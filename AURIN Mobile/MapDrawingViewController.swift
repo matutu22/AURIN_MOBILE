@@ -290,15 +290,10 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
                 // ====================================================================================
                 default: break
                 }
-                let circleCenter = CLLocationCoordinate2D(latitude: -37.84, longitude: 144.88)
-                let circ = GMSCircle(position: circleCenter, radius: 1000)
-                circ.fillColor = UIColor(red: 0.35, green: 0, blue: 0, alpha: 0.05)
-//                circ.strokeColor = UIColor.redColor()
-                circ.strokeWidth = 1
-                circ.map = self.mapView;
-            }
+                
+            } // Alamofire request ends.
             
-        })
+        }) // Multithread ends.
         
     } // View Did Load
 
