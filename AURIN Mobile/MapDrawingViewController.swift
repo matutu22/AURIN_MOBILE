@@ -39,15 +39,8 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        // Set the title of navigation bar
         navigationItem.title = "\(dataset.title)"
-        
-//        let multiPolygonURL = "https://geoserver.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=grattan:Grattan_Job_Access2011&MaxFeatures=1000&outputFormat=json&CQL_FILTER=BBOX(the_geom,-37.843287468235644,144.88364340276473,-37.7613640945703,145.05084158388618)"
-        
-        
-//        let queryURL = "http://localhost:3000/query?name=dataset&llat=1&llon=2&ulat=3&ulon=4"
-        
-//        let queryURL = "http://192.168.2.19:3000/query?dataset=\(dataset.name)&geo_name=\(geom_name)&llat=\(chooseBBOX.lowerLAT)&llon=\(chooseBBOX.lowerLON)&ulat=\(chooseBBOX.upperLAT)&ulon=\(chooseBBOX.upperLON)"
         
         var queryURL = "https://geoserver.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&MaxFeatures=1000&outputFormat=json&CQL_FILTER=BBOX(\(geom_name),\(chooseBBOX.lowerLAT),\(chooseBBOX.lowerLON),\(chooseBBOX.upperLAT),\(chooseBBOX.upperLON))"
         
