@@ -1,0 +1,580 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01E8C5183A970D32D89E9B07 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D354DC590FBA86BF29049A1F /* Pods.framework */; };
+		BC2B361F1CC0C606002DF1F6 /* MapSettingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2B361E1CC0C606002DF1F6 /* MapSettingTableViewController.swift */; };
+		BC2B36211CC0D5E8002DF1F6 /* DataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2B36201CC0D5E8002DF1F6 /* DataStorage.swift */; };
+		BC2B362C1CC1242B002DF1F6 /* MapDrawingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2B362B1CC1242B002DF1F6 /* MapDrawingViewController.swift */; };
+		BC2B362E1CC12441002DF1F6 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2B362D1CC12441002DF1F6 /* SwiftyJSON.swift */; };
+		BC358E5F1CC333C90070F1D1 /* ChartSettingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC358E5E1CC333C90070F1D1 /* ChartSettingTableViewController.swift */; };
+		BC358E6F1CC344810070F1D1 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC358E681CC344760070F1D1 /* Charts.framework */; };
+		BC358E701CC344810070F1D1 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BC358E681CC344760070F1D1 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		BC358E7A1CC3514B0070F1D1 /* ChartDrawingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC358E791CC3514B0070F1D1 /* ChartDrawingTableViewController.swift */; };
+		BC71768A1CB9E73900623916 /* DatasetDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7176891CB9E73900623916 /* DatasetDetailViewController.swift */; };
+		BC7176921CBA069300623916 /* DatasetDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7176911CBA069300623916 /* DatasetDetailTableViewCell.swift */; };
+		BC7176981CBA65CE00623916 /* AboutTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7176971CBA65CE00623916 /* AboutTableViewController.swift */; };
+		BC7176A01CBA69D400623916 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC71769F1CBA69D400623916 /* WebViewController.swift */; };
+		BC7176A21CBA7B2E00623916 /* AboutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7176A11CBA7B2E00623916 /* AboutTableViewCell.swift */; };
+		BC918E821CC2737400942BAA /* LocalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC918E811CC2737400942BAA /* LocalViewController.swift */; };
+		BC918E871CC2756B00942BAA /* AURIN Mobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BC918E851CC2756B00942BAA /* AURIN Mobile.xcdatamodeld */; };
+		BCAE3DE41CB902DB0019B4C9 /* DatasetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAE3DE31CB902DB0019B4C9 /* DatasetTableViewCell.swift */; };
+		BCB680221CB8F969006EFACD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB680211CB8F969006EFACD /* AppDelegate.swift */; };
+		BCB680241CB8F969006EFACD /* OnlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB680231CB8F969006EFACD /* OnlineViewController.swift */; };
+		BCB680291CB8F969006EFACD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BCB680281CB8F969006EFACD /* Assets.xcassets */; };
+		BCB6802C1CB8F969006EFACD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BCB6802A1CB8F969006EFACD /* LaunchScreen.storyboard */; };
+		BCB6806B1CB8FC20006EFACD /* DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB6806A1CB8FC20006EFACD /* DataType.swift */; };
+		BCB6B70D1CD5E70B007E044C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BCB6B70C1CD5E70B007E044C /* Main.storyboard */; };
+		BCB6B7101CD62510007E044C /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB6B70F1CD62510007E044C /* FilterViewController.swift */; };
+		BCEB76901CC5E0EA000B99B2 /* WalkthroughContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEB768F1CC5E0EA000B99B2 /* WalkthroughContentViewController.swift */; };
+		BCEB76951CC5E243000B99B2 /* WalkthroughPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEB76941CC5E243000B99B2 /* WalkthroughPageViewController.swift */; };
+		BCEB76981CC5FDFB000B99B2 /* WalkthroughAnimationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEB76971CC5FDFB000B99B2 /* WalkthroughAnimationViewController.swift */; };
+		C98325000EEC11D82B5E3598 /* Pods_AURIN_Mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FEAC482FD2D7A1DEDC5ECEC /* Pods_AURIN_Mobile.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BC358E671CC344760070F1D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BC358E601CC344760070F1D1 /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5BA8EC401A9D14DC00CE82E1;
+			remoteInfo = "Charts-iOS";
+		};
+		BC358E691CC344760070F1D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BC358E601CC344760070F1D1 /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A52C5C371BAC5CA400594CDD;
+			remoteInfo = "Charts-TV";
+		};
+		BC358E6B1CC344760070F1D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BC358E601CC344760070F1D1 /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 65B3F5BF1C7370BE000983D0;
+			remoteInfo = "Charts-OSX";
+		};
+		BC358E6D1CC344760070F1D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BC358E601CC344760070F1D1 /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 06AEE7A21BDC3F8B009875AE;
+			remoteInfo = ChartsTests;
+		};
+		BC358E711CC344810070F1D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BC358E601CC344760070F1D1 /* Charts.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5BA8EC3F1A9D14DC00CE82E1;
+			remoteInfo = "Charts-iOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BC2B362A1CC1147B002DF1F6 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				BC358E701CC344810070F1D1 /* Charts.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4FEAC482FD2D7A1DEDC5ECEC /* Pods_AURIN_Mobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AURIN_Mobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C6D22DE04824B586C2ECD4E /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		BC2B361E1CC0C606002DF1F6 /* MapSettingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSettingTableViewController.swift; sourceTree = "<group>"; };
+		BC2B36201CC0D5E8002DF1F6 /* DataStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStorage.swift; sourceTree = "<group>"; };
+		BC2B362B1CC1242B002DF1F6 /* MapDrawingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapDrawingViewController.swift; sourceTree = "<group>"; };
+		BC2B362D1CC12441002DF1F6 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
+		BC358E5E1CC333C90070F1D1 /* ChartSettingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartSettingTableViewController.swift; sourceTree = "<group>"; };
+		BC358E601CC344760070F1D1 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = "Charts-master/Charts/Charts.xcodeproj"; sourceTree = "<group>"; };
+		BC358E791CC3514B0070F1D1 /* ChartDrawingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartDrawingTableViewController.swift; sourceTree = "<group>"; };
+		BC7176891CB9E73900623916 /* DatasetDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatasetDetailViewController.swift; sourceTree = "<group>"; };
+		BC7176911CBA069300623916 /* DatasetDetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatasetDetailTableViewCell.swift; sourceTree = "<group>"; };
+		BC7176971CBA65CE00623916 /* AboutTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutTableViewController.swift; sourceTree = "<group>"; };
+		BC71769F1CBA69D400623916 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		BC7176A11CBA7B2E00623916 /* AboutTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutTableViewCell.swift; sourceTree = "<group>"; };
+		BC918E811CC2737400942BAA /* LocalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalViewController.swift; sourceTree = "<group>"; };
+		BC918E861CC2756B00942BAA /* AURIN Mobile.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AURIN Mobile.xcdatamodel"; sourceTree = "<group>"; };
+		BCAE3DE31CB902DB0019B4C9 /* DatasetTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatasetTableViewCell.swift; sourceTree = "<group>"; };
+		BCB6801E1CB8F969006EFACD /* AURIN Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AURIN Mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BCB680211CB8F969006EFACD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		BCB680231CB8F969006EFACD /* OnlineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlineViewController.swift; sourceTree = "<group>"; };
+		BCB680281CB8F969006EFACD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BCB6802B1CB8F969006EFACD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BCB6802D1CB8F969006EFACD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BCB6806A1CB8FC20006EFACD /* DataType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataType.swift; sourceTree = "<group>"; };
+		BCB6B70C1CD5E70B007E044C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		BCB6B70F1CD62510007E044C /* FilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
+		BCEB768F1CC5E0EA000B99B2 /* WalkthroughContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkthroughContentViewController.swift; sourceTree = "<group>"; };
+		BCEB76941CC5E243000B99B2 /* WalkthroughPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkthroughPageViewController.swift; sourceTree = "<group>"; };
+		BCEB76971CC5FDFB000B99B2 /* WalkthroughAnimationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkthroughAnimationViewController.swift; sourceTree = "<group>"; };
+		C26F7695EDEB4E63E40D699D /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		D354DC590FBA86BF29049A1F /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BCB6801B1CB8F969006EFACD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BC358E6F1CC344810070F1D1 /* Charts.framework in Frameworks */,
+				01E8C5183A970D32D89E9B07 /* Pods.framework in Frameworks */,
+				C98325000EEC11D82B5E3598 /* Pods_AURIN_Mobile.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		779F9733B0246D289D51E41F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D354DC590FBA86BF29049A1F /* Pods.framework */,
+				4FEAC482FD2D7A1DEDC5ECEC /* Pods_AURIN_Mobile.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BA541F8E5FE62524E4CFB0D4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C26F7695EDEB4E63E40D699D /* Pods.debug.xcconfig */,
+				7C6D22DE04824B586C2ECD4E /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		BC358E611CC344760070F1D1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BC358E681CC344760070F1D1 /* Charts.framework */,
+				BC358E6A1CC344760070F1D1 /* Charts.framework */,
+				BC358E6C1CC344760070F1D1 /* Charts.framework */,
+				BC358E6E1CC344760070F1D1 /* ChartsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BCB680151CB8F969006EFACD = {
+			isa = PBXGroup;
+			children = (
+				BC918E851CC2756B00942BAA /* AURIN Mobile.xcdatamodeld */,
+				BC358E601CC344760070F1D1 /* Charts.xcodeproj */,
+				BCB680201CB8F969006EFACD /* AURIN Mobile */,
+				BCB6801F1CB8F969006EFACD /* Products */,
+				BA541F8E5FE62524E4CFB0D4 /* Pods */,
+				779F9733B0246D289D51E41F /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		BCB6801F1CB8F969006EFACD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BCB6801E1CB8F969006EFACD /* AURIN Mobile.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BCB680201CB8F969006EFACD /* AURIN Mobile */ = {
+			isa = PBXGroup;
+			children = (
+				BCB6806A1CB8FC20006EFACD /* DataType.swift */,
+				BC2B36201CC0D5E8002DF1F6 /* DataStorage.swift */,
+				BCB680211CB8F969006EFACD /* AppDelegate.swift */,
+				BCB680231CB8F969006EFACD /* OnlineViewController.swift */,
+				BC918E811CC2737400942BAA /* LocalViewController.swift */,
+				BCB6B70F1CD62510007E044C /* FilterViewController.swift */,
+				BCAE3DE31CB902DB0019B4C9 /* DatasetTableViewCell.swift */,
+				BC7176891CB9E73900623916 /* DatasetDetailViewController.swift */,
+				BC7176911CBA069300623916 /* DatasetDetailTableViewCell.swift */,
+				BC2B361E1CC0C606002DF1F6 /* MapSettingTableViewController.swift */,
+				BC2B362B1CC1242B002DF1F6 /* MapDrawingViewController.swift */,
+				BC358E5E1CC333C90070F1D1 /* ChartSettingTableViewController.swift */,
+				BC358E791CC3514B0070F1D1 /* ChartDrawingTableViewController.swift */,
+				BC7176971CBA65CE00623916 /* AboutTableViewController.swift */,
+				BC7176A11CBA7B2E00623916 /* AboutTableViewCell.swift */,
+				BC71769F1CBA69D400623916 /* WebViewController.swift */,
+				BCEB76941CC5E243000B99B2 /* WalkthroughPageViewController.swift */,
+				BCEB768F1CC5E0EA000B99B2 /* WalkthroughContentViewController.swift */,
+				BCEB76971CC5FDFB000B99B2 /* WalkthroughAnimationViewController.swift */,
+				BCB680281CB8F969006EFACD /* Assets.xcassets */,
+				BCB6B70C1CD5E70B007E044C /* Main.storyboard */,
+				BCB6802A1CB8F969006EFACD /* LaunchScreen.storyboard */,
+				BC2B362D1CC12441002DF1F6 /* SwiftyJSON.swift */,
+				BCB6802D1CB8F969006EFACD /* Info.plist */,
+			);
+			path = "AURIN Mobile";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BCB6801D1CB8F969006EFACD /* AURIN Mobile */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BCB680301CB8F969006EFACD /* Build configuration list for PBXNativeTarget "AURIN Mobile" */;
+			buildPhases = (
+				3995CCFB6EE3FB1FFEA1423D /* Check Pods Manifest.lock */,
+				BCB6801A1CB8F969006EFACD /* Sources */,
+				BCB6801B1CB8F969006EFACD /* Frameworks */,
+				BCB6801C1CB8F969006EFACD /* Resources */,
+				3FF6D020C584A1BA8C493A41 /* Embed Pods Frameworks */,
+				EA1BF6D0FD0776351885B8AD /* Copy Pods Resources */,
+				BC2B362A1CC1147B002DF1F6 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BC358E721CC344810070F1D1 /* PBXTargetDependency */,
+			);
+			name = "AURIN Mobile";
+			productName = "AURIN Mobile";
+			productReference = BCB6801E1CB8F969006EFACD /* AURIN Mobile.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BCB680161CB8F969006EFACD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = "University of Melbourne";
+				TargetAttributes = {
+					BCB6801D1CB8F969006EFACD = {
+						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = UFCM2756LW;
+					};
+				};
+			};
+			buildConfigurationList = BCB680191CB8F969006EFACD /* Build configuration list for PBXProject "AURIN Mobile" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = BCB680151CB8F969006EFACD;
+			productRefGroup = BCB6801F1CB8F969006EFACD /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = BC358E611CC344760070F1D1 /* Products */;
+					ProjectRef = BC358E601CC344760070F1D1 /* Charts.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				BCB6801D1CB8F969006EFACD /* AURIN Mobile */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		BC358E681CC344760070F1D1 /* Charts.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Charts.framework;
+			remoteRef = BC358E671CC344760070F1D1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		BC358E6A1CC344760070F1D1 /* Charts.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Charts.framework;
+			remoteRef = BC358E691CC344760070F1D1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		BC358E6C1CC344760070F1D1 /* Charts.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Charts.framework;
+			remoteRef = BC358E6B1CC344760070F1D1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		BC358E6E1CC344760070F1D1 /* ChartsTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ChartsTests.xctest;
+			remoteRef = BC358E6D1CC344760070F1D1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BCB6801C1CB8F969006EFACD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BCB6B70D1CD5E70B007E044C /* Main.storyboard in Resources */,
+				BCB6802C1CB8F969006EFACD /* LaunchScreen.storyboard in Resources */,
+				BCB680291CB8F969006EFACD /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3995CCFB6EE3FB1FFEA1423D /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		3FF6D020C584A1BA8C493A41 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AURIN Mobile/Pods-AURIN Mobile-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EA1BF6D0FD0776351885B8AD /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AURIN Mobile/Pods-AURIN Mobile-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BCB6801A1CB8F969006EFACD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BCB6B7101CD62510007E044C /* FilterViewController.swift in Sources */,
+				BCB680241CB8F969006EFACD /* OnlineViewController.swift in Sources */,
+				BC7176A21CBA7B2E00623916 /* AboutTableViewCell.swift in Sources */,
+				BCEB76981CC5FDFB000B99B2 /* WalkthroughAnimationViewController.swift in Sources */,
+				BC358E7A1CC3514B0070F1D1 /* ChartDrawingTableViewController.swift in Sources */,
+				BC2B36211CC0D5E8002DF1F6 /* DataStorage.swift in Sources */,
+				BC7176A01CBA69D400623916 /* WebViewController.swift in Sources */,
+				BC358E5F1CC333C90070F1D1 /* ChartSettingTableViewController.swift in Sources */,
+				BC918E821CC2737400942BAA /* LocalViewController.swift in Sources */,
+				BC2B361F1CC0C606002DF1F6 /* MapSettingTableViewController.swift in Sources */,
+				BCB6806B1CB8FC20006EFACD /* DataType.swift in Sources */,
+				BC918E871CC2756B00942BAA /* AURIN Mobile.xcdatamodeld in Sources */,
+				BCAE3DE41CB902DB0019B4C9 /* DatasetTableViewCell.swift in Sources */,
+				BC7176981CBA65CE00623916 /* AboutTableViewController.swift in Sources */,
+				BC71768A1CB9E73900623916 /* DatasetDetailViewController.swift in Sources */,
+				BCB680221CB8F969006EFACD /* AppDelegate.swift in Sources */,
+				BC2B362C1CC1242B002DF1F6 /* MapDrawingViewController.swift in Sources */,
+				BCEB76901CC5E0EA000B99B2 /* WalkthroughContentViewController.swift in Sources */,
+				BC2B362E1CC12441002DF1F6 /* SwiftyJSON.swift in Sources */,
+				BC7176921CBA069300623916 /* DatasetDetailTableViewCell.swift in Sources */,
+				BCEB76951CC5E243000B99B2 /* WalkthroughPageViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BC358E721CC344810070F1D1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Charts-iOS";
+			targetProxy = BC358E711CC344810070F1D1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		BCB6802A1CB8F969006EFACD /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BCB6802B1CB8F969006EFACD /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BCB6802E1CB8F969006EFACD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BCB6802F1CB8F969006EFACD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BCB680311CB8F969006EFACD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C26F7695EDEB4E63E40D699D /* Pods.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = "AURIN Mobile/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "au.edu.unimelb.AURIN-Mobile";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BCB680321CB8F969006EFACD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7C6D22DE04824B586C2ECD4E /* Pods.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = "AURIN Mobile/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "au.edu.unimelb.AURIN-Mobile";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BCB680191CB8F969006EFACD /* Build configuration list for PBXProject "AURIN Mobile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BCB6802E1CB8F969006EFACD /* Debug */,
+				BCB6802F1CB8F969006EFACD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BCB680301CB8F969006EFACD /* Build configuration list for PBXNativeTarget "AURIN Mobile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BCB680311CB8F969006EFACD /* Debug */,
+				BCB680321CB8F969006EFACD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		BC918E851CC2756B00942BAA /* AURIN Mobile.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				BC918E861CC2756B00942BAA /* AURIN Mobile.xcdatamodel */,
+			);
+			currentVersion = BC918E861CC2756B00942BAA /* AURIN Mobile.xcdatamodel */;
+			path = "AURIN Mobile.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = BCB680161CB8F969006EFACD /* Project object */;
+}
