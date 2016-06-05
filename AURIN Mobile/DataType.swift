@@ -6,10 +6,24 @@
 //  Copyright © 2016 University of Melbourne. All rights reserved.
 //
 
+/********************************************************************************************
+ Description：
+    This file defines some data types used in this project:
+        BBOX: Store the bounding box
+        Dataset: Store the dataset from AUIRN
+        LocalDataset: Store the dataset in local database
+        ExtendedMarker: Used to represend Point data type
+        ExtendedPolyline: Used to represend MultiLineString data type
+        ExtendedPolygon: Used to represend MultiPolygon data type
+ 
+ ********************************************************************************************/
+
+
 import CoreData
 import Foundation
 import GoogleMaps
 
+// Bounding box
 class BBOX {
     var lowerLON: Double = 0.0
     var lowerLAT: Double = 0.0
@@ -25,60 +39,29 @@ class BBOX {
         self.upperLAT = upperLAT
     }
     
-    // 判断两个BBOX是否有重合部分，有则返回true，没有则返回false
+    // Algorithms to judge if two bounding boxes are intersectant
     func isIntersect(bbox: BBOX) -> Bool {
-        //x11和y11为坐标的左上角 x12和y12为坐标的右下角
+        // (x11, y11) is top-left corner, (x12, y12) is bottom-right corner.
         var x11 = self.lowerLON
         var y11 = self.upperLAT
         var x12 = self.upperLON
         var y12 = self.lowerLAT
-        
-        //x21和y21为坐标的左上角 x22和y22为坐标的右下角
+        // (x21, y21) is top-left corner, (x22, y22) is bottom-right corner.
         var x21 = bbox.lowerLON
         var y21 = bbox.upperLAT
         var x22 = bbox.upperLON
         var y22 = bbox.lowerLAT
-        
-        if x12 < x11 {
-            swap(&x11, &x12)
-        }
-        if y11 < y12 {
-            swap(&y11, &y12)
-        }
-        if x22 < x21 {
-            swap(&x22, &x21)
-        }
-        if y21 < y22 {
-            swap(&y21, &y22)
-        }
+        // Decide if they are intersectant
+        if x12 < x11 { swap(&x11, &x12) }
+        if y11 < y12 { swap(&y11, &y12) }
+        if x22 < x21 { swap(&x22, &x21) }
+        if y21 < y22 { swap(&y21, &y22) }
         if max(x11,x21) > min(x12,x22) || max(y12,y22) > min(y11,y21) {
             return false
         } else {
             return true
         }
-        
-//        // 相交
-//        let minLat = max(self.lowerLAT, bbox.lowerLAT)
-//        let minLon = max(self.lowerLON, bbox.lowerLON)
-//        let maxLat = min(self.upperLAT, bbox.upperLAT)
-//        let maxLon = min(self.upperLON, bbox.upperLON)
-//        if (minLat > maxLat) || (minLon > maxLon) {
-//            return true
-//        }
-//
-//        // 包含
-//        if (self.lowerLAT < bbox.lowerLAT) && (self.lowerLON < bbox.lowerLON) && (self.upperLAT > bbox.upperLAT) && (self.upperLON > bbox.upperLON) {
-//            return true
-//        }
-//        
-//        // 被包含
-//        if (self.lowerLAT > bbox.lowerLAT) && (self.lowerLON > bbox.lowerLON) && (self.upperLAT < bbox.upperLAT) && (self.upperLON < bbox.upperLON) {
-//            return true
-//        }
-//        
-//        return false
     }
-    
     
     func printBBOX() -> String {
         return "[\(NSString(format:"%.2f",self.lowerLON)), \(NSString(format:"%.2f",self.lowerLAT)), \(NSString(format:"%.2f",self.upperLON)), \(NSString(format:"%.2f",self.upperLAT))]"
@@ -90,6 +73,7 @@ class BBOX {
 }
 
 
+// Online dataset
 class Dataset {
     var name: String = "dataset name"
     var title: String = "dataset title"
@@ -152,6 +136,7 @@ class Dataset {
 }
 
 
+// Local dataset
 class LocalDataset:NSManagedObject {
     @NSManaged var name: String
     @NSManaged var title: String
@@ -186,23 +171,11 @@ class LocalDataset:NSManagedObject {
 }
 
 
+// Extend the Marker type in Google Maps SDK
 class ExtendedMarker: GMSMarker {
     var key: String = ""
     var value: Double = 0.0
     var properties = [String:String]()
-    
-//    func getProperties() -> String {
-//        var propertiesString = ""
-//        var count = 0
-//        for (key, value) in self.properties {
-//            count += 1
-//            propertiesString += "\(key): \(value)"
-//            if count < properties.count {
-//                propertiesString += "\n"
-//            }
-//        }
-//        return propertiesString
-//    }
     
     func getProperties() -> String {
         var width = 45
@@ -231,6 +204,7 @@ class ExtendedMarker: GMSMarker {
 }
 
 
+// Extend the Polyline type in Google Maps SDK
 class ExtendedPolyline: GMSPolyline {
     var key: String = ""
     var value: Double = 0.0
@@ -263,6 +237,7 @@ class ExtendedPolyline: GMSPolyline {
 }
 
 
+// Extend the Polygon type in Google Maps SDK
 class ExtendedPolygon: GMSPolygon {
     var key: String = ""
     var value: Double = 0.0
