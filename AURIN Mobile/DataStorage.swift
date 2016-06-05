@@ -6,9 +6,17 @@
 //  Copyright © 2016 University of Melbourne. All rights reserved.
 //
 
+/********************************************************************************************
+ Description：
+    This file is to store some data used in the project, such as bounding box of each suburbs.
+
+ ********************************************************************************************/
+
+
 import Foundation
 import UIKit
 
+// Color palettes.
 class ColorSet {
     
     static let theme = [

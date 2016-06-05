@@ -6,6 +6,13 @@
 //  Copyright © 2016 University of Melbourne. All rights reserved.
 //
 
+/********************************************************************************************
+ Description：
+    This file is application delegate, the app appearance and CoreData is set in this file.
+ 
+ ********************************************************************************************/
+
+
 import UIKit
 import CoreData
 import GoogleMaps
@@ -18,19 +25,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        // 添加Google Maps的Key
+        // Access Key of Google Maps SDK.
         GMSServices.provideAPIKey("AIzaSyDnR14R0Y6MDzX9eGpBKj4g_TCZrwv6i94")
 
-        /*********************************** NAVIGATION BAR APPEARANCE ***********************************/
-        // 修改Navigation Bar的颜色
+        /********************** NAVIGATION BAR APPEARANCE **********************/
+        // Colour of Navigation bar
         UINavigationBar.appearance().barTintColor = ColorSet.theme["AURIN-Ming"]
-        // 修改字体颜色
+        // Font colour
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
-        // 修改字体
+        // Font
         if let barFont = UIFont(name: "Avenir-Light", size: 24.0) {
             UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName:UIColor.whiteColor(), NSFontAttributeName:barFont]
         }
-        // 设置状态栏为浅色
+        // Light status bar
         UIApplication.sharedApplication().statusBarStyle = .LightContent
         
         

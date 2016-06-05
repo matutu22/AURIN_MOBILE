@@ -6,6 +6,14 @@
 //  Copyright © 2016 University of Melbourne. All rights reserved.
 //
 
+/********************************************************************************************
+ Description：
+    This file control the online dataset view, fetching datasat catalog from AUIRN, and display
+ them in a table view. There are also a geographical filer and search bar in this view.
+ 
+ ********************************************************************************************/
+
+
 import UIKit
 import Alamofire
 import SWXMLHash
@@ -15,7 +23,6 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
 
     /*********************************** VARIABLES *********************************************/
 
-    
     // 'datasets' list store the information of all datasets.
     var datasets = [Dataset]()
     
@@ -31,13 +38,7 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     
     var fetchResultController:NSFetchedResultsController!
     var localDatasets:[LocalDataset] = []
-    
     var alldatasets = [Dataset]()
-    
-
-    
-    //var refreshControl: UIRefreshControl!
-    //let refreshControl: UIRefreshControl = UIRefreshControl()
     
     
     /*********************************** FUNCTIONS *********************************************/
@@ -105,12 +106,9 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
             displayWalkthrough = false
         }
         
-        
-        // --------- 抓取CoreData里的信息
-        //getSavedDatasets()
     }
 
-    
+    // This fucntion fetch dataset catalog from AURIN API: GeoServer
     private func getSavedDatasets() {
         let fetchRequest = NSFetchRequest(entityName: "LocalDataset")
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
@@ -156,9 +154,8 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
                 // Dealing each feature, and put them into a list.
                 let featureTypeList = xml["wfs:WFS_Capabilities"]["FeatureTypeList"]["FeatureType"]
                 for featureType in featureTypeList {
-                    // 建立一个数据集，从XML中读取信息
+                    // Create a dataset, read data from XML
                     let dataset = Dataset()
-                    // 从XML中读取信息，并初始化dataset的成员变量
                     dataset.name = (featureType["Name"].element?.text)!
                     dataset.title = (featureType["Title"].element?.text)!
                     dataset.abstract = (featureType["Abstract"].element?.text)!
@@ -183,18 +180,12 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
                     dataset.organisation = dataset.name.componentsSeparatedByString(":")[0]
                     dataset.website = (featureType.element?.attributes["xmlns:\(dataset.organisation)"])!
                     
-                    // 将Dataset对象存入Dataset数组
-                    
+                    // Add dataset object to list
                     if DataSet.invalidData[dataset.title] != nil {
                         // Do nothing
                     } else {
                         self.datasets.append(dataset)
                     }
-                    
-                    //self.datasets.append(dataset)
-                    
-                    //print(dataset.bbox)
-                    //print("Center: \(dataset.center),  Zoom: \(dataset.zoom)\n")
                 }
                 self.tableView.reloadData()
                 self.alldatasets = self.datasets
@@ -219,7 +210,7 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
 
         getSavedDatasets()
         
-        // 设置Cell的identifier
+        // Set Cell's identifier
         let cellIdentifier = "Cell"
         // Reuse cells for saving memory.
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! DatasetTableViewCell
@@ -262,28 +253,19 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath
         indexPath: NSIndexPath) -> [UITableViewRowAction]? {
 
-        // 定制存储按钮，将dataset转换之后，存在CoreData里面
+        // Add a save option in the slide bar.
         let saveAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Save",handler:
             {   // This closure is a hundler which save dataset to CoreData
                 (action, indexPath) -> Void in
                 self.getSavedDatasets()
-                
                 if DataSet.savedDataset.contains(self.datasets[indexPath.row].title) {
                     tableView.editing = false
-                    
                     let alertMessage = UIAlertController(title: "NOTICE", message: "This dataset is already saved.", preferredStyle: .Alert)
-                    
-                    // 向Alert弹框里面增加一个选项
                     alertMessage.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
                     self.presentViewController(alertMessage, animated: true, completion: nil)
-                    
-                    
-                    
-                    //print("hello world")
                 } else {
                     // The Dataset type will be changed into Localdataset type.
                     var localDataset:LocalDataset!
-                    
                     if let managedObjectContext = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext {
                         localDataset = NSEntityDescription.insertNewObjectForEntityForName("LocalDataset", inManagedObjectContext: managedObjectContext) as! LocalDataset
                         
@@ -314,7 +296,6 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
                         let cell = tableView.cellForRowAtIndexPath(indexPath)
                         cell?.accessoryType = .Checkmark
                     }
-                    //tableView.editing = false
                     self.datasets.removeAtIndex(indexPath.row)
                     self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
                     
@@ -367,7 +348,7 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
         if segue.identifier == "showDatasetDetail" {
             if let indexPath = tableView.indexPathForSelectedRow {
                 let datasetToPass: Dataset
-                // 如果从搜索框进入Detail的话，下表要从过滤后的新列表中取
+                // If select a dataset from search view.
                 if searchController.active && searchController.searchBar.text != "" {
                     datasetToPass = searchDatasets[indexPath.row]
                 } else {
@@ -375,7 +356,6 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
                 }
                 let destinationController = segue.destinationViewController as! DatasetDetailViewController
                 destinationController.dataset = datasetToPass
-                // 在下页隐藏Tab Bar
                 // destinationController.hidesBottomBarWhenPushed = true
                 
             }
@@ -384,7 +364,6 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
             let vc = segue.destinationViewController as UIViewController
             let controller = vc.popoverPresentationController
             //controller!.backgroundColor = UIColor(red: 200/255.0, green: 200/255.0, blue: 200/255.0, alpha: 0.7)
-
             if controller != nil {
                 controller?.delegate = self
             }
@@ -401,12 +380,10 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     }
     
     
-    // 从Filter视图中返回
+    // Go back to dataset list from geographical filter.
     @IBAction func close(segue:UIStoryboardSegue) {
         if let filterViewController = segue.sourceViewController as? FilterViewController {
             let bbox = filterViewController.filertBBOX
-            //print(bbox.printBBOX())
-            // 在这里过滤datasets，然后刷新tableView
             datasets = datasets.filter{$0.bbox.isIntersect(bbox)}
             tableView.reloadData()
             DataSet.filterBBOX = bbox
@@ -422,7 +399,6 @@ extension OnlineViewController: UISearchResultsUpdating {
         let searchBar = searchController.searchBar
         let scope = searchBar.scopeButtonTitles![searchBar.selectedScopeButtonIndex]
         filterContentForSearchText(searchController.searchBar.text!, scope: scope)
-        
         //filterContentForSearchText(searchController.searchBar.text!)
         tableView.reloadData()
     }
