@@ -6,6 +6,12 @@
 //  Copyright © 2016 University of Melbourne. All rights reserved.
 //
 
+/********************************************************************************************
+ Description：
+    Control the dataset detail view.
+ ********************************************************************************************/
+
+
 import UIKit
 import Alamofire
 import SWXMLHash
@@ -28,7 +34,7 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         // Do any additional setup after loading the view.
         getDatasetProperties()
         
-        // 在页面上方添加一个Google Maps
+        // Add a google map to the view
         self.mapView.myLocationEnabled = true;
         self.mapView.mapType = kGMSTypeNormal;
         self.mapView.settings.compassButton = false;
@@ -39,7 +45,7 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         self.mapView.settings.scrollGestures = true
         self.mapView.delegate = self;
         
-        // 设定地图的初始视角
+        // Initialise the map view
         let lowerLAT = dataset.bbox.lowerLAT
         let lowerLON = dataset.bbox.lowerLON
         let upperLAT = dataset.bbox.upperLAT
@@ -51,7 +57,7 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         let camera = GMSCameraPosition.cameraWithLatitude(centerLAT, longitude: centerLON, zoom: zoomLevel)
         self.mapView.animateToCameraPosition(camera)
         
-        // 在地图上画出Bounding Box
+        // Draw bounding box on map
         let rect = GMSMutablePath()
         rect.addCoordinate(CLLocationCoordinate2D(latitude: lowerLAT, longitude: lowerLON))
         rect.addCoordinate(CLLocationCoordinate2D(latitude: upperLAT, longitude: lowerLON))
@@ -63,23 +69,12 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         bounding.strokeWidth = 0
         bounding.fillColor = UIColor(red: 28.0/255.0, green: 79.0/255.0, blue: 107.0/255.0, alpha: 0.15)
         //bbox.map = self.mapView
+    
         
-//        let  position = CLLocationCoordinate2DMake(centerLAT, centerLON)
-//        let marker = GMSMarker(position: position)
-//        marker.title = "Hello World"
-//        marker.snippet = "Lower LON: \(dataset.bbox.lowerLON) \nLower LAT: \(dataset.bbox.lowerLAT) \nUpper LON: \(dataset.bbox.upperLON) \nUpper LAT: \(dataset.bbox.upperLAT)"
-//        marker.icon = GMSMarker.markerImageWithColor(UIColor(red: 28.0/255.0, green: 79.0/255.0, blue: 107.0/255.0, alpha: 1.0))
-//        marker.map = mapView
-        
-        
-        
-        // 设置Table的Appearance
+        // Table's appearance
         //tableView.backgroundColor = UIColor(red: 240.0/255.0, green: 240.0/255.0, blue: 240.0/255.0, alpha: 0.2)
-        // 删除空白行的分割线
         tableView.tableFooterView = UIView(frame: CGRectZero)
         tableView.separatorColor = UIColor(red: 240.0/255.0, green: 240.0/255.0, blue: 240.0/255.0, alpha: 0.8)
-        
-        // 为了设置动态行间距
         tableView.estimatedRowHeight = 36.0
         tableView.rowHeight = UITableViewAutomaticDimension
         
@@ -89,14 +84,12 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         
     }
     
-    // 从GeoServer上获取当前选中数据集的信息
+    // Get the detail information of selected dataset from AURIN serer.
     private func getDatasetProperties() {
         Alamofire.request(.GET, "https://geoserver.aurin.org.au/wfs?request=DescribeFeatureType&service=WFS&version=1.1.0&TypeName=\(dataset.name)")
             .response { (request, response, data, error) in
                 //print(data) // if you want to check XML data in debug window.
                 let xml = SWXMLHash.parse(data!)
-                // 处理XML，取出信息放入Datset对象中
-                
                 for property in xml["xsd:schema"]["xsd:complexType"]["xsd:complexContent"]["xsd:extension"]["xsd:sequence"]["xsd:element"] {
                     let propertyName = (property.element?.attributes["name"])!
                     var propertyType = (property.element?.attributes["type"])!
@@ -121,20 +114,16 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         switch indexPath.row {
         case 0:
             cell.fieldImage.image = UIImage(named: "icon_dataset")
-            //cell.fieldLabel.text = "TITLE"
             cell.valueLabel.text = dataset.title
         case 1:
             cell.fieldImage.image = UIImage(named: "icon_org")
-            //cell.fieldLabel.text = "ORG"
             cell.valueLabel.text = dataset.organisation
         case 2:
             cell.fieldImage.image = UIImage(named: "icon_website")
-            //cell.fieldLabel.text = "WEBSITE"
             cell.valueLabel.textColor = UIColor(red: 65.0/255.0, green: 151.0/255.0, blue: 235.0/255.0, alpha: 1.0)
             cell.valueLabel.text = dataset.website
         case 3:
             cell.fieldImage.image = UIImage(named: "icon_type")
-            //cell.fieldLabel.text = "TYPE"
             
             // "wkb_geometry"
             for geom_title in ["the_geom", "geom", "wkb_geometry"] {
@@ -146,24 +135,18 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
             
         case 4:
             cell.fieldImage.image = UIImage(named: "icon_keywords")
-            //cell.fieldLabel.text = "KEYWORDS"
             cell.valueLabel.text = dataset.showKeyword()
         case 5:
             cell.fieldImage.image = UIImage(named: "icon_bbox")
-            //cell.fieldLabel.text = "BOUNDING"
-            //cell.valueLabel.font = UIFont(name: "Courier", size: 11.0)
-            //cell.valueLabel.text = dataset.bbox.printFormattedBBOX()
             cell.valueLabel.text = dataset.bbox.printBBOX()
         case 6:
             cell.fieldImage.image = UIImage(named: "icon_abstract")
-            //cell.fieldLabel.text = "ABSTRACT"
             if dataset.abstract != "" {
                 cell.valueLabel.text = dataset.abstract
             } else {
                 cell.valueLabel.text = "This dataset doesn't have abstract."
             }
         default:
-            //cell.fieldLabel.text = ""
             cell.valueLabel.text = ""
         }
         return cell
@@ -172,33 +155,23 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == 2 {
-            // 设置一个弹出菜单optionMenu。ActionSheet选项时，菜单从下方滑出；为Alert是，从屏幕中间弹出
             let optionMenu = UIAlertController(title: nil, message: "What do you want to do?", preferredStyle: .ActionSheet)
-            // 设置一个Cancel按钮
             let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-            // 定义一个handler
             let callActionHandler = { (action:UIAlertAction!) -> Void in
                 if let url = NSURL(string: self.dataset.website) {
                     UIApplication.sharedApplication().openURL(url)
                 }
             }
-            // 设置一个CallAction，拨打电话
             let callAction = UIAlertAction(title: "Visit Website", style: .Default, handler: callActionHandler)
-        
-
-            // 将cancelAction添加到弹出菜单中
             optionMenu.addAction(cancelAction)
             optionMenu.addAction(callAction)
-            // 设置显示optionMenu
             self.presentViewController(optionMenu, animated: true, completion: nil)
         }
         
         if indexPath.row == 5 {
-            // 设置一个弹出菜单optionMenu。ActionSheet选项时，菜单从下方滑出；为Alert是，从屏幕中间弹出
             let optionMenu = UIAlertController(title: nil, message: "What do you want to do?", preferredStyle: .ActionSheet)
-            // 设置一个Cancel按钮
+            // Cancel button
             let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-            // 设置一个CallAction，拨打电话
             let showBounding = UIAlertAction(title: "Show Bounding Box on Map", style: .Default, handler: { (action:UIAlertAction!) -> Void in
                 self.bounding.map = self.mapView
             })
@@ -206,15 +179,11 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
                 self.bounding.map = nil
             })
             
-            // 将cancelAction添加到弹出菜单中
             optionMenu.addAction(cancelAction)
             optionMenu.addAction(showBounding)
             optionMenu.addAction(dropBounding)
-            // 设置显示optionMenu
             self.presentViewController(optionMenu, animated: true, completion: nil)
         }
-        
-        // 执行完操作之后，释放该行的选择状态
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
     }
     
@@ -235,7 +204,6 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
             destinationController.dataset = dataset
             destinationController.propertyList = propertyList
             destinationController.geom_name = geom_name
-            // 在下页隐藏Tab Bar
             // destinationController.hidesBottomBarWhenPushed = true
         }
         

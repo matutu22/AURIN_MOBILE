@@ -8,8 +8,7 @@
 
 /********************************************************************************************
  Description：
-    This file is to store some data used in the project, such as bounding box of each suburbs.
-
+    This file is to store some data used in the project, such as bounding box of each suburbs
  ********************************************************************************************/
 
 

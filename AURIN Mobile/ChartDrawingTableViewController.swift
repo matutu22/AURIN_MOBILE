@@ -6,6 +6,12 @@
 //  Copyright © 2016年 University of Melbourne. All rights reserved.
 //
 
+/********************************************************************************************
+ Description：
+    Requset data from AURIN and generate a bar chart.
+ ********************************************************************************************/
+
+
 import UIKit
 import Charts
 import Alamofire
@@ -73,7 +79,6 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             Alamofire.request(.GET, queryURL).response { (_request, _response, data, _error) in
-                // 获取JSON信息
                 let json = JSON(data: data!)
                 
                 if json["features"].count == 0 {
@@ -203,7 +208,6 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         let chartData = BarChartData(xVals: dataPoints, dataSet: chartDataSet)
         barChartView.data = chartData
         
-        // 表格的色系
         switch self.palette {
         case "Red":
             //chartDataSet.colors = ChartColorTemplates.liberty()
@@ -227,26 +231,15 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
             chartDataSet.colors = ChartColorTemplates.liberty()
         }
         
-        
-        
-        
-        
-        
         //chartDataSet.colors = ColorSet.BlueSet
         
         barChartView.noDataText = "Loading data, please wait..."
         barChartView.noDataTextDescription = "The Internet is busy now"
         barChartView.descriptionText = ""
         
-        // 移动X轴标签位置
         barChartView.xAxis.labelPosition = .Bottom
-        
-        // 表格背景颜色
         barChartView.backgroundColor = UIColor.whiteColor()
-        
-        // 表格动画效果
         barChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
-        //barChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0, easingOption: .EaseInBounce)
         
         // Set the limit line.
         var average = 0.0
@@ -267,7 +260,6 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
     
     func chartValueSelected(chartView: ChartViewBase, entry: ChartDataEntry, dataSetIndex: Int, highlight: ChartHighlight) {
         mapView.clear()
-        //print("\(entry.value) in \(xAxis[entry.xIndex])")
         keyLabel.text = "\(xAxis[entry.xIndex])"
         valueLabel.text = "\(entry.value)"
         
@@ -279,19 +271,14 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
             print(nameSearchURL)
             
             Alamofire.request(.GET, nameSearchURL).response { (_request, _response, data, _error) in
-                // 获取JSON信息
                 let json = JSON(data: data!)
-                // 将JSON画在地图上
-                // 分析第一个元素即可知数据集的数据类型
                 let shapeType = json["features"][0]["geometry"]["type"]
                 switch shapeType {
                 // ====================================================================================
                 case "Point":
                     let latitude = json["features"][0]["geometry"]["coordinates"][1].doubleValue
                     let longitude = json["features"][0]["geometry"]["coordinates"][0].doubleValue
-                    // print("\(latitude), \(longitude)")
                     let marker = ExtendedMarker(position: CLLocationCoordinate2DMake(latitude, longitude))
-                    //print(json["features"][featureID]["properties"])
                     marker.title = json["features"][0]["id"].stringValue
                     for property in json["features"][0]["properties"] {
                         marker.properties.updateValue(String(property.1), forKey: property.0)
@@ -300,15 +287,11 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
                     
                     self.textView.editable = false
                     self.textView.text = marker.getProperties()
-                    //marker.appearAnimation = kGMSMarkerAnimationPop
                     marker.map = self.mapView
                 // ====================================================================================
                 case "MultiLineString":
-                    // 得到数据集的数目
                     let featuresNum = json["features"].count
-                    // 存储Polyline的Path和所有Polyline
                     var polylinePath = GMSMutablePath()
-                    // 对于每个数据集，要拿出数据集的properties，找到坐标，并画在地图上
                     for featureID in Range(0..<featuresNum) {
                         let polylineCount = json["features"][featureID]["geometry"]["coordinates"].count
                         for polylineNum in Range(0..<polylineCount) {
@@ -316,7 +299,7 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
                             for coordinateNum in Range(0..<count) {
                                 let point = json["features"][featureID]["geometry"]["coordinates"][polylineNum][coordinateNum]
                                 polylinePath.addCoordinate(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
-                            } // 坐标遍历完毕
+                            }
                             
                             let polyline = ExtendedPolyline(path: polylinePath)
                             polyline.title = json["features"][featureID]["id"].stringValue
@@ -340,19 +323,13 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
                     }
                 // ====================================================================================
                 case "MultiPolygon":
-                    // Do something
-                    // 为了存储Polygon的Path和所有Polygon
                     var polygonPath = GMSMutablePath()
-                    // 计算Polygon由多少个点坐标构成
                     let count = json["features"][0]["geometry"]["coordinates"][0][0].count
-                    // 对于每个点坐标
                     for i in Range(0..<count) {
                         let point = json["features"][0]["geometry"]["coordinates"][0][0][i]
-                        // 向Polygon坐标集中加入当前坐标
                         polygonPath.addCoordinate(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
-                    } // 遍历Polygon的每个坐标
+                    }
                     
-                    // 坐标集遍历完毕，通过坐标集生成Polygon
                     let polygon = ExtendedPolygon(path: polygonPath)
                     polygon.title = json["features"][0]["id"].stringValue
                     for property in json["features"][0]["properties"] {
@@ -401,7 +378,6 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
                     self.mapView.animateToCameraPosition(camera)
                     
                     
-                    // 一个Polygon画完，要重置Path坐标集，以便重新写入
                     polygonPath = GMSMutablePath()
                     
                     self.textView.editable = false

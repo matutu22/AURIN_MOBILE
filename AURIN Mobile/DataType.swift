@@ -15,7 +15,6 @@
         ExtendedMarker: Used to represend Point data type
         ExtendedPolyline: Used to represend MultiLineString data type
         ExtendedPolygon: Used to represend MultiPolygon data type
- 
  ********************************************************************************************/
 
 

@@ -6,6 +6,12 @@
 //  Copyright © 2016 University of Melbourne. All rights reserved.
 //
 
+/********************************************************************************************
+ Description：
+    Control the map setting view.
+ ********************************************************************************************/
+
+
 import UIKit
 import GoogleMaps
 

@@ -6,6 +6,12 @@
 //  Copyright © 2016 University of Melbourne. All rights reserved.
 //
 
+/********************************************************************************************
+ Description：
+    Fetch detailed geospatial data from AURIN and draw it on map.
+ ********************************************************************************************/
+
+
 import UIKit
 import Alamofire
 import GoogleMaps
@@ -72,7 +78,6 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
         // Do any additional setup after loading the view.
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             Alamofire.request(.GET, queryURL).response { (_request, _response, data, _error) in
-                // 获取JSON信息
                 let json = JSON(data: data!)
                 
                 if json["features"].count == 0 {
@@ -81,9 +86,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
                     self.presentViewController(alertMessage, animated: true, completion: nil)
                 }
                 
-                // 分析第一个元素即可知数据集的数据类型
                 let shapeType = json["features"][0]["geometry"]["type"]
-                print(shapeType)
                 switch shapeType {
                 // ====================================================================================
                 case "Point":
@@ -92,9 +95,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
                         
                         let latitude = json["features"][featureID]["geometry"]["coordinates"][1].doubleValue
                         let longitude = json["features"][featureID]["geometry"]["coordinates"][0].doubleValue
-                        //print("\(latitude), \(longitude)")
                         let marker = ExtendedMarker(position: CLLocationCoordinate2DMake(latitude, longitude))
-                        //print(json["features"][featureID]["properties"])
                         marker.title = json["features"][featureID]["id"].stringValue
                         for property in json["features"][featureID]["properties"] {
                             marker.properties.updateValue(String(property.1), forKey: property.0)
@@ -118,16 +119,9 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
                 // ====================================================================================
                 case "MultiLineString":
                     self.shapeType = "Polyline"
-                    // 得到数据集的数目
                     let featuresNum = json["features"].count
-                    // 存储Polyline的Path和所有Polyline
                     var polylinePath = GMSMutablePath()
-                    //                var polylines = [ExtendedPolyline]()
-                    //                var maxValue = 0.0
-                    //                var minValue = 9999999.0
-                    //                var step = 0.0
                     
-                    // 对于每个数据集，要拿出数据集的properties，找到坐标，并画在地图上
                     for featureID in Range(0..<featuresNum) {
                         let polylineCount = json["features"][featureID]["geometry"]["coordinates"].count
                         for polylineNum in Range(0..<polylineCount) {
@@ -135,7 +129,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
                             for coordinateNum in Range(0..<count) {
                                 let point = json["features"][featureID]["geometry"]["coordinates"][polylineNum][coordinateNum]
                                 polylinePath.addCoordinate(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
-                            } // 坐标遍历完毕
+                            }
                             
                             let polyline = ExtendedPolyline(path: polylinePath)
                             polyline.title = json["features"][featureID]["id"].stringValue
@@ -160,27 +154,22 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
                     break
                 // ====================================================================================
                 case "MultiPolygon", "Polygon":
-                    // Do something
                     self.shapeType = "Polygon"
                     let featuresNum = json["features"].count
-                    // 为了存储Polygon的Path和所有Polygon
                     var polygonPath = GMSMutablePath()
                     var polygons = [ExtendedPolygon]()
                     var maxValue = 0.0
                     var minValue = 9999999.0
                     var step = 0.0
                     
-                    // 每个featureID都是一个Polygon
                     for featureID in Range(0..<featuresNum) {
                         if json["features"][featureID]["geometry"]["type"] == "Polygon" {
                             let count = json["features"][featureID]["geometry"]["coordinates"][0].count
                             for i in Range(0..<count) {
                                 let point = json["features"][featureID]["geometry"]["coordinates"][0][i]
-                                // 向Polygon坐标集中加入当前坐标
                                 polygonPath.addCoordinate(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
-                            } // 遍历Polygon的每个坐标
+                            }
                             
-                            // 坐标集遍历完毕，通过坐标集生成Polygon
                             let polygon = ExtendedPolygon(path: polygonPath)
                             polygon.title = json["features"][featureID]["id"].stringValue
                             for property in json["features"][featureID]["properties"] {
@@ -200,22 +189,17 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
                             polygon.tappable = true
                             polygons.append(polygon)
                             
-                            // 一个Polygon画完，要重置Path坐标集，以便重新写入
                             polygonPath = GMSMutablePath()
                         } else {
                         
-                            // 计算Polygon由多少个点坐标构成
                             let ploygonCount = json["features"][featureID]["geometry"]["coordinates"].count
                             for polygonNum in Range(0..<ploygonCount) {
                                 let count = json["features"][featureID]["geometry"]["coordinates"][polygonNum][0].count
-                                // 对于每个点坐标
                                 for i in Range(0..<count) {
                                     let point = json["features"][featureID]["geometry"]["coordinates"][polygonNum][0][i]
-                                    // 向Polygon坐标集中加入当前坐标
                                     polygonPath.addCoordinate(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
-                                } // 遍历Polygon的每个坐标
+                                } // traverse all coordinates in a polygon
                                 
-                                // 坐标集遍历完毕，通过坐标集生成Polygon
                                 let polygon = ExtendedPolygon(path: polygonPath)
                                 polygon.title = json["features"][featureID]["id"].stringValue
                                 for property in json["features"][featureID]["properties"] {
@@ -235,31 +219,24 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
                                 polygon.tappable = true
                                 polygons.append(polygon)
                                 
-                                // 一个Polygon画完，要重置Path坐标集，以便重新写入
+                                // Reset
                                 polygonPath = GMSMutablePath()
                                 
-                            } // 遍历Feature里面包含的各个Polygons
+                            } // traverse each polygon in a feature
                         }
-                    } // 遍历Features
+                    } // traverse features
                     
-                    // 取出了数据集中的最大值和最小值
-                    //print("Dataset(\(featuresNum)) - max: \(maxValue), min: \(minValue)")
-                    // 略微调整最大值和最小值的边界
                     maxValue *= 1.01
                     minValue *= 0.99
                     step = (maxValue - minValue) / Double(self.colorClass)
                     //print("Dataset(\(featuresNum)) - max: \(maxValue), min: \(minValue)")
                     //print("Step = \(step)")
                     
-                    // 遍历图形集，开始向地图上画图
                     for polygon in polygons {
                         //let colorRank = Int((shape.value - self.minValue) / self.step)
-                        // 转换成10种颜色集的下标，10.0 is the size of color set.
                         let rankIndex = Int((polygon.value - minValue) / step)
                         let transformedIndex = Int(Double(rankIndex) * 10.0 / Double(self.colorClass))
                         
-                        // To see the conversion of color set index.
-                        //print("\(rankIndex) -> \(transformedIndex)")
                         
                         switch self.palette {
                         case "Red":
@@ -301,9 +278,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
         let alertMessage = UIAlertController(title: extendedMarker.key, message: "\(classifierProperty): \(extendedMarker.value)", preferredStyle: .Alert)
         
         let detailActionHandler = { (action:UIAlertAction!) -> Void in
-            // 定义一个Alert信息，Style为弹出式Alert
             let detailMessage = UIAlertController(title: extendedMarker.title, message: "Message", preferredStyle: .ActionSheet)
-            // 向Alert弹框里面增加一个选项
             detailMessage.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
             // Show alert
             let paragraphStyle = NSMutableParagraphStyle()
@@ -312,19 +287,13 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
                 string: extendedMarker.getProperties(),
                 attributes: [
                     NSParagraphStyleAttributeName: paragraphStyle,
-                    //NSFontAttributeName: UIFont.preferredFontForTextStyle(UIFontTextStyleBody),
                     NSFontAttributeName: UIFont(name: "Menlo-Regular",size: 11.0)!,
                     NSForegroundColorAttributeName : UIColor.darkGrayColor()
                 ])
             detailMessage.setValue(messageText, forKey: "attributedMessage")
-            //            detailMessage.setValue(NSAttributedString(string: extendedMarker.getProperties(), attributes: [NSFontAttributeName: UIFont.systemFontOfSize(9), NSForegroundColorAttributeName: UIColor.darkGrayColor()]), forKey: "attributedMessage")
             self.presentViewController(detailMessage, animated: true, completion: nil)
         }
         
-        
-        
-        
-        // 向Alert弹框里面增加一个选项
         alertMessage.addAction(UIAlertAction(title: "MORE", style: .Default, handler: detailActionHandler))
         alertMessage.addAction(UIAlertAction(title: "CLOSE", style: .Destructive, handler: nil))
         self.presentViewController(alertMessage, animated: true, completion: nil)
@@ -333,33 +302,26 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
     
     
     func mapView(mapView: GMSMapView, didTapOverlay overlay: GMSOverlay) {
-        // Overlay可能有两种情况，PolyLine和Polygon要分开处理
         switch shapeType {
         case "Polygon":
             let extendedPolygon = overlay as! ExtendedPolygon
             let alertMessage = UIAlertController(title: extendedPolygon.key, message: "\(classifierProperty): \(extendedPolygon.value)", preferredStyle: .Alert)
             
             let detailActionHandler = { (action:UIAlertAction!) -> Void in
-                // 定义一个Alert信息，Style为弹出式Alert
                 let detailMessage = UIAlertController(title: extendedPolygon.title, message: "Message", preferredStyle: .ActionSheet)
-                // 向Alert弹框里面增加一个选项
                 detailMessage.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                // 显示弹框
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = NSTextAlignment.Center
                 let messageText = NSMutableAttributedString(
                     string: extendedPolygon.getProperties(),
                     attributes: [
                         NSParagraphStyleAttributeName: paragraphStyle,
-                        //NSFontAttributeName: UIFont.preferredFontForTextStyle(UIFontTextStyleBody),
                         NSFontAttributeName: UIFont(name: "Menlo-Regular",size: 11.0)!,
                         NSForegroundColorAttributeName : UIColor.darkGrayColor()
                     ])
                 detailMessage.setValue(messageText, forKey: "attributedMessage")
                 self.presentViewController(detailMessage, animated: true, completion: nil)
             }
-            
-            // 向Alert弹框里面增加一个选项
             alertMessage.addAction(UIAlertAction(title: "MORE", style: .Default, handler: detailActionHandler))
             alertMessage.addAction(UIAlertAction(title: "CLOSE", style: .Destructive, handler: nil))
             self.presentViewController(alertMessage, animated: true, completion: nil)
@@ -369,25 +331,20 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
             let alertMessage = UIAlertController(title: extendedPolyline.key, message: "\(classifierProperty): \(extendedPolyline.value)", preferredStyle: .Alert)
             
             let detailActionHandler = { (action:UIAlertAction!) -> Void in
-                // 定义一个Alert信息，Style为弹出式Alert
                 let detailMessage = UIAlertController(title: extendedPolyline.title, message: "Message", preferredStyle: .ActionSheet)
-                // 向Alert弹框里面增加一个选项
                 detailMessage.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                // 显示弹框
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = NSTextAlignment.Center
                 let messageText = NSMutableAttributedString(
                     string: extendedPolyline.getProperties(),
                     attributes: [
                         NSParagraphStyleAttributeName: paragraphStyle,
-                        //NSFontAttributeName: UIFont.preferredFontForTextStyle(UIFontTextStyleBody),
                         NSFontAttributeName: UIFont(name: "Menlo-Regular",size: 11.0)!,
                         NSForegroundColorAttributeName : UIColor.darkGrayColor()
                     ])
                 detailMessage.setValue(messageText, forKey: "attributedMessage")
                 self.presentViewController(detailMessage, animated: true, completion: nil)
             }
-            // 向Alert弹框里面增加一个选项
             alertMessage.addAction(UIAlertAction(title: "MORE", style: .Default, handler: detailActionHandler))
             alertMessage.addAction(UIAlertAction(title: "CLOSE", style: .Destructive, handler: nil))
             self.presentViewController(alertMessage, animated: true, completion: nil)

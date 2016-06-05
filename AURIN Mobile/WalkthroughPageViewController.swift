@@ -65,7 +65,6 @@ class WalkthroughPageViewController: UIPageViewController, UIPageViewControllerD
     
     
     func viewControllerAtIndex(index: Int) -> WalkthroughContentViewController? {
-        // 如果越界，返回空，即没有页面
         if index == NSNotFound || index < 0 || index >= pageImages.count {
             return nil
         }

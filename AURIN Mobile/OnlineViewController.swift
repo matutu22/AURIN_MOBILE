@@ -10,7 +10,6 @@
  Description：
     This file control the online dataset view, fetching datasat catalog from AUIRN, and display
  them in a table view. There are also a geographical filer and search bar in this view.
- 
  ********************************************************************************************/
 
 

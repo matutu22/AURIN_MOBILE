@@ -6,6 +6,12 @@
 //  Copyright © 2016 University of Melbourne. All rights reserved.
 //
 
+/********************************************************************************************
+ Description：
+    Class for dataset table cell.
+ ********************************************************************************************/
+
+
 import UIKit
 
 class DatasetTableViewCell: UITableViewCell {

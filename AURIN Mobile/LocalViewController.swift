@@ -6,6 +6,13 @@
 //  Copyright © 2016年 University of Melbourne. All rights reserved.
 //
 
+/********************************************************************************************
+ Description：
+    This file control the offline dataset view, the structure is similar with OnlineViewController.
+ It fetches dataset from local database and display in a table view.
+ ********************************************************************************************/
+
+
 import UIKit
 import CoreData
 
@@ -13,28 +20,19 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
 
     
     var localDatasets:[LocalDataset] = []
-    
     // 'searchDatasets' list stores the information of datasets that match the query.
     var searchDatasets:[LocalDataset] = []
-    
     // Create a search controller.
     let searchController = UISearchController(searchResultsController: nil)
-    
-    
     var fetchResultController:NSFetchedResultsController!
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // Set the self sizing table cell. The default cell height is 72.0 point.
         tableView.estimatedRowHeight = 72.0
         tableView.rowHeight = UITableViewAutomaticDimension
-        
         // Get Data from GeoServer through WFS.
         self.getDatasets()
-        
         // Add search bar to the view.
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
@@ -42,13 +40,9 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
         tableView.tableHeaderView = searchController.searchBar
         searchController.searchBar.scopeButtonTitles = ["All", "Title", "Org", "Keyword"]
         searchController.searchBar.delegate = self
-
-        
         // Set the text of 'back' button in next view.
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
         // Do any additional setup after loading the view.
-        
-        // 清除空白行分割线
         tableView.tableFooterView = UIView(frame: CGRectZero)
 
     }
@@ -96,9 +90,9 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
     // FUNCTION: The content of row at 'indexPath'
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        // 设置Cell的identifier
+        // Set Cell's identifier
         let cellIdentifier = "Cell"
-        // 声明Cells可以复用，节省内存
+        // Reuse table cells to save memory
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! DatasetTableViewCell
         let data:LocalDataset
         if searchController.active && searchController.searchBar.text != "" {
@@ -122,7 +116,6 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        // 执行完操作之后，释放该行的选择状态
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
     }
     
@@ -131,9 +124,9 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath
         indexPath: NSIndexPath) -> [UITableViewRowAction]? {
         
-        // 定制删除按钮
+        // Delete option
         let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Delete",handler:
-            {   // 这是一个闭包，定义一个handler
+            {
                 (action, indexPath) -> Void in
                 // Delete the row from the database
                 if let managedObjectContext = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext {
@@ -151,7 +144,6 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
                 
         })
         deleteAction.backgroundColor = UIColor(red: 210.0/255.0, green: 77.0/255.0, blue: 87.0/255.0, alpha: 1.0)
-        //        return [deleteAction, shareAction]
         return [deleteAction]
     }
     
@@ -248,7 +240,6 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
             if let indexPath = tableView.indexPathForSelectedRow {
                 let datasetToPass = Dataset()
                 let localDataset: LocalDataset!
-                // 如果从搜索框进入Detail的话，下表要从过滤后的新列表中取
                 if searchController.active && searchController.searchBar.text != "" {
                     localDataset = searchDatasets[indexPath.row]
                 } else {
@@ -265,7 +256,6 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
                 datasetToPass.center = (longitude: localDataset.centerLON, latitude: localDataset.centerLAT)
                 let destinationController = segue.destinationViewController as! DatasetDetailViewController
                 destinationController.dataset = datasetToPass
-                // 在下页隐藏Tab Bar
                 // destinationController.hidesBottomBarWhenPushed = true
             }
         }

@@ -102,12 +102,6 @@ class WalkthroughAnimationViewController: UIViewController {
     }
 
     @IBAction func dontShowTapped(sender: AnyObject) {
-//        // 定义一个alertController，设定了title，message和style
-//        let alertController = UIAlertController(title: "CLOSE INTRODUCTION", message: "This page will not appear next time. You can watch it in 'About' page.", preferredStyle: UIAlertControllerStyle.Alert)
-//        // 向alertController添加了一个action，显示OK
-//        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-//        // 设置显示alertController
-//        self.presentViewController(alertController, animated: true, completion: nil)
         
         let defaluts = NSUserDefaults.standardUserDefaults()
         let status = defaluts.boolForKey("ClosedWalkthrough")

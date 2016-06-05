@@ -6,6 +6,12 @@
 //  Copyright © 2016年 University of Melbourne. All rights reserved.
 //
 
+/********************************************************************************************
+ Description：
+    Control the chart setting view.
+ ********************************************************************************************/
+
+
 import UIKit
 import GoogleMaps
 
@@ -53,20 +59,15 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
     
     
     // Used for MapView
-    // 这些变量用于在地图上选定区域
-    // tapCount用于对点击次数进行统计
     var tapCount = 0
-    // 以下四个变量用于分别统计两次点击的坐标
     var lowerLatitude:Double = 0.0
     var lowerLongitude:Double = 0.0
     var upperLatitude:Double = 0.0
     var upperLongitude:Double = 0.0
-    // 定义两个marker，分别用来标记两次点击的点
     var marker1 = GMSMarker(position: CLLocationCoordinate2DMake(0, 0))
     var marker2 = GMSMarker(position: CLLocationCoordinate2DMake(0, 0))
     var marker3 = GMSMarker(position: CLLocationCoordinate2DMake(0, 0))
     var marker4 = GMSMarker(position: CLLocationCoordinate2DMake(0, 0))
-    // areaSelection用于根据两个marker的位置来画图
     var areaSelection = GMSPolygon()
     
     
@@ -107,7 +108,6 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
         navigationItem.title = "Chart Setting"
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
         
-        // 装载Properties选项
         for (key, value) in propertyList {
             switch value {
             case "string":
@@ -140,9 +140,7 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
         let camera = GMSCameraPosition.cameraWithLatitude(dataset.center.latitude, longitude: dataset.center.longitude, zoom: dataset.zoom)
         bboxMap.animateToCameraPosition(camera)
         
-        
-        
-        // 为小屏幕iPhone优化
+        // For small screen
         if UIScreen.mainScreen().bounds.width <= 350.0 {
             areaLabel.font = areaLabel.font.fontWithSize(13.0)
             areaTitle.font = areaTitle.font.fontWithSize(13.0)
@@ -160,7 +158,6 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
         
         
         
-        // 根据是否存储了Filter中已经过滤的Area或者BBOX，来更改默认设置
         
         if DataSet.filterBBOX.lowerLON != 0 {
             chooseBBOX = DataSet.filterBBOX
@@ -169,24 +166,6 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
             DataSet.filterBBOX = BBOX(lowerLON: 0, lowerLAT: 0, upperLON: 0, upperLAT: 0)
         }
         
-        
-        /***********/
-        /***********/
-        /***********/
-        /***********/
-        /***********/
-        /***********/
-        /***********/
-        /***********/
-        /***********/
-        /***********/
-        
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-        
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
     
@@ -487,15 +466,11 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
     func mapView(mapView: GMSMapView, didLongPressAtCoordinate coordinate: CLLocationCoordinate2D) {
         // print(coordinate)
         
-        // 定义一个icon，用于作为自定义的Marker显示。第二句话用于将marker显示的点定义在中心位置
         var markerIcon = UIImage(named: "dot")
         markerIcon = markerIcon!.imageWithAlignmentRectInsets(UIEdgeInsetsMake(0, 0, markerIcon!.size.height/2, 0))
-        // 点击计数器
         self.tapCount += 1
         
-        // 单数次点击的情况
         if (self.tapCount % 2 == 1) {
-            // 点数次的点击，先清理遗留的坐标和Bounding Box
             marker1.map = nil
             marker2.map = nil
             marker3.map = nil
@@ -504,7 +479,6 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
             
             self.lowerLatitude = coordinate.latitude
             self.lowerLongitude = coordinate.longitude
-            // 覆盖掉之前的 marker1
             marker1 = GMSMarker(position: CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude))
             //marker1.position = CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude)
             marker1.icon = markerIcon!
@@ -512,40 +486,28 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
             marker1.snippet = ("\(marker1.position.latitude)\n\(marker1.position.longitude)")
             marker1.map = self.bboxMap
         } else {
-            // 双数次的点击，记录点击的坐标，更新全局变量
             self.upperLatitude = coordinate.latitude
             self.upperLongitude = coordinate.longitude
-            // 覆盖掉之前的 marker2
             marker2 = GMSMarker(position: CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude))
-            //marker2.position = CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude)
             marker2.icon = markerIcon!
             marker2.appearAnimation = kGMSMarkerAnimationPop
-            //marker2.snippet = ("\(marker2.position.latitude)\n\(marker2.position.longitude)")
             marker2.map = self.bboxMap
             
-            // 在与marker1和marker2相对的地方，放置marker3和marker4
             marker3 = GMSMarker(position: CLLocationCoordinate2DMake(self.upperLatitude, self.lowerLongitude))
             marker4 = GMSMarker(position: CLLocationCoordinate2DMake(self.lowerLatitude, self.upperLongitude))
             marker3.icon = markerIcon!
             marker4.icon = markerIcon!
             marker3.appearAnimation = kGMSMarkerAnimationPop
             marker4.appearAnimation = kGMSMarkerAnimationPop
-            //marker3.snippet = ("\(marker3.position.latitude)\n\(marker3.position.longitude)")
-            //marker4.snippet = ("\(marker4.position.latitude)\n\(marker4.position.longitude)")
             marker3.map = self.bboxMap
             marker4.map = self.bboxMap
             
-            
-            
-            // 两次点击确定一个Bounding Box
             let rect = GMSMutablePath()
             rect.addCoordinate(CLLocationCoordinate2D(latitude: self.lowerLatitude, longitude: self.lowerLongitude))
             rect.addCoordinate(CLLocationCoordinate2D(latitude: self.upperLatitude, longitude: self.lowerLongitude))
             rect.addCoordinate(CLLocationCoordinate2D(latitude: self.upperLatitude, longitude: self.upperLongitude))
             rect.addCoordinate(CLLocationCoordinate2D(latitude: self.lowerLatitude, longitude: self.upperLongitude))
-            // 将Bounding Box画在地图上
             areaSelection = GMSPolygon(path: rect)
-            //areaSelection = GMSPolygon(path: rect)
             areaSelection.strokeColor = UIColor.blackColor()
             areaSelection.strokeWidth = 1.5
             areaSelection.fillColor = UIColor(red:0, green:0, blue:0, alpha:0.2)
@@ -586,9 +548,6 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
             //destinationController.colorClass = colorClass
             destinationController.opacity = opacity
             destinationController.geom_name = geom_name
-
-
-            // 在下页隐藏Tab Bar
             // destinationController.hidesBottomBarWhenPushed = true
         }
     }
