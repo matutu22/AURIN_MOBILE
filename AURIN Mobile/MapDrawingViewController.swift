@@ -312,7 +312,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
             let detailMessage = UIAlertController(title: extendedMarker.title, message: "Message", preferredStyle: .ActionSheet)
             // 向Alert弹框里面增加一个选项
             detailMessage.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-            // 显示弹框
+            // Show alert
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.alignment = NSTextAlignment.Center
             let messageText = NSMutableAttributedString(
