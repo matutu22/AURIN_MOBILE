@@ -30,7 +30,7 @@ class WalkthroughAnimationViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         // Do any additional setup after loading the view.
-        let translate = CGAffineTransformMakeTranslation(0, 600)
+        let translate = CGAffineTransform(translationX: 0, y: 600)
         animation_1.transform = translate
         animation_2.transform = translate
         animation_3.transform = translate
@@ -43,48 +43,48 @@ class WalkthroughAnimationViewController: UIViewController {
         dontShowButton.transform = translate
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         
         
         // Spring animation
-        UIView.animateWithDuration(0.7, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
-            self.animation_1.transform = CGAffineTransformIdentity
+        UIView.animate(withDuration: 0.7, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
+            self.animation_1.transform = CGAffineTransform.identity
         }, completion: nil)
         
-        UIView.animateWithDuration(0.7, delay: 0.4, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
-            self.animation_2.transform = CGAffineTransformIdentity
+        UIView.animate(withDuration: 0.7, delay: 0.4, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
+            self.animation_2.transform = CGAffineTransform.identity
         }, completion: nil)
         
-        UIView.animateWithDuration(0.7, delay: 0.3, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
-            self.animation_3.transform = CGAffineTransformIdentity
+        UIView.animate(withDuration: 0.7, delay: 0.3, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
+            self.animation_3.transform = CGAffineTransform.identity
         }, completion: nil)
         
-        UIView.animateWithDuration(0.7, delay: 0.25, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
-            self.animation_4.transform = CGAffineTransformIdentity
+        UIView.animate(withDuration: 0.7, delay: 0.25, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
+            self.animation_4.transform = CGAffineTransform.identity
         }, completion: nil)
         
-        UIView.animateWithDuration(0.7, delay: 0.15, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
-            self.animation_5.transform = CGAffineTransformIdentity
+        UIView.animate(withDuration: 0.7, delay: 0.15, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
+            self.animation_5.transform = CGAffineTransform.identity
         }, completion: nil)
         
-        UIView.animateWithDuration(0.7, delay: 0.35, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
-            self.animation_6.transform = CGAffineTransformIdentity
+        UIView.animate(withDuration: 0.7, delay: 0.35, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
+            self.animation_6.transform = CGAffineTransform.identity
         }, completion: nil)
         
-        UIView.animateWithDuration(0.7, delay: 0.5, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
-            self.animation_7.transform = CGAffineTransformIdentity
+        UIView.animate(withDuration: 0.7, delay: 0.5, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
+            self.animation_7.transform = CGAffineTransform.identity
         }, completion: nil)
         
-        UIView.animateWithDuration(0.7, delay: 0.65, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
-            self.animation_8.transform = CGAffineTransformIdentity
+        UIView.animate(withDuration: 0.7, delay: 0.65, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
+            self.animation_8.transform = CGAffineTransform.identity
         }, completion: nil)
         
-        UIView.animateWithDuration(0.7, delay: 0.7, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
-            self.getStartedButton.transform = CGAffineTransformIdentity
+        UIView.animate(withDuration: 0.7, delay: 0.7, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
+            self.getStartedButton.transform = CGAffineTransform.identity
             }, completion: nil)
         
-        UIView.animateWithDuration(0.7, delay: 0.7, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
-            self.dontShowButton.transform = CGAffineTransformIdentity
+        UIView.animate(withDuration: 0.7, delay: 0.7, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
+            self.dontShowButton.transform = CGAffineTransform.identity
             }, completion: nil)
         
     }
@@ -97,16 +97,16 @@ class WalkthroughAnimationViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func getStaretedTapped(sender: AnyObject) {
-        dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func getStaretedTapped(_ sender: AnyObject) {
+        dismiss(animated: true, completion: nil)
     }
 
-    @IBAction func dontShowTapped(sender: AnyObject) {
+    @IBAction func dontShowTapped(_ sender: AnyObject) {
         
-        let defaluts = NSUserDefaults.standardUserDefaults()
-        let status = defaluts.boolForKey("ClosedWalkthrough")
-        defaluts.setBool(!status, forKey: "ClosedWalkthrough")
-        dismissViewControllerAnimated(true, completion: nil)
+        let defaluts = UserDefaults.standard
+        let status = defaluts.bool(forKey: "ClosedWalkthrough")
+        defaluts.set(!status, forKey: "ClosedWalkthrough")
+        dismiss(animated: true, completion: nil)
     }
     
     /*

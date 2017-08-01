@@ -39,7 +39,7 @@ class BBOX {
     }
     
     // Algorithms to judge if two bounding boxes are intersectant
-    func isIntersect(bbox: BBOX) -> Bool {
+    func isIntersect(_ bbox: BBOX) -> Bool {
         // (x11, y11) is top-left corner, (x12, y12) is bottom-right corner.
         var x11 = self.lowerLON
         var y11 = self.upperLAT
@@ -178,19 +178,19 @@ class ExtendedMarker: GMSMarker {
     
     func getProperties() -> String {
         var width = 45
-        if UIScreen.mainScreen().bounds.width <= 350.0 {
+        if UIScreen.main.bounds.width <= 350.0 {
             width = 35
         }
         
         
         var count = 0
         var propertiesString = ""
-        let newprop = self.properties.sort{$0.0 < $1.0}
+        let newprop = self.properties.sorted{$0.0 < $1.0}
         for (key, value) in newprop {
             count += 1
             propertiesString += "\(key) "
             let spaceNum = width-key.characters.count-value.characters.count
-            for _ in Range(0...(spaceNum > 0 ? spaceNum : 0)) {
+            for _ in 0...(spaceNum > 0 ? spaceNum : 0) {
                 propertiesString += "-"
             }
             propertiesString += " \(value)"
@@ -211,19 +211,19 @@ class ExtendedPolyline: GMSPolyline {
     
     func getProperties() -> String {
         var width = 45
-        if UIScreen.mainScreen().bounds.width <= 350.0 {
+        if UIScreen.main.bounds.width <= 350.0 {
             width = 35
         }
         
         
         var count = 0
         var propertiesString = ""
-        let newprop = self.properties.sort{$0.0 < $1.0}
+        let newprop = self.properties.sorted{$0.0 < $1.0}
         for (key, value) in newprop {
             count += 1
             propertiesString += "\(key) "
             let spaceNum = width-key.characters.count-value.characters.count
-            for _ in Range(0...(spaceNum > 0 ? spaceNum : 0)) {
+            for _ in 0...(spaceNum > 0 ? spaceNum : 0) {
                 propertiesString += "-"
             }
             propertiesString += " \(value)"
@@ -244,17 +244,17 @@ class ExtendedPolygon: GMSPolygon {
     
     func getProperties() -> String {
         var width = 45
-        if UIScreen.mainScreen().bounds.width <= 350.0 {
+        if UIScreen.main.bounds.width <= 350.0 {
             width = 35
         }
         var count = 0
         var propertiesString = ""
-        let newprop = self.properties.sort{$0.0 < $1.0}
+        let newprop = self.properties.sorted{$0.0 < $1.0}
         for (key, value) in newprop {
             count += 1
             propertiesString += "\(key) "
             let spaceNum = width-key.characters.count-value.characters.count
-            for _ in Range(0...(spaceNum > 0 ? spaceNum : 0)) {
+            for _ in 0...(spaceNum > 0 ? spaceNum : 0) {
                 propertiesString += "-"
             }
             propertiesString += " \(value)"

@@ -52,8 +52,8 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
 
         // Do any additional setup after loading the view.
         
-        self.areaMap.myLocationEnabled = true;
-        self.areaMap.mapType = kGMSTypeNormal;
+        self.areaMap.isMyLocationEnabled = true;
+        self.areaMap.mapType = .normal;
         self.areaMap.settings.compassButton = false;
         self.areaMap.settings.myLocationButton = false;
         self.areaMap.settings.zoomGestures = true
@@ -62,17 +62,17 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
         self.areaMap.settings.scrollGestures = true
         
         self.areaMap.delegate = self;
-        let camera = GMSCameraPosition.cameraWithLatitude(-28.00, longitude: 133.135, zoom: 3)
-        areaMap.animateToCameraPosition(camera)
+        let camera = GMSCameraPosition.camera(withLatitude: -28.00, longitude: 133.135, zoom: 3)
+        areaMap.animate(to: camera)
         
         
     }
 
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 2
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
 
         if component == 0 {
             return states.count
@@ -82,30 +82,30 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
 
     }
     
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView
     {
         if component == 0 {
             let pickerLabel = UILabel()
-            pickerLabel.textColor = UIColor.blackColor()
+            pickerLabel.textColor = UIColor.black
             pickerLabel.text = states[row]
             // pickerLabel.font = UIFont(name: pickerLabel.font.fontName, size: 15)
             pickerLabel.font = UIFont(name: "AvenirNextCondensed-Regular", size: 15) // In this use your custom font
-            pickerLabel.textAlignment = NSTextAlignment.Center
+            pickerLabel.textAlignment = NSTextAlignment.center
             return pickerLabel
             
         } else {
             let pickerLabel = UILabel()
-            pickerLabel.textColor = UIColor.blackColor()
+            pickerLabel.textColor = UIColor.black
             pickerLabel.text = suburbs[row]
             // pickerLabel.font = UIFont(name: pickerLabel.font.fontName, size: 15)
             pickerLabel.font = UIFont(name: "AvenirNextCondensed-Regular", size: 12) // In this use your custom font
-            pickerLabel.textAlignment = NSTextAlignment.Center
+            pickerLabel.textAlignment = NSTextAlignment.center
             return pickerLabel
         }
     }
     
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
 
         if component == 0 {
             switch states[row] {
@@ -150,15 +150,15 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
         
         // draw bounding box on the map
         let rect = GMSMutablePath()
-        rect.addCoordinate(CLLocationCoordinate2D(latitude: filertBBOX.lowerLAT, longitude: filertBBOX.lowerLON))
-        rect.addCoordinate(CLLocationCoordinate2D(latitude: filertBBOX.upperLAT, longitude: filertBBOX.lowerLON))
-        rect.addCoordinate(CLLocationCoordinate2D(latitude: filertBBOX.upperLAT, longitude: filertBBOX.upperLON))
-        rect.addCoordinate(CLLocationCoordinate2D(latitude: filertBBOX.lowerLAT, longitude: filertBBOX.upperLON))
+        rect.add(CLLocationCoordinate2D(latitude: filertBBOX.lowerLAT, longitude: filertBBOX.lowerLON))
+        rect.add(CLLocationCoordinate2D(latitude: filertBBOX.upperLAT, longitude: filertBBOX.lowerLON))
+        rect.add(CLLocationCoordinate2D(latitude: filertBBOX.upperLAT, longitude: filertBBOX.upperLON))
+        rect.add(CLLocationCoordinate2D(latitude: filertBBOX.lowerLAT, longitude: filertBBOX.upperLON))
         
         areaMap.clear()
         let bounding = GMSPolygon(path: rect)
-        bounding.tappable = true
-        bounding.strokeColor = UIColor.blackColor()
+        bounding.isTappable = true
+        bounding.strokeColor = UIColor.black
         bounding.strokeWidth = 1.5
         bounding.fillColor = UIColor(red:0, green:0, blue:0, alpha:0.2)
         
@@ -170,8 +170,8 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
         
         
         
-        let camera = GMSCameraPosition.cameraWithLatitude(centerLatitude, longitude: centerLongitude, zoom: zoomLevel)
-        areaMap.animateToCameraPosition(camera)
+        let camera = GMSCameraPosition.camera(withLatitude: centerLatitude, longitude: centerLongitude, zoom: zoomLevel)
+        areaMap.animate(to: camera)
         
         
     }
@@ -181,11 +181,11 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
     /************************************* MAP VIEW ****************************************/
     
     
-    func mapView(mapView: GMSMapView, didLongPressAtCoordinate coordinate: CLLocationCoordinate2D) {
+    func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
         // print(coordinate)
         
         var markerIcon = UIImage(named: "dot")
-        markerIcon = markerIcon!.imageWithAlignmentRectInsets(UIEdgeInsetsMake(0, 0, markerIcon!.size.height/2, 0))
+        markerIcon = markerIcon!.withAlignmentRectInsets(UIEdgeInsetsMake(0, 0, markerIcon!.size.height/2, 0))
         // Count the taps
         self.tapCount += 1
         
@@ -202,7 +202,7 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
             self.lowerLongitude = coordinate.longitude
             marker1 = GMSMarker(position: CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude))
             marker1.icon = markerIcon!
-            marker1.appearAnimation = kGMSMarkerAnimationPop
+            marker1.appearAnimation = .pop
             marker1.snippet = ("\(marker1.position.latitude)\n\(marker1.position.longitude)")
             marker1.map = self.areaMap
         } else {
@@ -210,30 +210,30 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
             self.upperLongitude = coordinate.longitude
             marker2 = GMSMarker(position: CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude))
             marker2.icon = markerIcon!
-            marker2.appearAnimation = kGMSMarkerAnimationPop
+            marker2.appearAnimation = .pop
             marker2.map = self.areaMap
             
             marker3 = GMSMarker(position: CLLocationCoordinate2DMake(self.upperLatitude, self.lowerLongitude))
             marker4 = GMSMarker(position: CLLocationCoordinate2DMake(self.lowerLatitude, self.upperLongitude))
             marker3.icon = markerIcon!
             marker4.icon = markerIcon!
-            marker3.appearAnimation = kGMSMarkerAnimationPop
-            marker4.appearAnimation = kGMSMarkerAnimationPop
+            marker3.appearAnimation = .pop
+            marker4.appearAnimation = .pop
             marker3.map = self.areaMap
             marker4.map = self.areaMap
             
             
             
             let rect = GMSMutablePath()
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: self.lowerLatitude, longitude: self.lowerLongitude))
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: self.upperLatitude, longitude: self.lowerLongitude))
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: self.upperLatitude, longitude: self.upperLongitude))
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: self.lowerLatitude, longitude: self.upperLongitude))
+            rect.add(CLLocationCoordinate2D(latitude: self.lowerLatitude, longitude: self.lowerLongitude))
+            rect.add(CLLocationCoordinate2D(latitude: self.upperLatitude, longitude: self.lowerLongitude))
+            rect.add(CLLocationCoordinate2D(latitude: self.upperLatitude, longitude: self.upperLongitude))
+            rect.add(CLLocationCoordinate2D(latitude: self.lowerLatitude, longitude: self.upperLongitude))
             areaSelection = GMSPolygon(path: rect)
-            areaSelection.strokeColor = UIColor.blackColor()
+            areaSelection.strokeColor = UIColor.black
             areaSelection.strokeWidth = 1.5
             areaSelection.fillColor = UIColor(red:0, green:0, blue:0, alpha:0.2)
-            areaSelection.tappable = true
+            areaSelection.isTappable = true
             
             areaSelection.map = self.areaMap
             
@@ -251,7 +251,7 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
         
     }
     
-    func mapView(mapView: GMSMapView, didTapOverlay overlay: GMSOverlay) {
+    func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
         overlay.map = nil
         self.marker1.map = nil
         self.marker2.map = nil

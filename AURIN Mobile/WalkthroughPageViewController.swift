@@ -23,7 +23,7 @@ class WalkthroughPageViewController: UIPageViewController, UIPageViewControllerD
         dataSource = self
         // Create the first walkthrough screen
         if let startingViewController = viewControllerAtIndex(0) {
-            setViewControllers([startingViewController], direction: .Forward, animated: true, completion: nil)
+            setViewControllers([startingViewController], direction: .forward, animated: true, completion: nil)
         }
         
     }
@@ -32,7 +32,7 @@ class WalkthroughPageViewController: UIPageViewController, UIPageViewControllerD
     
 
     
-    func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         if stop {
             return nil
         }
@@ -46,7 +46,7 @@ class WalkthroughPageViewController: UIPageViewController, UIPageViewControllerD
         }
     }
     
-    func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         if stop {
             return nil
         }
@@ -55,8 +55,8 @@ class WalkthroughPageViewController: UIPageViewController, UIPageViewControllerD
         return viewControllerAtIndex(index)
     }
     
-    func animationViewController(index: Int) -> WalkthroughAnimationViewController? {
-        if let animationContentViewController = storyboard?.instantiateViewControllerWithIdentifier("WalkthroughAnimationViewController") as? WalkthroughAnimationViewController {
+    func animationViewController(_ index: Int) -> WalkthroughAnimationViewController? {
+        if let animationContentViewController = storyboard?.instantiateViewController(withIdentifier: "WalkthroughAnimationViewController") as? WalkthroughAnimationViewController {
             //animationContentViewController.index = index
             return animationContentViewController
         }
@@ -64,12 +64,12 @@ class WalkthroughPageViewController: UIPageViewController, UIPageViewControllerD
     }
     
     
-    func viewControllerAtIndex(index: Int) -> WalkthroughContentViewController? {
+    func viewControllerAtIndex(_ index: Int) -> WalkthroughContentViewController? {
         if index == NSNotFound || index < 0 || index >= pageImages.count {
             return nil
         }
         // Create a new view controller and pass suitable data.
-        if let pageContentViewController = storyboard?.instantiateViewControllerWithIdentifier("WalkthroughContentViewController") as? WalkthroughContentViewController {
+        if let pageContentViewController = storyboard?.instantiateViewController(withIdentifier: "WalkthroughContentViewController") as? WalkthroughContentViewController {
             stop = false
             pageContentViewController.imageFile = pageImages[index]
             pageContentViewController.index = index
@@ -78,9 +78,9 @@ class WalkthroughPageViewController: UIPageViewController, UIPageViewControllerD
         return nil
     }
     
-    func forward(index:Int) {
+    func forward(_ index:Int) {
         if let nextViewController = viewControllerAtIndex(index + 1) {
-            setViewControllers([nextViewController], direction: .Forward, animated: true, completion: nil)
+            setViewControllers([nextViewController], direction: .forward, animated: true, completion: nil)
         }
     }
     

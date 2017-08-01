@@ -35,7 +35,7 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     var displayWalkthrough = true
     
     
-    var fetchResultController:NSFetchedResultsController!
+    var fetchResultController:NSFetchedResultsController<NSFetchRequestResult>!
     var localDatasets:[LocalDataset] = []
     var alldatasets = [Dataset]()
     
@@ -63,12 +63,12 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
         searchController.searchBar.delegate = self
         
         // Set the text of 'back' button in next view.
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
         // Set refresh Control
         let refreshControl = UIRefreshControl()
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to reload datasets")
-        refreshControl.addTarget(self, action: #selector(OnlineViewController.refreshDataset), forControlEvents: UIControlEvents.ValueChanged)
+        refreshControl.addTarget(self, action: #selector(OnlineViewController.refreshDataset), for: UIControlEvents.valueChanged)
         self.refreshControl = refreshControl
         
         
@@ -85,21 +85,21 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     
     
     // This function will display the walkthrough pages after the table view appears.
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         tableView.reloadData()
         
         // Check user's setting, if the walkthrough is closed, then do noting and return.
-        let defaluts = NSUserDefaults.standardUserDefaults()
-        if defaluts.boolForKey("ClosedWalkthrough") {
+        let defaluts = UserDefaults.standard
+        if defaluts.bool(forKey: "ClosedWalkthrough") {
             return
         }
         
         // Check the flag, walktrough pages will only display once after the app launching.
         if displayWalkthrough {
-            if let pageViewController = storyboard?.instantiateViewControllerWithIdentifier("WalkthroughController") as? WalkthroughPageViewController {
-                presentViewController(pageViewController, animated: true, completion: nil)
+            if let pageViewController = storyboard?.instantiateViewController(withIdentifier: "WalkthroughController") as? WalkthroughPageViewController {
+                present(pageViewController, animated: true, completion: nil)
             }
             // Set the display flag to false.
             displayWalkthrough = false
@@ -108,11 +108,11 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     }
 
     // This fucntion fetch dataset catalog from AURIN API: GeoServer
-    private func getSavedDatasets() {
-        let fetchRequest = NSFetchRequest(entityName: "LocalDataset")
+    fileprivate func getSavedDatasets() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "LocalDataset")
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
-        if let managedObjectContext = (UIApplication.sharedApplication().delegate as?
+        if let managedObjectContext = (UIApplication.shared.delegate as?
             AppDelegate)?.managedObjectContext {
             fetchResultController = NSFetchedResultsController(fetchRequest:
                 fetchRequest, managedObjectContext: managedObjectContext, sectionNameKeyPath:
@@ -141,15 +141,15 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     
     
     // This function will get datasets content fron GeoServer, and generating a list of 'Dataset' type.
-    private func getDatasets() {
+    fileprivate func getDatasets() {
         
         // Query the dataset list from GeoServer, using 'GetCapabilities' service.
-        Alamofire.request(.GET, "https://geoserver.aurin.org.au/wfs?service=WFS&version=1.1.0&request=GetCapabilities")
+        Alamofire.request("https://geoserver.aurin.org.au/wfs?service=WFS&version=1.1.0&request=GetCapabilities")
             .authenticate(user: "student", password: "dj78dfGF")
-            .response { (request, response, data, error) in
+            .response {  response in
                 
                 // It is the XML file that returnd by GeoServer.
-                let xml = SWXMLHash.parse(data!)
+                let xml = SWXMLHash.parse(response.data!)
                 // Dealing each feature, and put them into a list.
                 let featureTypeList = xml["wfs:WFS_Capabilities"]["FeatureTypeList"]["FeatureType"]
                 for featureType in featureTypeList {
@@ -196,8 +196,8 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     // MARK: - DataSource
     
     // FUNCTION: Number of rows in table section.
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchController.active && searchController.searchBar.text != "" {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if searchController.isActive && searchController.searchBar.text != "" {
             return searchDatasets.count
         } else {
             return datasets.count
@@ -205,26 +205,26 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     }
     
     // FUNCTION: The content of row at 'indexPath'
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         getSavedDatasets()
         
         // Set Cell's identifier
         let cellIdentifier = "Cell"
         // Reuse cells for saving memory.
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! DatasetTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! DatasetTableViewCell
         let data:Dataset
         // If the search bar is active, display the filtered list.
-        if searchController.active && searchController.searchBar.text != "" {
+        if searchController.isActive && searchController.searchBar.text != "" {
             data = searchDatasets[indexPath.row]
         } else {
             data = datasets[indexPath.row]
         }
         
         if data.isSaved {
-            cell.accessoryType = .Checkmark
+            cell.accessoryType = .checkmark
         } else {
-            cell.accessoryType = .None
+            cell.accessoryType = .none
         }
         
         cell.datasetTitle.text = data.title
@@ -234,39 +234,39 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
         return cell
     }
     
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if searchController.active {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if searchController.isActive {
             return false
         } else {
             return true }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Deselect the row after touching.
-        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
     }
     
-    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath
-        indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+    override func tableView(_ tableView: UITableView, editActionsForRowAt
+        indexPath: IndexPath) -> [UITableViewRowAction]? {
 
         // Add a save option in the slide bar.
-        let saveAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Save",handler:
+        let saveAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Save",handler:
             {   // This closure is a hundler which save dataset to CoreData
                 (action, indexPath) -> Void in
                 self.getSavedDatasets()
                 if DataSet.savedDataset.contains(self.datasets[indexPath.row].title) {
-                    tableView.editing = false
-                    let alertMessage = UIAlertController(title: "NOTICE", message: "This dataset is already saved.", preferredStyle: .Alert)
-                    alertMessage.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                    self.presentViewController(alertMessage, animated: true, completion: nil)
+                    tableView.isEditing = false
+                    let alertMessage = UIAlertController(title: "NOTICE", message: "This dataset is already saved.", preferredStyle: .alert)
+                    alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alertMessage, animated: true, completion: nil)
                 } else {
                     // The Dataset type will be changed into Localdataset type.
                     var localDataset:LocalDataset!
-                    if let managedObjectContext = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext {
-                        localDataset = NSEntityDescription.insertNewObjectForEntityForName("LocalDataset", inManagedObjectContext: managedObjectContext) as! LocalDataset
+                    if let managedObjectContext = (UIApplication.shared.delegate as? AppDelegate)?.managedObjectContext {
+                        localDataset = NSEntityDescription.insertNewObject(forEntityName: "LocalDataset", into: managedObjectContext) as! LocalDataset
                         
                         localDataset.name = self.datasets[indexPath.row].name
                         localDataset.title = self.datasets[indexPath.row].title
@@ -284,7 +284,7 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
                         
                         Numbers.newSavedItem += 1
                         let tabArray = self.tabBarController?.tabBar.items as NSArray!
-                        let tabItem = tabArray.objectAtIndex(1) as! UITabBarItem
+                        let tabItem = tabArray?.object(at: 1) as! UITabBarItem
                         tabItem.badgeValue = "\(Numbers.newSavedItem)"
                         
                         do {
@@ -292,11 +292,11 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
                         } catch {
                             print(error)
                         }
-                        let cell = tableView.cellForRowAtIndexPath(indexPath)
-                        cell?.accessoryType = .Checkmark
+                        let cell = tableView.cellForRow(at: indexPath)
+                        cell?.accessoryType = .checkmark
                     }
-                    self.datasets.removeAtIndex(indexPath.row)
-                    self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                    self.datasets.remove(at: indexPath.row)
+                    self.tableView.deleteRows(at: [indexPath], with: .fade)
                     
                 }
 
@@ -313,11 +313,11 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     }
     
     
-    func filterContentForSearchText(searchText: String, scope: String = "All") {
+    func filterContentForSearchText(_ searchText: String, scope: String = "All") {
         searchDatasets = datasets.filter( { (dataset:Dataset) -> Bool in
-            let titleMatch = dataset.title.rangeOfString(searchText, options: NSStringCompareOptions.CaseInsensitiveSearch)
-            let orgMatch = dataset.organisation.rangeOfString(searchText, options: NSStringCompareOptions.CaseInsensitiveSearch)
-            let keywordMatch = dataset.showKeyword().rangeOfString(searchText, options: NSStringCompareOptions.CaseInsensitiveSearch)
+            let titleMatch = dataset.title.range(of: searchText, options: NSString.CompareOptions.caseInsensitive)
+            let orgMatch = dataset.organisation.range(of: searchText, options: NSString.CompareOptions.caseInsensitive)
+            let keywordMatch = dataset.showKeyword().range(of: searchText, options: NSString.CompareOptions.caseInsensitive)
             let titleMatchFlag = titleMatch != nil
             let orgMatchFlag = orgMatch != nil
             let keywordMatchFlag = keywordMatch != nil
@@ -337,30 +337,30 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     
     
     // FUNCTION: Close the keyboard when touch other places.
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         searchController.resignFirstResponder()
     }
     
     
     // Pass a Dataset object to next view.
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDatasetDetail" {
             if let indexPath = tableView.indexPathForSelectedRow {
                 let datasetToPass: Dataset
                 // If select a dataset from search view.
-                if searchController.active && searchController.searchBar.text != "" {
+                if searchController.isActive && searchController.searchBar.text != "" {
                     datasetToPass = searchDatasets[indexPath.row]
                 } else {
                     datasetToPass = datasets[indexPath.row]
                 }
-                let destinationController = segue.destinationViewController as! DatasetDetailViewController
+                let destinationController = segue.destination as! DatasetDetailViewController
                 destinationController.dataset = datasetToPass
                 // destinationController.hidesBottomBarWhenPushed = true
                 
             }
         }
         if segue.identifier == "showPopover" {
-            let vc = segue.destinationViewController as UIViewController
+            let vc = segue.destination as UIViewController
             let controller = vc.popoverPresentationController
             //controller!.backgroundColor = UIColor(red: 200/255.0, green: 200/255.0, blue: 200/255.0, alpha: 0.7)
             if controller != nil {
@@ -370,18 +370,18 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
         
     }
 
-    @IBAction func popover(sender: AnyObject) {
-        self.performSegueWithIdentifier("showPopover", sender: self)
+    @IBAction func popover(_ sender: AnyObject) {
+        self.performSegue(withIdentifier: "showPopover", sender: self)
     }
     
-    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .None
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
     }
     
     
     // Go back to dataset list from geographical filter.
-    @IBAction func close(segue:UIStoryboardSegue) {
-        if let filterViewController = segue.sourceViewController as? FilterViewController {
+    @IBAction func close(_ segue:UIStoryboardSegue) {
+        if let filterViewController = segue.source as? FilterViewController {
             let bbox = filterViewController.filertBBOX
             datasets = datasets.filter{$0.bbox.isIntersect(bbox)}
             tableView.reloadData()
@@ -394,7 +394,7 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
 
 
 extension OnlineViewController: UISearchResultsUpdating {
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
+    func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
         let scope = searchBar.scopeButtonTitles![searchBar.selectedScopeButtonIndex]
         filterContentForSearchText(searchController.searchBar.text!, scope: scope)
@@ -404,7 +404,7 @@ extension OnlineViewController: UISearchResultsUpdating {
 }
 
 extension OnlineViewController: UISearchBarDelegate {
-    func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         filterContentForSearchText(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
     }
 }

@@ -27,18 +27,18 @@ class WalkthroughContentViewController: UIViewController {
         pageControl.currentPage = index
         
         switch index {
-        case 0...5: forwardButton.setTitle("NEXT", forState: UIControlState.Normal)
-        case 6: forwardButton.setTitle("DONE", forState: UIControlState.Normal)
+        case 0...5: forwardButton.setTitle("NEXT", for: UIControlState())
+        case 6: forwardButton.setTitle("DONE", for: UIControlState())
         default: break
         }
         
     }
     
     
-    @IBAction func nextButtonTapped(sender: UIButton) {
+    @IBAction func nextButtonTapped(_ sender: UIButton) {
         switch index {
         case 0...6:
-            let pageViewController = parentViewController as!
+            let pageViewController = parent as!
             WalkthroughPageViewController
             pageViewController.forward(index)
         case 7:
@@ -48,8 +48,8 @@ class WalkthroughContentViewController: UIViewController {
         }
     }
     
-    @IBAction func skipButtonTapped(sender: AnyObject) {
-        dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func skipButtonTapped(_ sender: AnyObject) {
+        dismiss(animated: true, completion: nil)
     }
 
 

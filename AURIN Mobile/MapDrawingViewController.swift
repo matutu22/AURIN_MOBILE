@@ -62,22 +62,22 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
         let centerLatitude = (chooseBBOX.lowerLAT + chooseBBOX.upperLAT) / 2
         let centerLongitude = (chooseBBOX.lowerLON + chooseBBOX.upperLON) / 2
         
-        mapView.bringSubviewToFront(backButton)
+        mapView.bringSubview(toFront: backButton)
         alpha = CGFloat(opacity)
         
-        self.mapView.myLocationEnabled = true;
-        self.mapView.mapType = kGMSTypeNormal;
+        self.mapView.isMyLocationEnabled = true;
+        self.mapView.mapType = .normal;
         self.mapView.settings.compassButton = true;
         self.mapView.settings.myLocationButton = true;
         self.mapView.settings.tiltGestures = false
         self.mapView.settings.rotateGestures = false
         self.mapView.delegate = self;
-        let camera = GMSCameraPosition.cameraWithLatitude(centerLatitude, longitude: centerLongitude, zoom: zoomLevel)
-        self.mapView.animateToCameraPosition(camera)
+        let camera = GMSCameraPosition.camera(withLatitude: centerLatitude, longitude: centerLongitude, zoom: zoomLevel)
+        self.mapView.animate(to: camera)
         
         // Do any additional setup after loading the view.
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            Alamofire.request(.GET, queryURL).response { (_request, _response, data, _error) in
+        dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0).async(execute: {
+            Alamofire.request(queryURL).response { (_request, _response, data, _error) in
                 let json = JSON(data: data!)
                 
                 if json["features"].count == 0 {
@@ -272,82 +272,82 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    func mapView(mapView: GMSMapView, didTapMarker marker: GMSMarker) -> Bool {
+    func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
         
         let extendedMarker = marker as! ExtendedMarker
-        let alertMessage = UIAlertController(title: extendedMarker.key, message: "\(classifierProperty): \(extendedMarker.value)", preferredStyle: .Alert)
+        let alertMessage = UIAlertController(title: extendedMarker.key, message: "\(classifierProperty): \(extendedMarker.value)", preferredStyle: .alert)
         
         let detailActionHandler = { (action:UIAlertAction!) -> Void in
-            let detailMessage = UIAlertController(title: extendedMarker.title, message: "Message", preferredStyle: .ActionSheet)
-            detailMessage.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+            let detailMessage = UIAlertController(title: extendedMarker.title, message: "Message", preferredStyle: .actionSheet)
+            detailMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             // Show alert
             let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.alignment = NSTextAlignment.Center
+            paragraphStyle.alignment = NSTextAlignment.center
             let messageText = NSMutableAttributedString(
                 string: extendedMarker.getProperties(),
                 attributes: [
                     NSParagraphStyleAttributeName: paragraphStyle,
                     NSFontAttributeName: UIFont(name: "Menlo-Regular",size: 11.0)!,
-                    NSForegroundColorAttributeName : UIColor.darkGrayColor()
+                    NSForegroundColorAttributeName : UIColor.darkGray
                 ])
             detailMessage.setValue(messageText, forKey: "attributedMessage")
-            self.presentViewController(detailMessage, animated: true, completion: nil)
+            self.present(detailMessage, animated: true, completion: nil)
         }
         
-        alertMessage.addAction(UIAlertAction(title: "MORE", style: .Default, handler: detailActionHandler))
-        alertMessage.addAction(UIAlertAction(title: "CLOSE", style: .Destructive, handler: nil))
-        self.presentViewController(alertMessage, animated: true, completion: nil)
+        alertMessage.addAction(UIAlertAction(title: "MORE", style: .default, handler: detailActionHandler))
+        alertMessage.addAction(UIAlertAction(title: "CLOSE", style: .destructive, handler: nil))
+        self.present(alertMessage, animated: true, completion: nil)
         return true
     }
     
     
-    func mapView(mapView: GMSMapView, didTapOverlay overlay: GMSOverlay) {
+    func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
         switch shapeType {
         case "Polygon":
             let extendedPolygon = overlay as! ExtendedPolygon
-            let alertMessage = UIAlertController(title: extendedPolygon.key, message: "\(classifierProperty): \(extendedPolygon.value)", preferredStyle: .Alert)
+            let alertMessage = UIAlertController(title: extendedPolygon.key, message: "\(classifierProperty): \(extendedPolygon.value)", preferredStyle: .alert)
             
             let detailActionHandler = { (action:UIAlertAction!) -> Void in
-                let detailMessage = UIAlertController(title: extendedPolygon.title, message: "Message", preferredStyle: .ActionSheet)
-                detailMessage.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                let detailMessage = UIAlertController(title: extendedPolygon.title, message: "Message", preferredStyle: .actionSheet)
+                detailMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 let paragraphStyle = NSMutableParagraphStyle()
-                paragraphStyle.alignment = NSTextAlignment.Center
+                paragraphStyle.alignment = NSTextAlignment.center
                 let messageText = NSMutableAttributedString(
                     string: extendedPolygon.getProperties(),
                     attributes: [
                         NSParagraphStyleAttributeName: paragraphStyle,
                         NSFontAttributeName: UIFont(name: "Menlo-Regular",size: 11.0)!,
-                        NSForegroundColorAttributeName : UIColor.darkGrayColor()
+                        NSForegroundColorAttributeName : UIColor.darkGray
                     ])
                 detailMessage.setValue(messageText, forKey: "attributedMessage")
-                self.presentViewController(detailMessage, animated: true, completion: nil)
+                self.present(detailMessage, animated: true, completion: nil)
             }
-            alertMessage.addAction(UIAlertAction(title: "MORE", style: .Default, handler: detailActionHandler))
-            alertMessage.addAction(UIAlertAction(title: "CLOSE", style: .Destructive, handler: nil))
-            self.presentViewController(alertMessage, animated: true, completion: nil)
+            alertMessage.addAction(UIAlertAction(title: "MORE", style: .default, handler: detailActionHandler))
+            alertMessage.addAction(UIAlertAction(title: "CLOSE", style: .destructive, handler: nil))
+            self.present(alertMessage, animated: true, completion: nil)
             
         case "Polyline":
             let extendedPolyline = overlay as! ExtendedPolyline
-            let alertMessage = UIAlertController(title: extendedPolyline.key, message: "\(classifierProperty): \(extendedPolyline.value)", preferredStyle: .Alert)
+            let alertMessage = UIAlertController(title: extendedPolyline.key, message: "\(classifierProperty): \(extendedPolyline.value)", preferredStyle: .alert)
             
             let detailActionHandler = { (action:UIAlertAction!) -> Void in
-                let detailMessage = UIAlertController(title: extendedPolyline.title, message: "Message", preferredStyle: .ActionSheet)
-                detailMessage.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                let detailMessage = UIAlertController(title: extendedPolyline.title, message: "Message", preferredStyle: .actionSheet)
+                detailMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 let paragraphStyle = NSMutableParagraphStyle()
-                paragraphStyle.alignment = NSTextAlignment.Center
+                paragraphStyle.alignment = NSTextAlignment.center
                 let messageText = NSMutableAttributedString(
                     string: extendedPolyline.getProperties(),
                     attributes: [
                         NSParagraphStyleAttributeName: paragraphStyle,
                         NSFontAttributeName: UIFont(name: "Menlo-Regular",size: 11.0)!,
-                        NSForegroundColorAttributeName : UIColor.darkGrayColor()
+                        NSForegroundColorAttributeName : UIColor.darkGray
                     ])
                 detailMessage.setValue(messageText, forKey: "attributedMessage")
-                self.presentViewController(detailMessage, animated: true, completion: nil)
+                self.present(detailMessage, animated: true, completion: nil)
             }
-            alertMessage.addAction(UIAlertAction(title: "MORE", style: .Default, handler: detailActionHandler))
-            alertMessage.addAction(UIAlertAction(title: "CLOSE", style: .Destructive, handler: nil))
-            self.presentViewController(alertMessage, animated: true, completion: nil)
+            alertMessage.addAction(UIAlertAction(title: "MORE", style: .default, handler: detailActionHandler))
+            alertMessage.addAction(UIAlertAction(title: "CLOSE", style: .destructive, handler: nil))
+            self.present(alertMessage, animated: true, completion: nil)
             
         default:
             break

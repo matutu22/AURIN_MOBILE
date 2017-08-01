@@ -24,7 +24,7 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
     var searchDatasets:[LocalDataset] = []
     // Create a search controller.
     let searchController = UISearchController(searchResultsController: nil)
-    var fetchResultController:NSFetchedResultsController!
+    var fetchResultController:NSFetchedResultsController<NSFetchRequestResult>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,26 +41,26 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
         searchController.searchBar.scopeButtonTitles = ["All", "Title", "Org", "Keyword"]
         searchController.searchBar.delegate = self
         // Set the text of 'back' button in next view.
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         // Do any additional setup after loading the view.
-        tableView.tableFooterView = UIView(frame: CGRectZero)
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
 
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         let tabArray = self.tabBarController?.tabBar.items as NSArray!
-        let tabItem = tabArray.objectAtIndex(1) as! UITabBarItem
+        let tabItem = tabArray?.object(at: 1) as! UITabBarItem
         tabItem.badgeValue = nil
         Numbers.newSavedItem = 0
     }
     
 
-    private func getDatasets() {
-        let fetchRequest = NSFetchRequest(entityName: "LocalDataset")
+    fileprivate func getDatasets() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "LocalDataset")
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
-        if let managedObjectContext = (UIApplication.sharedApplication().delegate as?
+        if let managedObjectContext = (UIApplication.shared.delegate as?
             AppDelegate)?.managedObjectContext {
             fetchResultController = NSFetchedResultsController(fetchRequest:
                 fetchRequest, managedObjectContext: managedObjectContext, sectionNameKeyPath:
@@ -79,8 +79,8 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
     // MARK: - DataSource
     
     // FUNCTION: Number of rows in table section.
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchController.active && searchController.searchBar.text != "" {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if searchController.isActive && searchController.searchBar.text != "" {
             return searchDatasets.count
         } else {
             return localDatasets.count
@@ -88,14 +88,14 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
     }
     
     // FUNCTION: The content of row at 'indexPath'
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Set Cell's identifier
         let cellIdentifier = "Cell"
         // Reuse table cells to save memory
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! DatasetTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! DatasetTableViewCell
         let data:LocalDataset
-        if searchController.active && searchController.searchBar.text != "" {
+        if searchController.isActive && searchController.searchBar.text != "" {
             data = searchDatasets[indexPath.row]
         } else {
             data = localDatasets[indexPath.row]
@@ -107,32 +107,32 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
         return cell
     }
     
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if searchController.active {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if searchController.isActive {
             return false
         } else {
             return true
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
     
     
-    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath
-        indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+    override func tableView(_ tableView: UITableView, editActionsForRowAt
+        indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         // Delete option
-        let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Delete",handler:
+        let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Delete",handler:
             {
                 (action, indexPath) -> Void in
                 // Delete the row from the database
-                if let managedObjectContext = (UIApplication.sharedApplication().delegate as? AppDelegate)?.managedObjectContext {
+                if let managedObjectContext = (UIApplication.shared.delegate as? AppDelegate)?.managedObjectContext {
                     
-                    let datasetToDelete = self.fetchResultController.objectAtIndexPath(indexPath) as! LocalDataset
-                    managedObjectContext.deleteObject(datasetToDelete)
+                    let datasetToDelete = self.fetchResultController.object(at: indexPath) as! LocalDataset
+                    managedObjectContext.delete(datasetToDelete)
                     
                     do {
                         try managedObjectContext.save()
@@ -149,22 +149,22 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
     
     
     // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to toIndexPath: IndexPath) {
         let datasetToMove = localDatasets[fromIndexPath.row]
-        localDatasets.removeAtIndex(fromIndexPath.row)
-        localDatasets.insert(datasetToMove, atIndex: toIndexPath.row)
+        localDatasets.remove(at: fromIndexPath.row)
+        localDatasets.insert(datasetToMove, at: toIndexPath.row)
         
     }
     
     // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // Return NO if you do not want the item to be re-orderable.
         return true
     }
     
-    @IBAction func editing(sender: AnyObject) {
+    @IBAction func editing(_ sender: AnyObject) {
         
-        self.editing = !self.editing
+        self.isEditing = !self.isEditing
     }
     
     
@@ -174,11 +174,11 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
     }
     
 
-    func filterContentForSearchText(searchText: String, scope: String = "All") {
+    func filterContentForSearchText(_ searchText: String, scope: String = "All") {
         searchDatasets = localDatasets.filter( { (localDatasets:LocalDataset) -> Bool in
-            let titleMatch = localDatasets.title.rangeOfString(searchText, options: NSStringCompareOptions.CaseInsensitiveSearch)
-            let orgMatch = localDatasets.organisation.rangeOfString(searchText, options: NSStringCompareOptions.CaseInsensitiveSearch)
-            let keywordMatch = localDatasets.keywords.rangeOfString(searchText, options: NSStringCompareOptions.CaseInsensitiveSearch)
+            let titleMatch = localDatasets.title.range(of: searchText, options: NSString.CompareOptions.caseInsensitive)
+            let orgMatch = localDatasets.organisation.range(of: searchText, options: NSString.CompareOptions.caseInsensitive)
+            let keywordMatch = localDatasets.keywords.range(of: searchText, options: NSString.CompareOptions.caseInsensitive)
             let titleMatchFlag = titleMatch != nil
             let orgMatchFlag = orgMatch != nil
             let keywordMatchFlag = keywordMatch != nil
@@ -199,29 +199,29 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
     
     
     // FUNCTION: Close the keyboard when touch other places.
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         searchController.resignFirstResponder()
     }
     
-    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.beginUpdates()
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeObject
-        anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type:
-        NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange
+        anObject: Any, at indexPath: IndexPath?, for type:
+        NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
-        case .Insert:
+        case .insert:
             if let _newIndexPath = newIndexPath {
-                tableView.insertRowsAtIndexPaths([_newIndexPath], withRowAnimation: .Fade)
+                tableView.insertRows(at: [_newIndexPath], with: .fade)
             }
-        case .Delete:
+        case .delete:
             if let _indexPath = indexPath {
-                tableView.deleteRowsAtIndexPaths([_indexPath], withRowAnimation: .Fade)
+                tableView.deleteRows(at: [_indexPath], with: .fade)
             }
-        case .Update:
+        case .update:
             if let _indexPath = indexPath {
-                tableView.reloadRowsAtIndexPaths([_indexPath], withRowAnimation: .Fade)
+                tableView.reloadRows(at: [_indexPath], with: .fade)
             }
         default:
             tableView.reloadData()
@@ -229,18 +229,18 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
         localDatasets = controller.fetchedObjects as! [LocalDataset]
     }
     
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.endUpdates()
     }
     
 
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "displayDatasetDetail" {
             if let indexPath = tableView.indexPathForSelectedRow {
                 let datasetToPass = Dataset()
                 let localDataset: LocalDataset!
-                if searchController.active && searchController.searchBar.text != "" {
+                if searchController.isActive && searchController.searchBar.text != "" {
                     localDataset = searchDatasets[indexPath.row]
                 } else {
                     localDataset = localDatasets[indexPath.row]
@@ -254,7 +254,7 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
                 datasetToPass.bbox = BBOX(lowerLON: localDataset.lowerLON, lowerLAT: localDataset.lowerLAT, upperLON: localDataset.upperLON, upperLAT: localDataset.upperLAT)
                 datasetToPass.zoom = localDataset.zoom
                 datasetToPass.center = (longitude: localDataset.centerLON, latitude: localDataset.centerLAT)
-                let destinationController = segue.destinationViewController as! DatasetDetailViewController
+                let destinationController = segue.destination as! DatasetDetailViewController
                 destinationController.dataset = datasetToPass
                 // destinationController.hidesBottomBarWhenPushed = true
             }
@@ -277,7 +277,7 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
 }
 
 extension LocalViewController: UISearchResultsUpdating {
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
+    func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
         let scope = searchBar.scopeButtonTitles![searchBar.selectedScopeButtonIndex]
         filterContentForSearchText(searchController.searchBar.text!, scope: scope)
@@ -288,7 +288,7 @@ extension LocalViewController: UISearchResultsUpdating {
 }
 
 extension LocalViewController: UISearchBarDelegate {
-    func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         filterContentForSearchText(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
     }
 }

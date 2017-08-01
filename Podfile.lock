@@ -1,14 +1,18 @@
 PODS:
-  - Alamofire (3.3.1)
-  - GoogleMaps (1.13.0)
-  - SwiftyJSON (2.3.2)
-  - SWXMLHash (2.3.1)
+  - Alamofire (4.5.0)
+  - GoogleMaps (2.3.1):
+    - GoogleMaps/Maps (= 2.3.1)
+  - GoogleMaps/Base (2.3.1)
+  - GoogleMaps/Maps (2.3.1):
+    - GoogleMaps/Base
+  - SwiftyJSON (3.1.4)
+  - SWXMLHash (4.0.0)
 
 DEPENDENCIES:
-  - Alamofire (~> 3.3)
+  - Alamofire (~> 4.4)
   - GoogleMaps
   - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`)
-  - SWXMLHash (~> 2.3.0)
+  - SWXMLHash (~> 4.0.0)
 
 EXTERNAL SOURCES:
   SwiftyJSON:
@@ -16,13 +20,15 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   SwiftyJSON:
-    :commit: 2a5b70f06001316d4fb54501edc70b4084705da0
+    :commit: ebc305b69ecca005b636f20e0db4d07d19d333fa
     :git: https://github.com/SwiftyJSON/SwiftyJSON.git
 
 SPEC CHECKSUMS:
-  Alamofire: 369bc67b6f5ac33ded3648d7bd21c5bfb91c2ecc
-  GoogleMaps: 7a6caeb8336d7cb42982e969fc9b1b20a889fe79
-  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
-  SWXMLHash: 795c66e74f4cc9473ad6465c6653c5a6f59f417e
+  Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
+  GoogleMaps: c66a71058b9b1294bcdd5463a68e357fa50c079f
+  SwiftyJSON: 05cf0e98a950e2ba343735264f5a96b81e755d00
+  SWXMLHash: 6bbc0bf72975a18ceda469fb7d6a886a26d81694
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 4a1240bcf244413342a58b7912d22fb827288960
+
+COCOAPODS: 1.2.1

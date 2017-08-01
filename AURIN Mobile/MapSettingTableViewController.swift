@@ -117,8 +117,8 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
     var useSimplifier = false
     var serverAddress = "localhost:3000"
     
-    @IBAction func simplifierOnOff(sender: UISwitch) {
-        if sender.on {
+    @IBAction func simplifierOnOff(_ sender: UISwitch) {
+        if sender.isOn {
             useSimplifier = true
             tableView.reloadData()
             print("On")
@@ -129,7 +129,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
         }
     }
     
-    @IBAction func simplifierSlider(sender: AnyObject) {
+    @IBAction func simplifierSlider(_ sender: AnyObject) {
         let slider = sender as! UISlider
         let i = Int(slider.value)
         slider.value = Float(i)
@@ -137,7 +137,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
         simLevel = slider.value / 100.0
     }
     
-    @IBAction func inputAddress(sender: AnyObject) {
+    @IBAction func inputAddress(_ sender: AnyObject) {
         let textField = sender as! UITextField
         serverAddress = textField.text!
     }
@@ -146,7 +146,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Map Setting"
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
         // 装载Properties选项
         for (key, value) in propertyList {
@@ -168,8 +168,8 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
         }
         
         
-        self.bboxMap.myLocationEnabled = true;
-        self.bboxMap.mapType = kGMSTypeNormal;
+        self.bboxMap.isMyLocationEnabled = true;
+        self.bboxMap.mapType = .normal;
         self.bboxMap.settings.compassButton = false;
         self.bboxMap.settings.myLocationButton = true;
         self.bboxMap.settings.zoomGestures = true
@@ -178,25 +178,25 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
         self.bboxMap.settings.scrollGestures = true
         
         self.bboxMap.delegate = self;
-        let camera = GMSCameraPosition.cameraWithLatitude(dataset.center.latitude, longitude: dataset.center.longitude, zoom: dataset.zoom)
-        bboxMap.animateToCameraPosition(camera)
+        let camera = GMSCameraPosition.camera(withLatitude: dataset.center.latitude, longitude: dataset.center.longitude, zoom: dataset.zoom)
+        bboxMap.animate(to: camera)
         
         // 为小屏幕iPhone优化
-        if UIScreen.mainScreen().bounds.width <= 350.0 {
-            areaLabel.font = areaLabel.font.fontWithSize(13.0)
-            areaTitle.font = areaTitle.font.fontWithSize(13.0)
-            bboxLabel.font = bboxLabel.font.fontWithSize(13.0)
-            bboxTitle.font = bboxLabel.font.fontWithSize(13.0)
-            titleLabel.font = titleLabel.font.fontWithSize(13.0)
-            titleTitle.font = titleTitle.font.fontWithSize(13.0)
-            classifierLabel.font = classifierLabel.font.fontWithSize(13.0)
-            classifierTitle.font = classifierTitle.font.fontWithSize(13.0)
-            paletteLabel.font = paletteLabel.font.fontWithSize(13.0)
-            paletteTitle.font = paletteTitle.font.fontWithSize(13.0)
-            opacityLabel.font = opacityLabel.font.fontWithSize(13.0)
-            opacityTitle.font = opacityTitle.font.fontWithSize(13.0)
-            colorClassLabel.font = colorClassLabel.font.fontWithSize(13.0)
-            colorClassTitle.font = colorClassTitle.font.fontWithSize(13.0)
+        if UIScreen.main.bounds.width <= 350.0 {
+            areaLabel.font = areaLabel.font.withSize(13.0)
+            areaTitle.font = areaTitle.font.withSize(13.0)
+            bboxLabel.font = bboxLabel.font.withSize(13.0)
+            bboxTitle.font = bboxLabel.font.withSize(13.0)
+            titleLabel.font = titleLabel.font.withSize(13.0)
+            titleTitle.font = titleTitle.font.withSize(13.0)
+            classifierLabel.font = classifierLabel.font.withSize(13.0)
+            classifierTitle.font = classifierTitle.font.withSize(13.0)
+            paletteLabel.font = paletteLabel.font.withSize(13.0)
+            paletteTitle.font = paletteTitle.font.withSize(13.0)
+            opacityLabel.font = opacityLabel.font.withSize(13.0)
+            opacityTitle.font = opacityTitle.font.withSize(13.0)
+            colorClassLabel.font = colorClassLabel.font.withSize(13.0)
+            colorClassTitle.font = colorClassTitle.font.withSize(13.0)
         }
 
         
@@ -234,7 +234,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
     
     /************************************* TABLE VIEW **************************************/
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
             if indexPath.row == 0 {
@@ -277,10 +277,10 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
         default:
             break
         }
-        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if areaPickerHidden && indexPath.section == 0 && indexPath.row == 1 {
             return 0
         } else if bboxMapHidden && indexPath.section == 0 && indexPath.row == 3 {
@@ -302,14 +302,14 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
         }
         
         else {
-            return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
+            return super.tableView(tableView, heightForRowAt: indexPath)
         }
     }
     
     
     /************************************* 3 PICKERS ***************************************/
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         switch pickerView.tag {
         case 0:
             return 2
@@ -318,7 +318,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
         }
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         switch pickerView.tag {
         case 0:
             if component == 0 {
@@ -335,7 +335,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
         }
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch pickerView.tag {
         case 0:
             if component == 0 {
@@ -351,48 +351,48 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
     }
     
     
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView
     {
         switch pickerView.tag {
         case 0:
             if component == 0 {
                 let pickerLabel = UILabel()
-                pickerLabel.textColor = UIColor.blackColor()
+                pickerLabel.textColor = UIColor.black
                 pickerLabel.text = states[row]
                 // pickerLabel.font = UIFont(name: pickerLabel.font.fontName, size: 15)
                 pickerLabel.font = UIFont(name: "AvenirNextCondensed-Regular", size: 15) // In this use your custom font
-                pickerLabel.textAlignment = NSTextAlignment.Center
+                pickerLabel.textAlignment = NSTextAlignment.center
                 return pickerLabel
                 
             } else {
                 let pickerLabel = UILabel()
-                pickerLabel.textColor = UIColor.blackColor()
+                pickerLabel.textColor = UIColor.black
                 pickerLabel.text = suburbs[row]
                 // pickerLabel.font = UIFont(name: pickerLabel.font.fontName, size: 15)
                 pickerLabel.font = UIFont(name: "AvenirNextCondensed-Regular", size: 12) // In this use your custom font
-                pickerLabel.textAlignment = NSTextAlignment.Center
+                pickerLabel.textAlignment = NSTextAlignment.center
                 return pickerLabel
             }
         case 1:
             let pickerLabel = UILabel()
-            pickerLabel.textColor = UIColor.blackColor()
+            pickerLabel.textColor = UIColor.black
             pickerLabel.text = titleProperties[row]
             // pickerLabel.font = UIFont(name: pickerLabel.font.fontName, size: 15)
             pickerLabel.font = UIFont(name: "AvenirNextCondensed-Regular", size: 15) // In this use your custom font
-            pickerLabel.textAlignment = NSTextAlignment.Center
+            pickerLabel.textAlignment = NSTextAlignment.center
             return pickerLabel
         default:
             let pickerLabel = UILabel()
-            pickerLabel.textColor = UIColor.blackColor()
+            pickerLabel.textColor = UIColor.black
             pickerLabel.text = classifierProperties[row]
             // pickerLabel.font = UIFont(name: pickerLabel.font.fontName, size: 15)
             pickerLabel.font = UIFont(name: "AvenirNextCondensed-Regular", size: 15) // In this use your custom font
-            pickerLabel.textAlignment = NSTextAlignment.Center
+            pickerLabel.textAlignment = NSTextAlignment.center
             return pickerLabel
         }
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch pickerView.tag {
         case 0:
             if component == 0 {
@@ -457,15 +457,15 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
             
             // 在地图上画出Bounding Box
             let rect = GMSMutablePath()
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: chooseBBOX.lowerLAT, longitude: chooseBBOX.lowerLON))
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: chooseBBOX.upperLAT, longitude: chooseBBOX.lowerLON))
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: chooseBBOX.upperLAT, longitude: chooseBBOX.upperLON))
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: chooseBBOX.lowerLAT, longitude: chooseBBOX.upperLON))
+            rect.add(CLLocationCoordinate2D(latitude: chooseBBOX.lowerLAT, longitude: chooseBBOX.lowerLON))
+            rect.add(CLLocationCoordinate2D(latitude: chooseBBOX.upperLAT, longitude: chooseBBOX.lowerLON))
+            rect.add(CLLocationCoordinate2D(latitude: chooseBBOX.upperLAT, longitude: chooseBBOX.upperLON))
+            rect.add(CLLocationCoordinate2D(latitude: chooseBBOX.lowerLAT, longitude: chooseBBOX.upperLON))
             
             bboxMap.clear()
             let bounding = GMSPolygon(path: rect)
-            bounding.tappable = true
-            bounding.strokeColor = UIColor.blackColor()
+            bounding.isTappable = true
+            bounding.strokeColor = UIColor.black
             bounding.strokeWidth = 1.5
             bounding.fillColor = UIColor(red:0, green:0, blue:0, alpha:0.2)
             
@@ -475,15 +475,15 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
             let centerLatitude = (chooseBBOX.lowerLAT + chooseBBOX.upperLAT) / 2
             let centerLongitude = (chooseBBOX.lowerLON + chooseBBOX.upperLON) / 2
             
-            let camera = GMSCameraPosition.cameraWithLatitude(centerLatitude, longitude: centerLongitude, zoom: zoomLevel)
-            bboxMap.animateToCameraPosition(camera)
+            let camera = GMSCameraPosition.camera(withLatitude: centerLatitude, longitude: centerLongitude, zoom: zoomLevel)
+            bboxMap.animate(to: camera)
             
         case 1:
-            titleLabel.text = titleProperties[pickerView.selectedRowInComponent(0)]
-            titleProperty = titleProperties[pickerView.selectedRowInComponent(0)]
+            titleLabel.text = titleProperties[pickerView.selectedRow(inComponent: 0)]
+            titleProperty = titleProperties[pickerView.selectedRow(inComponent: 0)]
         case 2:
-            classifierLabel.text = classifierProperties[pickerView.selectedRowInComponent(0)]
-            classifierProperty = classifierProperties[pickerView.selectedRowInComponent(0)]
+            classifierLabel.text = classifierProperties[pickerView.selectedRow(inComponent: 0)]
+            classifierProperty = classifierProperties[pickerView.selectedRow(inComponent: 0)]
         default:
             break
         }
@@ -496,7 +496,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
     
     /************************************* COLOR PALETTE ***********************************/
     
-    @IBAction func paletteSelected(sender: UISegmentedControl) {
+    @IBAction func paletteSelected(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
             paletteLabel.text = "Red"
@@ -524,7 +524,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
     
     /************************************* COLOR CLASS *************************************/
     
-    @IBAction func colorClassChanged(sender: AnyObject) {
+    @IBAction func colorClassChanged(_ sender: AnyObject) {
         let slider = sender as! UISlider
         let i = Int(slider.value)
         slider.value = Float(i)
@@ -535,7 +535,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
     
     /************************************* COLOR OPACITY ***********************************/
     
-    @IBAction func colorOpacityChanged(sender: AnyObject) {
+    @IBAction func colorOpacityChanged(_ sender: AnyObject) {
         let slider = sender as! UISlider
         let i = Int(slider.value)
         slider.value = Float(i)
@@ -548,12 +548,12 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
     /************************************* MAP VIEW ****************************************/
 
     
-    func mapView(mapView: GMSMapView, didLongPressAtCoordinate coordinate: CLLocationCoordinate2D) {
+    func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
         // print(coordinate)
         
         // 定义一个icon，用于作为自定义的Marker显示。第二句话用于将marker显示的点定义在中心位置
         var markerIcon = UIImage(named: "dot")
-        markerIcon = markerIcon!.imageWithAlignmentRectInsets(UIEdgeInsetsMake(0, 0, markerIcon!.size.height/2, 0))
+        markerIcon = markerIcon!.withAlignmentRectInsets(UIEdgeInsetsMake(0, 0, markerIcon!.size.height/2, 0))
         // 点击计数器
         self.tapCount += 1
         
@@ -571,7 +571,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
             // 覆盖掉之前的 marker1
             marker1 = GMSMarker(position: CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude))
             marker1.icon = markerIcon!
-            marker1.appearAnimation = kGMSMarkerAnimationPop
+            marker1.appearAnimation = .pop
             marker1.snippet = ("\(marker1.position.latitude)\n\(marker1.position.longitude)")
             marker1.map = self.bboxMap
         } else {
@@ -581,7 +581,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
             // 覆盖掉之前的 marker2
             marker2 = GMSMarker(position: CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude))
             marker2.icon = markerIcon!
-            marker2.appearAnimation = kGMSMarkerAnimationPop
+            marker2.appearAnimation = .pop
             //marker2.snippet = ("\(marker2.position.latitude)\n\(marker2.position.longitude)")
             marker2.map = self.bboxMap
             
@@ -590,8 +590,8 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
             marker4 = GMSMarker(position: CLLocationCoordinate2DMake(self.lowerLatitude, self.upperLongitude))
             marker3.icon = markerIcon!
             marker4.icon = markerIcon!
-            marker3.appearAnimation = kGMSMarkerAnimationPop
-            marker4.appearAnimation = kGMSMarkerAnimationPop
+            marker3.appearAnimation = .pop
+            marker4.appearAnimation = .pop
             //marker3.snippet = ("\(marker3.position.latitude)\n\(marker3.position.longitude)")
             //marker4.snippet = ("\(marker4.position.latitude)\n\(marker4.position.longitude)")
             marker3.map = self.bboxMap
@@ -601,17 +601,17 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
             
             // 两次点击确定一个Bounding Box
             let rect = GMSMutablePath()
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: self.lowerLatitude, longitude: self.lowerLongitude))
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: self.upperLatitude, longitude: self.lowerLongitude))
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: self.upperLatitude, longitude: self.upperLongitude))
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: self.lowerLatitude, longitude: self.upperLongitude))
+            rect.add(CLLocationCoordinate2D(latitude: self.lowerLatitude, longitude: self.lowerLongitude))
+            rect.add(CLLocationCoordinate2D(latitude: self.upperLatitude, longitude: self.lowerLongitude))
+            rect.add(CLLocationCoordinate2D(latitude: self.upperLatitude, longitude: self.upperLongitude))
+            rect.add(CLLocationCoordinate2D(latitude: self.lowerLatitude, longitude: self.upperLongitude))
             // 将Bounding Box画在地图上
             areaSelection = GMSPolygon(path: rect)
             //areaSelection = GMSPolygon(path: rect)
-            areaSelection.strokeColor = UIColor.blackColor()
+            areaSelection.strokeColor = UIColor.black
             areaSelection.strokeWidth = 1.5
             areaSelection.fillColor = UIColor(red:0, green:0, blue:0, alpha:0.2)
-            areaSelection.tappable = true
+            areaSelection.isTappable = true
             
             areaSelection.map = self.bboxMap
             
@@ -626,7 +626,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
             // 如果所选范围过大，给出提示
             if longitudeDistance > 0.3 || latitudeDistance > 0.3 {
                 
-                let alertMessage = UIAlertController(title: "Large Area", message: "You have selected a large area, a mass of data may cause app crash.", preferredStyle: .Alert)
+                let alertMessage = UIAlertController(title: "Large Area", message: "You have selected a large area, a mass of data may cause app crash.", preferredStyle: .alert)
                                 
                 let retryHandler = { (action:UIAlertAction!) -> Void in
                     self.areaSelection.map = nil
@@ -641,11 +641,11 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
                 }
                 
                 // 向Alert弹框里面增加一个选项
-                alertMessage.addAction(UIAlertAction(title: "IGNORE", style: .Destructive, handler: ignoreHandler))
-                alertMessage.addAction(UIAlertAction(title: "RETRY", style: .Default, handler: retryHandler))
+                alertMessage.addAction(UIAlertAction(title: "IGNORE", style: .destructive, handler: ignoreHandler))
+                alertMessage.addAction(UIAlertAction(title: "RETRY", style: .default, handler: retryHandler))
 
                 
-                self.presentViewController(alertMessage, animated: true, completion: nil)
+                self.present(alertMessage, animated: true, completion: nil)
                 
                 
             } else {
@@ -657,7 +657,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
         
     } // FUNCTION: mapView - didLongPressAtCoordinate
     
-    func mapView(mapView: GMSMapView, didTapOverlay overlay: GMSOverlay) {
+    func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
         overlay.map = nil
         self.marker1.map = nil
         self.marker2.map = nil
@@ -673,9 +673,9 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
     
      // MARK: - Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "drawingMap" {
-            let destinationController = segue.destinationViewController as! MapDrawingViewController
+            let destinationController = segue.destination as! MapDrawingViewController
             destinationController.dataset = dataset
             destinationController.chooseBBOX = chooseBBOX
             destinationController.titleProperty = titleProperty
@@ -695,7 +695,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
     }
 
     
-    @IBAction func close(segue:UIStoryboardSegue) {
+    @IBAction func close(_ segue:UIStoryboardSegue) {
     
     }
     

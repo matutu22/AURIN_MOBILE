@@ -61,7 +61,7 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         
         barChartView.delegate = self
         
-        self.mapView.mapType = kGMSTypeNormal;
+        self.mapView.mapType = .normal;
         self.mapView.settings.tiltGestures = false
         self.mapView.settings.rotateGestures = false
         self.mapView.settings.scrollGestures = true
@@ -71,15 +71,15 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         let centerLatitude = (dataset.bbox.lowerLAT + dataset.bbox.upperLAT) / 2
         let centerLongitude = (dataset.bbox.lowerLON + dataset.bbox.upperLON) / 2
         
-        let camera = GMSCameraPosition.cameraWithLatitude(centerLatitude, longitude: centerLongitude, zoom: zoomLevel)
-        self.mapView.animateToCameraPosition(camera)
+        let camera = GMSCameraPosition.camera(withLatitude: centerLatitude, longitude: centerLongitude, zoom: zoomLevel)
+        self.mapView.animate(camera)
         
         // Generate the query which only request for key & value properties.
         let queryURL = "https://geoserver.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&MaxFeatures=1000&outputFormat=json&CQL_FILTER=BBOX(\(geom_name),\(chooseBBOX.lowerLAT),\(chooseBBOX.lowerLON),\(chooseBBOX.upperLAT),\(chooseBBOX.upperLON))&PropertyName=\(titleProperty),\(classifierProperty)"
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            Alamofire.request(.GET, queryURL).response { (_request, _response, data, _error) in
-                let json = JSON(data: data!)
+        dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0).async(execute: {
+            Alamofire.request(queryURL).response { response in
+                let json = JSON(data: response.data!)
                 
                 if json["features"].count == 0 {
                     let alertMessage = UIAlertController(title: "No Data", message: "There is no data in the selected area, please try to choose another area.", preferredStyle: .Alert)
@@ -111,12 +111,12 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
 
     // MARK: - Table view data source
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         if !mapViewHidden && detailViewHidden && indexPath.section == 0 {
             // Map opend，Text closed.
@@ -128,7 +128,7 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
             case 3: // Map View.
                 return 200
             default: // Cell Label.
-                return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
+                return super.tableView(tableView, heightForRowAt: indexPath)
             }
         } else if mapViewHidden && !detailViewHidden && indexPath.section == 0 {
             // Map closed，Text opend.
@@ -140,7 +140,7 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
             case 3: // Map View.
                 return 0
             default: // Cell Label.
-                return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
+                return super.tableView(tableView, heightForRowAt: indexPath)
             }
         } else if mapViewHidden && detailViewHidden && indexPath.section == 0 {
             // Map closed，Text closed
@@ -152,7 +152,7 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
             case 3: // Map View.
                 return 0
             default: // Cell Label.
-                return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
+                return super.tableView(tableView, heightForRowAt: indexPath)
             }
         } else if !mapViewHidden && !detailViewHidden && indexPath.section == 0 {
             // Map opend，Text opend.
@@ -164,18 +164,18 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
             case 3: // Map View.
                 return 150
             default: // Cell Label.
-                return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
+                return super.tableView(tableView, heightForRowAt: indexPath)
             }
             
         } else {
             // Other cells in section 0 and 1.
-            return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
+            return super.tableView(tableView, heightForRowAt: indexPath)
         }
 
     }
     
-    @IBAction func mapSwitch(sender: UISwitch) {
-        if sender.on {
+    @IBAction func mapSwitch(_ sender: UISwitch) {
+        if sender.isOn {
             mapViewHidden = false
             tableView.reloadData()
         } else {
@@ -184,8 +184,8 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         }
     }
     
-    @IBAction func detailSwitch(sender: UISwitch) {
-        if sender.on {
+    @IBAction func detailSwitch(_ sender: UISwitch) {
+        if sender.isOn {
             detailViewHidden = false
             tableView.reloadData()
         } else {
@@ -195,7 +195,7 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
     }
 
 
-    func setChart(dataPoints: [String], values: [Double]) {
+    func setChart(_ dataPoints: [String], values: [Double]) {
         
         var dataEntries: [BarChartDataEntry] = []
         
@@ -258,7 +258,7 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
     
     
     
-    func chartValueSelected(chartView: ChartViewBase, entry: ChartDataEntry, dataSetIndex: Int, highlight: ChartHighlight) {
+    func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, dataSetIndex: Int, highlight: Highlight) {
         mapView.clear()
         keyLabel.text = "\(xAxis[entry.xIndex])"
         valueLabel.text = "\(entry.value)"

@@ -16,8 +16,8 @@ class AboutTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.tableFooterView = UIView(frame: CGRectZero)
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -27,12 +27,12 @@ class AboutTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 3
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         if section == 0 {
             return 3
@@ -43,13 +43,13 @@ class AboutTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sectionTitles[section]
     }
 
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! AboutTableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! AboutTableViewCell
 
         switch indexPath.section {
         case 0:
@@ -103,37 +103,37 @@ class AboutTableViewController: UITableViewController {
     }
  
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         // Leave us feedback section
         case 0:
             break
         case 1:
             if indexPath.row == 0 {
-                if let url = NSURL(string: "https://twitter.com/aurin_org_au") {
-                    UIApplication.sharedApplication().openURL(url)
+                if let url = URL(string: "https://twitter.com/aurin_org_au") {
+                    UIApplication.shared.openURL(url)
                 }
             } else if indexPath.row == 1 {
-                if let url = NSURL(string: "https://www.facebook.com/Aurin-183080631739008/") {
-                    UIApplication.sharedApplication().openURL(url)
+                if let url = URL(string: "https://www.facebook.com/Aurin-183080631739008/") {
+                    UIApplication.shared.openURL(url)
                 }
             } else {
-                if let url = NSURL(string: "https://www.linkedin.com/groups/6622107/profile") {
-                    UIApplication.sharedApplication().openURL(url)
+                if let url = URL(string: "https://www.linkedin.com/groups/6622107/profile") {
+                    UIApplication.shared.openURL(url)
                 }
             }
         case 2:
             if indexPath.row == 0 {
-                if let pageViewController = storyboard?.instantiateViewControllerWithIdentifier("WalkthroughController") as? WalkthroughPageViewController {
-                    presentViewController(pageViewController, animated: true, completion: nil)
+                if let pageViewController = storyboard?.instantiateViewController(withIdentifier: "WalkthroughController") as? WalkthroughPageViewController {
+                    present(pageViewController, animated: true, completion: nil)
                 }
             } else {
-                performSegueWithIdentifier("showWebView", sender: self)
+                performSegue(withIdentifier: "showWebView", sender: self)
             }
         default:
             break
         }
-        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
     

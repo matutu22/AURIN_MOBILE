@@ -35,8 +35,8 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         getDatasetProperties()
         
         // Add a google map to the view
-        self.mapView.myLocationEnabled = true;
-        self.mapView.mapType = kGMSTypeNormal;
+        self.mapView.isMyLocationEnabled = true;
+        self.mapView.mapType = .normal;
         self.mapView.settings.compassButton = false;
         self.mapView.settings.myLocationButton = false;
         self.mapView.settings.zoomGestures = true
@@ -54,18 +54,18 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         let centerLON = dataset.center.longitude
         let zoomLevel = dataset.zoom
         
-        let camera = GMSCameraPosition.cameraWithLatitude(centerLAT, longitude: centerLON, zoom: zoomLevel)
-        self.mapView.animateToCameraPosition(camera)
+        let camera = GMSCameraPosition.camera(withLatitude: centerLAT, longitude: centerLON, zoom: zoomLevel)
+        self.mapView.animate(to: camera)
         
         // Draw bounding box on map
         let rect = GMSMutablePath()
-        rect.addCoordinate(CLLocationCoordinate2D(latitude: lowerLAT, longitude: lowerLON))
-        rect.addCoordinate(CLLocationCoordinate2D(latitude: upperLAT, longitude: lowerLON))
-        rect.addCoordinate(CLLocationCoordinate2D(latitude: upperLAT, longitude: upperLON))
-        rect.addCoordinate(CLLocationCoordinate2D(latitude: lowerLAT, longitude: upperLON))
+        rect.add(CLLocationCoordinate2D(latitude: lowerLAT, longitude: lowerLON))
+        rect.add(CLLocationCoordinate2D(latitude: upperLAT, longitude: lowerLON))
+        rect.add(CLLocationCoordinate2D(latitude: upperLAT, longitude: upperLON))
+        rect.add(CLLocationCoordinate2D(latitude: lowerLAT, longitude: upperLON))
         
         bounding = GMSPolygon(path: rect)
-        bounding.strokeColor = UIColor.blackColor()
+        bounding.strokeColor = UIColor.black
         bounding.strokeWidth = 0
         bounding.fillColor = UIColor(red: 28.0/255.0, green: 79.0/255.0, blue: 107.0/255.0, alpha: 0.15)
         //bbox.map = self.mapView
@@ -73,23 +73,23 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         
         // Table's appearance
         //tableView.backgroundColor = UIColor(red: 240.0/255.0, green: 240.0/255.0, blue: 240.0/255.0, alpha: 0.2)
-        tableView.tableFooterView = UIView(frame: CGRectZero)
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
         tableView.separatorColor = UIColor(red: 240.0/255.0, green: 240.0/255.0, blue: 240.0/255.0, alpha: 0.8)
         tableView.estimatedRowHeight = 36.0
         tableView.rowHeight = UITableViewAutomaticDimension
         
         navigationItem.title = "Dataset Detail"
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
         
     }
     
     // Get the detail information of selected dataset from AURIN serer.
-    private func getDatasetProperties() {
-        Alamofire.request(.GET, "https://geoserver.aurin.org.au/wfs?request=DescribeFeatureType&service=WFS&version=1.1.0&TypeName=\(dataset.name)")
-            .response { (request, response, data, error) in
+    fileprivate func getDatasetProperties() {
+        Alamofire.request("https://geoserver.aurin.org.au/wfs?request=DescribeFeatureType&service=WFS&version=1.1.0&TypeName=\(dataset.name)")
+            .response { response in
                 //print(data) // if you want to check XML data in debug window.
-                let xml = SWXMLHash.parse(data!)
+                let xml = SWXMLHash.parse(response.data!)
                 for property in xml["xsd:schema"]["xsd:complexType"]["xsd:complexContent"]["xsd:extension"]["xsd:sequence"]["xsd:element"] {
                     let propertyName = (property.element?.attributes["name"])!
                     var propertyType = (property.element?.attributes["type"])!
@@ -101,15 +101,15 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
             }
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 7
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath:
-        NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! DatasetDetailTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath:
+        IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! DatasetDetailTableViewCell
         
-        cell.backgroundColor = UIColor.clearColor()
+        cell.backgroundColor = UIColor.clear
         // Configure the cell...
         switch indexPath.row {
         case 0:
@@ -153,38 +153,38 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 2 {
-            let optionMenu = UIAlertController(title: nil, message: "What do you want to do?", preferredStyle: .ActionSheet)
-            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+            let optionMenu = UIAlertController(title: nil, message: "What do you want to do?", preferredStyle: .actionSheet)
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             let callActionHandler = { (action:UIAlertAction!) -> Void in
-                if let url = NSURL(string: self.dataset.website) {
-                    UIApplication.sharedApplication().openURL(url)
+                if let url = URL(string: self.dataset.website) {
+                    UIApplication.shared.openURL(url)
                 }
             }
-            let callAction = UIAlertAction(title: "Visit Website", style: .Default, handler: callActionHandler)
+            let callAction = UIAlertAction(title: "Visit Website", style: .default, handler: callActionHandler)
             optionMenu.addAction(cancelAction)
             optionMenu.addAction(callAction)
-            self.presentViewController(optionMenu, animated: true, completion: nil)
+            self.present(optionMenu, animated: true, completion: nil)
         }
         
         if indexPath.row == 5 {
-            let optionMenu = UIAlertController(title: nil, message: "What do you want to do?", preferredStyle: .ActionSheet)
+            let optionMenu = UIAlertController(title: nil, message: "What do you want to do?", preferredStyle: .actionSheet)
             // Cancel button
-            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-            let showBounding = UIAlertAction(title: "Show Bounding Box on Map", style: .Default, handler: { (action:UIAlertAction!) -> Void in
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            let showBounding = UIAlertAction(title: "Show Bounding Box on Map", style: .default, handler: { (action:UIAlertAction!) -> Void in
                 self.bounding.map = self.mapView
             })
-            let dropBounding = UIAlertAction(title: "Don't Show Bounding Box", style: .Destructive, handler: { (action:UIAlertAction!) -> Void in
+            let dropBounding = UIAlertAction(title: "Don't Show Bounding Box", style: .destructive, handler: { (action:UIAlertAction!) -> Void in
                 self.bounding.map = nil
             })
             
             optionMenu.addAction(cancelAction)
             optionMenu.addAction(showBounding)
             optionMenu.addAction(dropBounding)
-            self.presentViewController(optionMenu, animated: true, completion: nil)
+            self.present(optionMenu, animated: true, completion: nil)
         }
-        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
     override func didReceiveMemoryWarning() {
@@ -198,9 +198,9 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showMapSetting" {
-            let destinationController = segue.destinationViewController as! MapSettingTableViewController
+            let destinationController = segue.destination as! MapSettingTableViewController
             destinationController.dataset = dataset
             destinationController.propertyList = propertyList
             destinationController.geom_name = geom_name
@@ -208,7 +208,7 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         }
         
         if segue.identifier == "showChartSetting" {
-            let destinationController = segue.destinationViewController as! ChartSettingTableViewController
+            let destinationController = segue.destination as! ChartSettingTableViewController
             destinationController.dataset = dataset
             destinationController.propertyList = propertyList
             destinationController.geom_name = geom_name

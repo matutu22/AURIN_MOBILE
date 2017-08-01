@@ -106,7 +106,7 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Chart Setting"
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
         for (key, value) in propertyList {
             switch value {
@@ -127,8 +127,8 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
         }
         
         
-        self.bboxMap.myLocationEnabled = true;
-        self.bboxMap.mapType = kGMSTypeNormal;
+        self.bboxMap.isMyLocationEnabled = true;
+        self.bboxMap.mapType = .normal;
         self.bboxMap.settings.compassButton = false;
         self.bboxMap.settings.myLocationButton = true;
         self.bboxMap.settings.zoomGestures = true
@@ -137,23 +137,23 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
         self.bboxMap.settings.scrollGestures = true
         
         self.bboxMap.delegate = self;
-        let camera = GMSCameraPosition.cameraWithLatitude(dataset.center.latitude, longitude: dataset.center.longitude, zoom: dataset.zoom)
-        bboxMap.animateToCameraPosition(camera)
+        let camera = GMSCameraPosition.camera(withLatitude: dataset.center.latitude, longitude: dataset.center.longitude, zoom: dataset.zoom)
+        bboxMap.animate(to: camera)
         
         // For small screen
-        if UIScreen.mainScreen().bounds.width <= 350.0 {
-            areaLabel.font = areaLabel.font.fontWithSize(13.0)
-            areaTitle.font = areaTitle.font.fontWithSize(13.0)
-            bboxLabel.font = bboxLabel.font.fontWithSize(13.0)
-            bboxTitle.font = bboxLabel.font.fontWithSize(13.0)
-            titleLabel.font = titleLabel.font.fontWithSize(13.0)
-            titleTitle.font = titleTitle.font.fontWithSize(13.0)
-            classifierLabel.font = classifierLabel.font.fontWithSize(13.0)
-            classifierTitle.font = classifierTitle.font.fontWithSize(13.0)
-            paletteLabel.font = paletteLabel.font.fontWithSize(13.0)
-            paletteTitle.font = paletteTitle.font.fontWithSize(13.0)
-            opacityLabel.font = opacityLabel.font.fontWithSize(13.0)
-            opacityTitle.font = opacityTitle.font.fontWithSize(13.0)
+        if UIScreen.main.bounds.width <= 350.0 {
+            areaLabel.font = areaLabel.font.withSize(13.0)
+            areaTitle.font = areaTitle.font.withSize(13.0)
+            bboxLabel.font = bboxLabel.font.withSize(13.0)
+            bboxTitle.font = bboxLabel.font.withSize(13.0)
+            titleLabel.font = titleLabel.font.withSize(13.0)
+            titleTitle.font = titleTitle.font.withSize(13.0)
+            classifierLabel.font = classifierLabel.font.withSize(13.0)
+            classifierTitle.font = classifierTitle.font.withSize(13.0)
+            paletteLabel.font = paletteLabel.font.withSize(13.0)
+            paletteTitle.font = paletteTitle.font.withSize(13.0)
+            opacityLabel.font = opacityLabel.font.withSize(13.0)
+            opacityTitle.font = opacityTitle.font.withSize(13.0)
         }
         
         
@@ -172,7 +172,7 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
     
     /************************************* TABLE VIEW **************************************/
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
             if indexPath.row == 0 {
@@ -210,10 +210,10 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
         default:
             break
         }
-        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if areaPickerHidden && indexPath.section == 0 && indexPath.row == 1 {
             return 0
         } else if bboxMapHidden && indexPath.section == 0 && indexPath.row == 3 {
@@ -227,14 +227,14 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
         } else if opacitySliderHidden && indexPath.section == 2 && indexPath.row == 3 {
             return 0
         } else {
-            return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
+            return super.tableView(tableView, heightForRowAt: indexPath)
         }
     }
     
     
     /************************************* 3 PICKERS ***************************************/
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         switch pickerView.tag {
         case 0:
             return 2
@@ -243,7 +243,7 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
         }
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         switch pickerView.tag {
         case 0:
             if component == 0 {
@@ -260,7 +260,7 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
         }
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch pickerView.tag {
         case 0:
             if component == 0 {
@@ -275,48 +275,48 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
         }
     }
     
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView
     {
         switch pickerView.tag {
         case 0:
             if component == 0 {
                 let pickerLabel = UILabel()
-                pickerLabel.textColor = UIColor.blackColor()
+                pickerLabel.textColor = UIColor.black
                 pickerLabel.text = states[row]
                 // pickerLabel.font = UIFont(name: pickerLabel.font.fontName, size: 15)
                 pickerLabel.font = UIFont(name: "AvenirNextCondensed-Regular", size: 15) // In this use your custom font
-                pickerLabel.textAlignment = NSTextAlignment.Center
+                pickerLabel.textAlignment = NSTextAlignment.center
                 return pickerLabel
                 
             } else {
                 let pickerLabel = UILabel()
-                pickerLabel.textColor = UIColor.blackColor()
+                pickerLabel.textColor = UIColor.black
                 pickerLabel.text = suburbs[row]
                 // pickerLabel.font = UIFont(name: pickerLabel.font.fontName, size: 15)
                 pickerLabel.font = UIFont(name: "AvenirNextCondensed-Regular", size: 12) // In this use your custom font
-                pickerLabel.textAlignment = NSTextAlignment.Center
+                pickerLabel.textAlignment = NSTextAlignment.center
                 return pickerLabel
             }
         case 1:
             let pickerLabel = UILabel()
-            pickerLabel.textColor = UIColor.blackColor()
+            pickerLabel.textColor = UIColor.black
             pickerLabel.text = titleProperties[row]
             // pickerLabel.font = UIFont(name: pickerLabel.font.fontName, size: 15)
             pickerLabel.font = UIFont(name: "AvenirNextCondensed-Regular", size: 15) // In this use your custom font
-            pickerLabel.textAlignment = NSTextAlignment.Center
+            pickerLabel.textAlignment = NSTextAlignment.center
             return pickerLabel
         default:
             let pickerLabel = UILabel()
-            pickerLabel.textColor = UIColor.blackColor()
+            pickerLabel.textColor = UIColor.black
             pickerLabel.text = classifierProperties[row]
             // pickerLabel.font = UIFont(name: pickerLabel.font.fontName, size: 15)
             pickerLabel.font = UIFont(name: "AvenirNextCondensed-Regular", size: 15) // In this use your custom font
-            pickerLabel.textAlignment = NSTextAlignment.Center
+            pickerLabel.textAlignment = NSTextAlignment.center
             return pickerLabel
         }
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch pickerView.tag {
         case 0:
             if component == 0 {
@@ -380,15 +380,15 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
             
             // 在地图上画出Bounding Box
             let rect = GMSMutablePath()
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: chooseBBOX.lowerLAT, longitude: chooseBBOX.lowerLON))
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: chooseBBOX.upperLAT, longitude: chooseBBOX.lowerLON))
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: chooseBBOX.upperLAT, longitude: chooseBBOX.upperLON))
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: chooseBBOX.lowerLAT, longitude: chooseBBOX.upperLON))
+            rect.add(CLLocationCoordinate2D(latitude: chooseBBOX.lowerLAT, longitude: chooseBBOX.lowerLON))
+            rect.add(CLLocationCoordinate2D(latitude: chooseBBOX.upperLAT, longitude: chooseBBOX.lowerLON))
+            rect.add(CLLocationCoordinate2D(latitude: chooseBBOX.upperLAT, longitude: chooseBBOX.upperLON))
+            rect.add(CLLocationCoordinate2D(latitude: chooseBBOX.lowerLAT, longitude: chooseBBOX.upperLON))
             
             bboxMap.clear()
             let bounding = GMSPolygon(path: rect)
-            bounding.tappable = true
-            bounding.strokeColor = UIColor.blackColor()
+            bounding.isTappable = true
+            bounding.strokeColor = UIColor.black
             bounding.strokeWidth = 1.5
             bounding.fillColor = UIColor(red:0, green:0, blue:0, alpha:0.2)
             
@@ -398,16 +398,16 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
             let centerLatitude = (chooseBBOX.lowerLAT + chooseBBOX.upperLAT) / 2
             let centerLongitude = (chooseBBOX.lowerLON + chooseBBOX.upperLON) / 2
             
-            let camera = GMSCameraPosition.cameraWithLatitude(centerLatitude, longitude: centerLongitude, zoom: zoomLevel)
-            bboxMap.animateToCameraPosition(camera)
+            let camera = GMSCameraPosition.camera(withLatitude: centerLatitude, longitude: centerLongitude, zoom: zoomLevel)
+            bboxMap.animate(to: camera)
             
             
         case 1:
-            titleLabel.text = titleProperties[pickerView.selectedRowInComponent(0)]
-            titleProperty = titleProperties[pickerView.selectedRowInComponent(0)]
+            titleLabel.text = titleProperties[pickerView.selectedRow(inComponent: 0)]
+            titleProperty = titleProperties[pickerView.selectedRow(inComponent: 0)]
         case 2:
-            classifierLabel.text = classifierProperties[pickerView.selectedRowInComponent(0)]
-            classifierProperty = classifierProperties[pickerView.selectedRowInComponent(0)]
+            classifierLabel.text = classifierProperties[pickerView.selectedRow(inComponent: 0)]
+            classifierProperty = classifierProperties[pickerView.selectedRow(inComponent: 0)]
         default:
             break
         }
@@ -420,7 +420,7 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
     
     /************************************* COLOR PALETTE ***********************************/
     
-    @IBAction func paletteSelected(sender: UISegmentedControl) {
+    @IBAction func paletteSelected(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
             paletteLabel.text = "Red"
@@ -450,7 +450,7 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
     
     /************************************* COLOR OPACITY ***********************************/
     
-    @IBAction func colorOpacityChanged(sender: AnyObject) {
+    @IBAction func colorOpacityChanged(_ sender: AnyObject) {
         let slider = sender as! UISlider
         let i = Int(slider.value)
         slider.value = Float(i)
@@ -463,11 +463,11 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
     /************************************* MAP VIEW ****************************************/
     
     
-    func mapView(mapView: GMSMapView, didLongPressAtCoordinate coordinate: CLLocationCoordinate2D) {
+    func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
         // print(coordinate)
         
         var markerIcon = UIImage(named: "dot")
-        markerIcon = markerIcon!.imageWithAlignmentRectInsets(UIEdgeInsetsMake(0, 0, markerIcon!.size.height/2, 0))
+        markerIcon = markerIcon!.withAlignmentRectInsets(UIEdgeInsetsMake(0, 0, markerIcon!.size.height/2, 0))
         self.tapCount += 1
         
         if (self.tapCount % 2 == 1) {
@@ -482,7 +482,7 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
             marker1 = GMSMarker(position: CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude))
             //marker1.position = CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude)
             marker1.icon = markerIcon!
-            marker1.appearAnimation = kGMSMarkerAnimationPop
+            marker1.appearAnimation = .pop
             marker1.snippet = ("\(marker1.position.latitude)\n\(marker1.position.longitude)")
             marker1.map = self.bboxMap
         } else {
@@ -490,28 +490,28 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
             self.upperLongitude = coordinate.longitude
             marker2 = GMSMarker(position: CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude))
             marker2.icon = markerIcon!
-            marker2.appearAnimation = kGMSMarkerAnimationPop
+            marker2.appearAnimation = .pop
             marker2.map = self.bboxMap
             
             marker3 = GMSMarker(position: CLLocationCoordinate2DMake(self.upperLatitude, self.lowerLongitude))
             marker4 = GMSMarker(position: CLLocationCoordinate2DMake(self.lowerLatitude, self.upperLongitude))
             marker3.icon = markerIcon!
             marker4.icon = markerIcon!
-            marker3.appearAnimation = kGMSMarkerAnimationPop
-            marker4.appearAnimation = kGMSMarkerAnimationPop
+            marker3.appearAnimation = .pop
+            marker4.appearAnimation = .pop
             marker3.map = self.bboxMap
             marker4.map = self.bboxMap
             
             let rect = GMSMutablePath()
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: self.lowerLatitude, longitude: self.lowerLongitude))
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: self.upperLatitude, longitude: self.lowerLongitude))
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: self.upperLatitude, longitude: self.upperLongitude))
-            rect.addCoordinate(CLLocationCoordinate2D(latitude: self.lowerLatitude, longitude: self.upperLongitude))
+            rect.add(CLLocationCoordinate2D(latitude: self.lowerLatitude, longitude: self.lowerLongitude))
+            rect.add(CLLocationCoordinate2D(latitude: self.upperLatitude, longitude: self.lowerLongitude))
+            rect.add(CLLocationCoordinate2D(latitude: self.upperLatitude, longitude: self.upperLongitude))
+            rect.add(CLLocationCoordinate2D(latitude: self.lowerLatitude, longitude: self.upperLongitude))
             areaSelection = GMSPolygon(path: rect)
-            areaSelection.strokeColor = UIColor.blackColor()
+            areaSelection.strokeColor = UIColor.black
             areaSelection.strokeWidth = 1.5
             areaSelection.fillColor = UIColor(red:0, green:0, blue:0, alpha:0.2)
-            areaSelection.tappable = true
+            areaSelection.isTappable = true
             
             areaSelection.map = self.bboxMap
             
@@ -527,7 +527,7 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
         
     }
     
-    func mapView(mapView: GMSMapView, didTapOverlay overlay: GMSOverlay) {
+    func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
         overlay.map = nil
         self.marker1.map = nil
         self.marker2.map = nil
@@ -537,9 +537,9 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
     }
 
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "drawingChart" {
-            let destinationController = segue.destinationViewController as! ChartDrawingTableViewController
+            let destinationController = segue.destination as! ChartDrawingTableViewController
             destinationController.dataset = dataset
             destinationController.chooseBBOX = chooseBBOX
             destinationController.titleProperty = titleProperty

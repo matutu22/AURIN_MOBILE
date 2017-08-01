@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		01E8C5183A970D32D89E9B07 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D354DC590FBA86BF29049A1F /* Pods.framework */; };
+		11800D251F30BA300046F5D6 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB6B70F1CD62510007E044C /* FilterViewController.swift */; };
+		11FB20861F2EE88500AAD489 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11FB20831F2EE84300AAD489 /* Charts.framework */; };
+		11FB20871F2EE88500AAD489 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 11FB20831F2EE84300AAD489 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BC2B361F1CC0C606002DF1F6 /* MapSettingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2B361E1CC0C606002DF1F6 /* MapSettingTableViewController.swift */; };
 		BC2B36211CC0D5E8002DF1F6 /* DataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2B36201CC0D5E8002DF1F6 /* DataStorage.swift */; };
 		BC2B362C1CC1242B002DF1F6 /* MapDrawingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2B362B1CC1242B002DF1F6 /* MapDrawingViewController.swift */; };
-		BC2B362E1CC12441002DF1F6 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2B362D1CC12441002DF1F6 /* SwiftyJSON.swift */; };
 		BC358E5F1CC333C90070F1D1 /* ChartSettingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC358E5E1CC333C90070F1D1 /* ChartSettingTableViewController.swift */; };
-		BC358E6F1CC344810070F1D1 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC358E681CC344760070F1D1 /* Charts.framework */; };
-		BC358E701CC344810070F1D1 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BC358E681CC344760070F1D1 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BC358E7A1CC3514B0070F1D1 /* ChartDrawingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC358E791CC3514B0070F1D1 /* ChartDrawingTableViewController.swift */; };
 		BC71768A1CB9E73900623916 /* DatasetDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7176891CB9E73900623916 /* DatasetDetailViewController.swift */; };
 		BC7176921CBA069300623916 /* DatasetDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7176911CBA069300623916 /* DatasetDetailTableViewCell.swift */; };
@@ -30,7 +30,6 @@
 		BCB6802C1CB8F969006EFACD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BCB6802A1CB8F969006EFACD /* LaunchScreen.storyboard */; };
 		BCB6806B1CB8FC20006EFACD /* DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB6806A1CB8FC20006EFACD /* DataType.swift */; };
 		BCB6B70D1CD5E70B007E044C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BCB6B70C1CD5E70B007E044C /* Main.storyboard */; };
-		BCB6B7101CD62510007E044C /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB6B70F1CD62510007E044C /* FilterViewController.swift */; };
 		BCEB76901CC5E0EA000B99B2 /* WalkthroughContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEB768F1CC5E0EA000B99B2 /* WalkthroughContentViewController.swift */; };
 		BCEB76951CC5E243000B99B2 /* WalkthroughPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEB76941CC5E243000B99B2 /* WalkthroughPageViewController.swift */; };
 		BCEB76981CC5FDFB000B99B2 /* WalkthroughAnimationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEB76971CC5FDFB000B99B2 /* WalkthroughAnimationViewController.swift */; };
@@ -38,40 +37,26 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		BC358E671CC344760070F1D1 /* PBXContainerItemProxy */ = {
+		11FB20821F2EE84300AAD489 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = BC358E601CC344760070F1D1 /* Charts.xcodeproj */;
+			containerPortal = 11FB207D1F2EE84200AAD489 /* Charts.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 5BA8EC401A9D14DC00CE82E1;
-			remoteInfo = "Charts-iOS";
+			remoteGlobalIDString = 06165F241D8110E600722320;
+			remoteInfo = Charts;
 		};
-		BC358E691CC344760070F1D1 /* PBXContainerItemProxy */ = {
+		11FB20841F2EE84300AAD489 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = BC358E601CC344760070F1D1 /* Charts.xcodeproj */;
+			containerPortal = 11FB207D1F2EE84200AAD489 /* Charts.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = A52C5C371BAC5CA400594CDD;
-			remoteInfo = "Charts-TV";
-		};
-		BC358E6B1CC344760070F1D1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BC358E601CC344760070F1D1 /* Charts.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 65B3F5BF1C7370BE000983D0;
-			remoteInfo = "Charts-OSX";
-		};
-		BC358E6D1CC344760070F1D1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BC358E601CC344760070F1D1 /* Charts.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 06AEE7A21BDC3F8B009875AE;
+			remoteGlobalIDString = 06165F2E1D8110E600722320;
 			remoteInfo = ChartsTests;
 		};
-		BC358E711CC344810070F1D1 /* PBXContainerItemProxy */ = {
+		11FB20881F2EE88500AAD489 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = BC358E601CC344760070F1D1 /* Charts.xcodeproj */;
+			containerPortal = 11FB207D1F2EE84200AAD489 /* Charts.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 5BA8EC3F1A9D14DC00CE82E1;
-			remoteInfo = "Charts-iOS";
+			remoteGlobalIDString = 06165F231D8110E600722320;
+			remoteInfo = Charts;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -82,7 +67,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				BC358E701CC344810070F1D1 /* Charts.framework in Embed Frameworks */,
+				11FB20871F2EE88500AAD489 /* Charts.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -90,14 +75,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		11FB207D1F2EE84200AAD489 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = "../Intern/Charts-master/Charts.xcodeproj"; sourceTree = "<group>"; };
 		4FEAC482FD2D7A1DEDC5ECEC /* Pods_AURIN_Mobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AURIN_Mobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C6D22DE04824B586C2ECD4E /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		98036E5135EAF90673E09B79 /* Pods-AURIN Mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AURIN Mobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-AURIN Mobile/Pods-AURIN Mobile.release.xcconfig"; sourceTree = "<group>"; };
 		BC2B361E1CC0C606002DF1F6 /* MapSettingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSettingTableViewController.swift; sourceTree = "<group>"; };
 		BC2B36201CC0D5E8002DF1F6 /* DataStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStorage.swift; sourceTree = "<group>"; };
 		BC2B362B1CC1242B002DF1F6 /* MapDrawingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapDrawingViewController.swift; sourceTree = "<group>"; };
-		BC2B362D1CC12441002DF1F6 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		BC358E5E1CC333C90070F1D1 /* ChartSettingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartSettingTableViewController.swift; sourceTree = "<group>"; };
-		BC358E601CC344760070F1D1 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = "Charts-master/Charts/Charts.xcodeproj"; sourceTree = "<group>"; };
 		BC358E791CC3514B0070F1D1 /* ChartDrawingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartDrawingTableViewController.swift; sourceTree = "<group>"; };
 		BC7176891CB9E73900623916 /* DatasetDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatasetDetailViewController.swift; sourceTree = "<group>"; };
 		BC7176911CBA069300623916 /* DatasetDetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatasetDetailTableViewCell.swift; sourceTree = "<group>"; };
@@ -121,6 +106,7 @@
 		BCEB76971CC5FDFB000B99B2 /* WalkthroughAnimationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkthroughAnimationViewController.swift; sourceTree = "<group>"; };
 		C26F7695EDEB4E63E40D699D /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		D354DC590FBA86BF29049A1F /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD689112050DB3B75F58E077 /* Pods-AURIN Mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AURIN Mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AURIN Mobile/Pods-AURIN Mobile.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,7 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BC358E6F1CC344810070F1D1 /* Charts.framework in Frameworks */,
+				11FB20861F2EE88500AAD489 /* Charts.framework in Frameworks */,
 				01E8C5183A970D32D89E9B07 /* Pods.framework in Frameworks */,
 				C98325000EEC11D82B5E3598 /* Pods_AURIN_Mobile.framework in Frameworks */,
 			);
@@ -137,6 +123,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		11FB207E1F2EE84200AAD489 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				11FB20831F2EE84300AAD489 /* Charts.framework */,
+				11FB20851F2EE84300AAD489 /* ChartsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		779F9733B0246D289D51E41F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -151,26 +146,17 @@
 			children = (
 				C26F7695EDEB4E63E40D699D /* Pods.debug.xcconfig */,
 				7C6D22DE04824B586C2ECD4E /* Pods.release.xcconfig */,
+				DD689112050DB3B75F58E077 /* Pods-AURIN Mobile.debug.xcconfig */,
+				98036E5135EAF90673E09B79 /* Pods-AURIN Mobile.release.xcconfig */,
 			);
 			name = Pods;
-			sourceTree = "<group>";
-		};
-		BC358E611CC344760070F1D1 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				BC358E681CC344760070F1D1 /* Charts.framework */,
-				BC358E6A1CC344760070F1D1 /* Charts.framework */,
-				BC358E6C1CC344760070F1D1 /* Charts.framework */,
-				BC358E6E1CC344760070F1D1 /* ChartsTests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		BCB680151CB8F969006EFACD = {
 			isa = PBXGroup;
 			children = (
 				BC918E851CC2756B00942BAA /* AURIN Mobile.xcdatamodeld */,
-				BC358E601CC344760070F1D1 /* Charts.xcodeproj */,
+				11FB207D1F2EE84200AAD489 /* Charts.xcodeproj */,
 				BCB680201CB8F969006EFACD /* AURIN Mobile */,
 				BCB6801F1CB8F969006EFACD /* Products */,
 				BA541F8E5FE62524E4CFB0D4 /* Pods */,
@@ -211,7 +197,6 @@
 				BCB680281CB8F969006EFACD /* Assets.xcassets */,
 				BCB6B70C1CD5E70B007E044C /* Main.storyboard */,
 				BCB6802A1CB8F969006EFACD /* LaunchScreen.storyboard */,
-				BC2B362D1CC12441002DF1F6 /* SwiftyJSON.swift */,
 				BCB6802D1CB8F969006EFACD /* Info.plist */,
 			);
 			path = "AURIN Mobile";
@@ -224,18 +209,18 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BCB680301CB8F969006EFACD /* Build configuration list for PBXNativeTarget "AURIN Mobile" */;
 			buildPhases = (
-				3995CCFB6EE3FB1FFEA1423D /* Check Pods Manifest.lock */,
+				3995CCFB6EE3FB1FFEA1423D /* [CP] Check Pods Manifest.lock */,
 				BCB6801A1CB8F969006EFACD /* Sources */,
 				BCB6801B1CB8F969006EFACD /* Frameworks */,
 				BCB6801C1CB8F969006EFACD /* Resources */,
-				3FF6D020C584A1BA8C493A41 /* Embed Pods Frameworks */,
-				EA1BF6D0FD0776351885B8AD /* Copy Pods Resources */,
+				3FF6D020C584A1BA8C493A41 /* [CP] Embed Pods Frameworks */,
+				EA1BF6D0FD0776351885B8AD /* [CP] Copy Pods Resources */,
 				BC2B362A1CC1147B002DF1F6 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				BC358E721CC344810070F1D1 /* PBXTargetDependency */,
+				11FB20891F2EE88500AAD489 /* PBXTargetDependency */,
 			);
 			name = "AURIN Mobile";
 			productName = "AURIN Mobile";
@@ -249,12 +234,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "University of Melbourne";
 				TargetAttributes = {
 					BCB6801D1CB8F969006EFACD = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = UFCM2756LW;
+						DevelopmentTeam = HB7G3G78MD;
+						LastSwiftMigration = 0830;
 					};
 				};
 			};
@@ -271,8 +257,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = BC358E611CC344760070F1D1 /* Products */;
-					ProjectRef = BC358E601CC344760070F1D1 /* Charts.xcodeproj */;
+					ProductGroup = 11FB207E1F2EE84200AAD489 /* Products */;
+					ProjectRef = 11FB207D1F2EE84200AAD489 /* Charts.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -283,32 +269,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		BC358E681CC344760070F1D1 /* Charts.framework */ = {
+		11FB20831F2EE84300AAD489 /* Charts.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Charts.framework;
-			remoteRef = BC358E671CC344760070F1D1 /* PBXContainerItemProxy */;
+			remoteRef = 11FB20821F2EE84300AAD489 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		BC358E6A1CC344760070F1D1 /* Charts.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Charts.framework;
-			remoteRef = BC358E691CC344760070F1D1 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		BC358E6C1CC344760070F1D1 /* Charts.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Charts.framework;
-			remoteRef = BC358E6B1CC344760070F1D1 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		BC358E6E1CC344760070F1D1 /* ChartsTests.xctest */ = {
+		11FB20851F2EE84300AAD489 /* ChartsTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = ChartsTests.xctest;
-			remoteRef = BC358E6D1CC344760070F1D1 /* PBXContainerItemProxy */;
+			remoteRef = 11FB20841F2EE84300AAD489 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -327,29 +299,29 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3995CCFB6EE3FB1FFEA1423D /* Check Pods Manifest.lock */ = {
+		3995CCFB6EE3FB1FFEA1423D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		3FF6D020C584A1BA8C493A41 /* Embed Pods Frameworks */ = {
+		3FF6D020C584A1BA8C493A41 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -357,14 +329,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AURIN Mobile/Pods-AURIN Mobile-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		EA1BF6D0FD0776351885B8AD /* Copy Pods Resources */ = {
+		EA1BF6D0FD0776351885B8AD /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -379,7 +351,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BCB6B7101CD62510007E044C /* FilterViewController.swift in Sources */,
 				BCB680241CB8F969006EFACD /* OnlineViewController.swift in Sources */,
 				BC7176A21CBA7B2E00623916 /* AboutTableViewCell.swift in Sources */,
 				BCEB76981CC5FDFB000B99B2 /* WalkthroughAnimationViewController.swift in Sources */,
@@ -394,10 +365,10 @@
 				BCAE3DE41CB902DB0019B4C9 /* DatasetTableViewCell.swift in Sources */,
 				BC7176981CBA65CE00623916 /* AboutTableViewController.swift in Sources */,
 				BC71768A1CB9E73900623916 /* DatasetDetailViewController.swift in Sources */,
+				11800D251F30BA300046F5D6 /* FilterViewController.swift in Sources */,
 				BCB680221CB8F969006EFACD /* AppDelegate.swift in Sources */,
 				BC2B362C1CC1242B002DF1F6 /* MapDrawingViewController.swift in Sources */,
 				BCEB76901CC5E0EA000B99B2 /* WalkthroughContentViewController.swift in Sources */,
-				BC2B362E1CC12441002DF1F6 /* SwiftyJSON.swift in Sources */,
 				BC7176921CBA069300623916 /* DatasetDetailTableViewCell.swift in Sources */,
 				BCEB76951CC5E243000B99B2 /* WalkthroughPageViewController.swift in Sources */,
 			);
@@ -406,10 +377,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		BC358E721CC344810070F1D1 /* PBXTargetDependency */ = {
+		11FB20891F2EE88500AAD489 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = "Charts-iOS";
-			targetProxy = BC358E711CC344810070F1D1 /* PBXContainerItemProxy */;
+			name = Charts;
+			targetProxy = 11FB20881F2EE88500AAD489 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -439,8 +410,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -462,7 +435,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -485,8 +458,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -502,9 +477,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -512,31 +489,35 @@
 		};
 		BCB680311CB8F969006EFACD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C26F7695EDEB4E63E40D699D /* Pods.debug.xcconfig */;
+			baseConfigurationReference = DD689112050DB3B75F58E077 /* Pods-AURIN Mobile.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				DEVELOPMENT_TEAM = HB7G3G78MD;
 				INFOPLIST_FILE = "AURIN Mobile/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "au.edu.unimelb.AURIN-Mobile";
+				PRODUCT_BUNDLE_IDENTIFIER = "au.edu.unimelb.AURIN-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		BCB680321CB8F969006EFACD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7C6D22DE04824B586C2ECD4E /* Pods.release.xcconfig */;
+			baseConfigurationReference = 98036E5135EAF90673E09B79 /* Pods-AURIN Mobile.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				DEVELOPMENT_TEAM = HB7G3G78MD;
 				INFOPLIST_FILE = "AURIN Mobile/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "au.edu.unimelb.AURIN-Mobile";
+				PRODUCT_BUNDLE_IDENTIFIER = "au.edu.unimelb.AURIN-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

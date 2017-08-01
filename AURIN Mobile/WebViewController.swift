@@ -16,8 +16,8 @@ class WebViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.title = "aurin.org.au"
         // Do any additional setup after loading the view.
-        if let url = NSURL(string: "http://aurin.org.au/") {
-            let request = NSURLRequest(URL: url)
+        if let url = URL(string: "http://aurin.org.au/") {
+            let request = URLRequest(url: url)
             webView.loadRequest(request)
         }
     }
