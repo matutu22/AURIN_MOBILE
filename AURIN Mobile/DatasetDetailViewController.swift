@@ -86,14 +86,14 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
     
     // Get the detail information of selected dataset from AURIN serer.
     fileprivate func getDatasetProperties() {
-        Alamofire.request("https://geoserver.aurin.org.au/wfs?request=DescribeFeatureType&service=WFS&version=1.1.0&TypeName=\(dataset.name)")
+        Alamofire.request("https://openapi.aurin.org.au/wfs?request=DescribeFeatureType&service=WFS&version=1.1.0&TypeName=\(dataset.name)")
             .response { response in
                 //print(data) // if you want to check XML data in debug window.
                 let xml = SWXMLHash.parse(response.data!)
-                for property in xml["xsd:schema"]["xsd:complexType"]["xsd:complexContent"]["xsd:extension"]["xsd:sequence"]["xsd:element"] {
-                    let propertyName = (property.element?.attributes["name"])!
-                    var propertyType = (property.element?.attributes["type"])!
-                    propertyType.removeRange(propertyType.startIndex..<propertyType.startIndex.advancedBy(4))
+                for property in xml["xsd:schema"]["xsd:complexType"]["xsd:complexContent"]["xsd:extension"]["xsd:sequence"]["xsd:element"].all {
+                    let propertyName = (property.element?.attribute(by: "name")?.text)!
+                    var propertyType = (property.element?.attribute(by: "type")?.text)!
+                    propertyType = propertyType.components(separatedBy: ":")[1]
                     //print("\(propertyName): \(propertyType)")
                     self.propertyList.updateValue(propertyType, forKey: propertyName)
                 }
@@ -159,7 +159,7 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             let callActionHandler = { (action:UIAlertAction!) -> Void in
                 if let url = URL(string: self.dataset.website) {
-                    UIApplication.shared.openURL(url)
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
             }
             let callAction = UIAlertAction(title: "Visit Website", style: .default, handler: callActionHandler)

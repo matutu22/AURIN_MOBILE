@@ -15,6 +15,7 @@
 import UIKit
 import Alamofire
 import GoogleMaps
+import SwiftyJSON
 
 
 class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
@@ -48,7 +49,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
         // Set the title of navigation bar
         navigationItem.title = "\(dataset.title)"
         
-        var queryURL = "https://geoserver.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&MaxFeatures=1000&outputFormat=json&CQL_FILTER=BBOX(\(geom_name),\(chooseBBOX.lowerLAT),\(chooseBBOX.lowerLON),\(chooseBBOX.upperLAT),\(chooseBBOX.upperLON))"
+        var queryURL = "https://openapi.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&MaxFeatures=1000&outputFormat=json&CQL_FILTER=BBOX(\(geom_name),\(chooseBBOX.lowerLAT),\(chooseBBOX.lowerLON),\(chooseBBOX.upperLAT),\(chooseBBOX.upperLON))"
         
         // If the use choose to use the intermediate server, change the URL.
         if useSimplifier {
@@ -76,37 +77,37 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
         self.mapView.animate(to: camera)
         
         // Do any additional setup after loading the view.
-        dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0).async(execute: {
-            Alamofire.request(queryURL).response { (_request, _response, data, _error) in
-                let json = JSON(data: data!)
+        DispatchQueue.global(qos: .default).async(execute: {
+            Alamofire.request(queryURL).response { response in
+                let json = try! JSON(data: response.data!)
                 
                 if json["features"].count == 0 {
-                    let alertMessage = UIAlertController(title: "No Data", message: "There is no data in the selected area, please try to choose another area.", preferredStyle: .Alert)
-                    alertMessage.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                    self.presentViewController(alertMessage, animated: true, completion: nil)
+                    let alertMessage = UIAlertController(title: "No Data", message: "There is no data in the selected area, please try to choose another area.", preferredStyle: .alert)
+                    alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alertMessage, animated: true, completion: nil)
                 }
                 
                 let shapeType = json["features"][0]["geometry"]["type"]
                 switch shapeType {
                 // ====================================================================================
                 case "Point":
-                    let featuresNum = json["features"].count
-                    for featureID in Range(0..<featuresNum) {
+                    let featuresNum : Int = json["features"].count
+                    for featureID in 0..<featuresNum {
                         
                         let latitude = json["features"][featureID]["geometry"]["coordinates"][1].doubleValue
                         let longitude = json["features"][featureID]["geometry"]["coordinates"][0].doubleValue
                         let marker = ExtendedMarker(position: CLLocationCoordinate2DMake(latitude, longitude))
                         marker.title = json["features"][featureID]["id"].stringValue
                         for property in json["features"][featureID]["properties"] {
-                            marker.properties.updateValue(String(property.1), forKey: property.0)
+                            marker.properties.updateValue(String(describing: property.1), forKey: property.0)
                         }
                         marker.key = json["features"][featureID]["properties"][self.titleProperty].stringValue
                         marker.value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
                         
                         
                         let markerColor = ColorSet.colorDictionary[self.palette]
-                        marker.icon = GMSMarker.markerImageWithColor(markerColor?.colorWithAlphaComponent(self.alpha))
-                        marker.properties.removeValueForKey("bbox")
+                        marker.icon = GMSMarker.markerImage(with: markerColor?.withAlphaComponent(self.alpha))
+                        marker.properties.removeValue(forKey: "bbox")
                         //marker.appearAnimation = kGMSMarkerAnimationPop
                         marker.map = self.mapView
                     }
@@ -122,29 +123,29 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
                     let featuresNum = json["features"].count
                     var polylinePath = GMSMutablePath()
                     
-                    for featureID in Range(0..<featuresNum) {
+                    for featureID in 0..<featuresNum {
                         let polylineCount = json["features"][featureID]["geometry"]["coordinates"].count
-                        for polylineNum in Range(0..<polylineCount) {
+                        for polylineNum in 0..<polylineCount {
                             let count = json["features"][featureID]["geometry"]["coordinates"][polylineNum].count
-                            for coordinateNum in Range(0..<count) {
+                            for coordinateNum in 0..<count {
                                 let point = json["features"][featureID]["geometry"]["coordinates"][polylineNum][coordinateNum]
-                                polylinePath.addCoordinate(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
+                                polylinePath.add(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
                             }
                             
                             let polyline = ExtendedPolyline(path: polylinePath)
                             polyline.title = json["features"][featureID]["id"].stringValue
                             for property in json["features"][featureID]["properties"] {
-                                polyline.properties.updateValue(String(property.1), forKey: property.0)
+                                polyline.properties.updateValue(String(describing: property.1), forKey: property.0)
                             }
-                            polyline.properties.removeValueForKey("bbox")
+                            polyline.properties.removeValue(forKey: "bbox")
                             polyline.key = json["features"][featureID]["properties"][self.titleProperty].stringValue
                             polyline.value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
                             
                             polyline.strokeWidth = 2.0
                             let strokeColor = ColorSet.colorDictionary[self.palette]
-                            polyline.strokeColor = strokeColor!.colorWithAlphaComponent(self.alpha)
+                            polyline.strokeColor = strokeColor!.withAlphaComponent(self.alpha)
                             polyline.geodesic = true
-                            polyline.tappable = true
+                            polyline.isTappable = true
                             polyline.map = self.mapView
                             polylinePath = GMSMutablePath()
                         }
@@ -162,20 +163,20 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
                     var minValue = 9999999.0
                     var step = 0.0
                     
-                    for featureID in Range(0..<featuresNum) {
+                    for featureID in 0..<featuresNum {
                         if json["features"][featureID]["geometry"]["type"] == "Polygon" {
                             let count = json["features"][featureID]["geometry"]["coordinates"][0].count
-                            for i in Range(0..<count) {
+                            for i in 0..<count {
                                 let point = json["features"][featureID]["geometry"]["coordinates"][0][i]
-                                polygonPath.addCoordinate(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
+                                polygonPath.add(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
                             }
                             
                             let polygon = ExtendedPolygon(path: polygonPath)
                             polygon.title = json["features"][featureID]["id"].stringValue
                             for property in json["features"][featureID]["properties"] {
-                                polygon.properties.updateValue(String(property.1), forKey: property.0)
+                                polygon.properties.updateValue(String(describing: property.1), forKey: property.0)
                             }
-                            polygon.properties.removeValueForKey("bbox")
+                            polygon.properties.removeValue(forKey: "bbox")
                             polygon.key = json["features"][featureID]["properties"][self.titleProperty].stringValue
                             polygon.value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
                             if polygon.value > maxValue {
@@ -184,28 +185,28 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
                             if polygon.value < minValue {
                                 minValue = polygon.value
                             }
-                            polygon.strokeColor = UIColor.blackColor()
+                            polygon.strokeColor = UIColor.black
                             polygon.strokeWidth = 1
-                            polygon.tappable = true
+                            polygon.isTappable = true
                             polygons.append(polygon)
                             
                             polygonPath = GMSMutablePath()
                         } else {
                         
                             let ploygonCount = json["features"][featureID]["geometry"]["coordinates"].count
-                            for polygonNum in Range(0..<ploygonCount) {
+                            for polygonNum in 0..<ploygonCount {
                                 let count = json["features"][featureID]["geometry"]["coordinates"][polygonNum][0].count
-                                for i in Range(0..<count) {
+                                for i in 0..<count {
                                     let point = json["features"][featureID]["geometry"]["coordinates"][polygonNum][0][i]
-                                    polygonPath.addCoordinate(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
+                                    polygonPath.add(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
                                 } // traverse all coordinates in a polygon
                                 
                                 let polygon = ExtendedPolygon(path: polygonPath)
                                 polygon.title = json["features"][featureID]["id"].stringValue
                                 for property in json["features"][featureID]["properties"] {
-                                    polygon.properties.updateValue(String(property.1), forKey: property.0)
+                                    polygon.properties.updateValue(String(describing: property.1), forKey: property.0)
                                 }
-                                polygon.properties.removeValueForKey("bbox")
+                                polygon.properties.removeValue(forKey: "bbox")
                                 polygon.key = json["features"][featureID]["properties"][self.titleProperty].stringValue
                                 polygon.value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
                                 if polygon.value > maxValue {
@@ -214,9 +215,9 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
                                 if polygon.value < minValue {
                                     minValue = polygon.value
                                 }
-                                polygon.strokeColor = UIColor.blackColor()
+                                polygon.strokeColor = UIColor.black
                                 polygon.strokeWidth = 1
-                                polygon.tappable = true
+                                polygon.isTappable = true
                                 polygons.append(polygon)
                                 
                                 // Reset
@@ -240,19 +241,19 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate {
                         
                         switch self.palette {
                         case "Red":
-                            polygon.fillColor = ColorSet.redSet[transformedIndex].colorWithAlphaComponent(self.alpha)
+                            polygon.fillColor = ColorSet.redSet[transformedIndex].withAlphaComponent(self.alpha)
                         case "Orange":
-                            polygon.fillColor = ColorSet.OrangeSet[transformedIndex].colorWithAlphaComponent(self.alpha)
+                            polygon.fillColor = ColorSet.OrangeSet[transformedIndex].withAlphaComponent(self.alpha)
                         case "Green":
-                            polygon.fillColor = ColorSet.GreenSet[transformedIndex].colorWithAlphaComponent(self.alpha)
+                            polygon.fillColor = ColorSet.GreenSet[transformedIndex].withAlphaComponent(self.alpha)
                         case "Blue":
-                            polygon.fillColor = ColorSet.BlueSet[transformedIndex].colorWithAlphaComponent(self.alpha)
+                            polygon.fillColor = ColorSet.BlueSet[transformedIndex].withAlphaComponent(self.alpha)
                         case "Purple":
-                            polygon.fillColor = ColorSet.PurpleSet[transformedIndex].colorWithAlphaComponent(self.alpha)
+                            polygon.fillColor = ColorSet.PurpleSet[transformedIndex].withAlphaComponent(self.alpha)
                         case "Gray":
-                            polygon.fillColor = ColorSet.GraySet[transformedIndex].colorWithAlphaComponent(self.alpha)
+                            polygon.fillColor = ColorSet.GraySet[transformedIndex].withAlphaComponent(self.alpha)
                         default:
-                            polygon.fillColor = ColorSet.redSet[transformedIndex].colorWithAlphaComponent(self.alpha)
+                            polygon.fillColor = ColorSet.redSet[transformedIndex].withAlphaComponent(self.alpha)
                         }
                         polygon.map = self.mapView
                     }

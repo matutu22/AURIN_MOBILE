@@ -111,15 +111,15 @@ class AboutTableViewController: UITableViewController {
         case 1:
             if indexPath.row == 0 {
                 if let url = URL(string: "https://twitter.com/aurin_org_au") {
-                    UIApplication.shared.openURL(url)
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
             } else if indexPath.row == 1 {
                 if let url = URL(string: "https://www.facebook.com/Aurin-183080631739008/") {
-                    UIApplication.shared.openURL(url)
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
             } else {
                 if let url = URL(string: "https://www.linkedin.com/groups/6622107/profile") {
-                    UIApplication.shared.openURL(url)
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
             }
         case 2:

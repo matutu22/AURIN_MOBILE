@@ -16,6 +16,7 @@ import UIKit
 import Charts
 import Alamofire
 import GoogleMaps
+import SwiftyJSON
 
 
 class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate, GMSMapViewDelegate {
@@ -66,31 +67,34 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         self.mapView.settings.rotateGestures = false
         self.mapView.settings.scrollGestures = true
         self.mapView.delegate = self;
+        self.mapView.isIndoorEnabled = false
+
         // Set the map location to fit the dataset.
         let zoomLevel = Float(round((log2(210 / abs(dataset.bbox.upperLON - dataset.bbox.lowerLON)) + 1) * 100) / 100)
         let centerLatitude = (dataset.bbox.lowerLAT + dataset.bbox.upperLAT) / 2
         let centerLongitude = (dataset.bbox.lowerLON + dataset.bbox.upperLON) / 2
         
         let camera = GMSCameraPosition.camera(withLatitude: centerLatitude, longitude: centerLongitude, zoom: zoomLevel)
-        self.mapView.animate(camera)
+        mapView.camera = camera
+        // self.mapView.animate()
         
         // Generate the query which only request for key & value properties.
-        let queryURL = "https://geoserver.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&MaxFeatures=1000&outputFormat=json&CQL_FILTER=BBOX(\(geom_name),\(chooseBBOX.lowerLAT),\(chooseBBOX.lowerLON),\(chooseBBOX.upperLAT),\(chooseBBOX.upperLON))&PropertyName=\(titleProperty),\(classifierProperty)"
+        let queryURL = "https://openapi.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&MaxFeatures=1000&outputFormat=json&CQL_FILTER=BBOX(\(geom_name),\(chooseBBOX.lowerLAT),\(chooseBBOX.lowerLON),\(chooseBBOX.upperLAT),\(chooseBBOX.upperLON))&PropertyName=\(titleProperty),\(classifierProperty)"
         
-        dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0).async(execute: {
+        DispatchQueue.global(qos: .default).async(execute: {
             Alamofire.request(queryURL).response { response in
-                let json = JSON(data: response.data!)
+                let json = try! JSON(data: response.data!)
                 
                 if json["features"].count == 0 {
-                    let alertMessage = UIAlertController(title: "No Data", message: "There is no data in the selected area, please try to choose another area.", preferredStyle: .Alert)
-                    alertMessage.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                    self.presentViewController(alertMessage, animated: true, completion: nil)
+                    let alertMessage = UIAlertController(title: "No Data", message: "There is no data in the selected area, please try to choose another area.", preferredStyle: .alert)
+                    alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alertMessage, animated: true, completion: nil)
                 }
                 
                 
                 // ====================================================================================
                 let featuresNum = json["features"].count
-                for featureID in Range(0..<featuresNum) {
+                for featureID in 0..<featuresNum {
                     let key = json["features"][featureID]["properties"][self.titleProperty].stringValue
                     let value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
                     self.xAxis.append(key)
@@ -200,12 +204,12 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         var dataEntries: [BarChartDataEntry] = []
         
         for i in 0..<dataPoints.count {
-            let dataEntry = BarChartDataEntry(value: values[i], xIndex: i)
+            let dataEntry = BarChartDataEntry(x: Double(i), y: values[i])
             dataEntries.append(dataEntry)
         }
         
-        let chartDataSet = BarChartDataSet(yVals: dataEntries, label: "\(classifierProperty)")
-        let chartData = BarChartData(xVals: dataPoints, dataSet: chartDataSet)
+        let chartDataSet = BarChartDataSet(values: dataEntries, label: "\(classifierProperty)")
+        let chartData = BarChartData(dataSet: chartDataSet)
         barChartView.data = chartData
         
         switch self.palette {
@@ -234,11 +238,14 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         //chartDataSet.colors = ColorSet.BlueSet
         
         barChartView.noDataText = "Loading data, please wait..."
-        barChartView.noDataTextDescription = "The Internet is busy now"
-        barChartView.descriptionText = ""
+        //barChartView.nodatatextdescrip = "The Internet is busy now"
         
-        barChartView.xAxis.labelPosition = .Bottom
-        barChartView.backgroundColor = UIColor.whiteColor()
+        barChartView.chartDescription?.text = ""
+        //barChartView.drawGridBackgroundEnabled = true
+
+        
+        barChartView.xAxis.labelPosition = .bottom
+        barChartView.backgroundColor = UIColor.white
         barChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
         
         // Set the limit line.
@@ -249,7 +256,7 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         average /= Double(values.count)
         
         let limitLine = ChartLimitLine(limit: average, label: "AVG")
-        limitLine.lineColor = UIColor.redColor()
+        limitLine.lineColor = UIColor.red
         barChartView.drawValueAboveBarEnabled = false
         barChartView.rightAxis.addLimitLine(limitLine)
         
@@ -260,18 +267,18 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
     
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, dataSetIndex: Int, highlight: Highlight) {
         mapView.clear()
-        keyLabel.text = "\(xAxis[entry.xIndex])"
-        valueLabel.text = "\(entry.value)"
+        keyLabel.text = "\(xAxis[Int(entry.x)])"
+        valueLabel.text = "\(entry.y)"
         
         
         if !mapViewHidden || !detailViewHidden {
             // The URL request shoud not include 'space', so change it to '%20'.
-            let newName = xAxis[entry.xIndex].stringByReplacingOccurrencesOfString(" ", withString: "%20")
-            let nameSearchURL = "https://geoserver.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&outputFormat=json&CQL_FILTER=(\(titleProperty)='\(newName)')"
+            let newName = xAxis[Int(entry.x)].replacingOccurrences(of: " ", with: "%20")
+            let nameSearchURL = "https://openapi.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&outputFormat=json&CQL_FILTER=(\(titleProperty)='\(newName)')"
             print(nameSearchURL)
             
-            Alamofire.request(.GET, nameSearchURL).response { (_request, _response, data, _error) in
-                let json = JSON(data: data!)
+            Alamofire.request(nameSearchURL).response { response in
+                let json = try! JSON(data: response.data!)
                 let shapeType = json["features"][0]["geometry"]["type"]
                 switch shapeType {
                 // ====================================================================================
@@ -281,43 +288,43 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
                     let marker = ExtendedMarker(position: CLLocationCoordinate2DMake(latitude, longitude))
                     marker.title = json["features"][0]["id"].stringValue
                     for property in json["features"][0]["properties"] {
-                        marker.properties.updateValue(String(property.1), forKey: property.0)
+                        marker.properties.updateValue(String(describing: property.1), forKey: property.0)
                     }
-                    marker.properties.removeValueForKey("bbox")
+                    marker.properties.removeValue(forKey: "bbox")
                     
-                    self.textView.editable = false
+                    self.textView.isEditable = false
                     self.textView.text = marker.getProperties()
                     marker.map = self.mapView
                 // ====================================================================================
                 case "MultiLineString":
                     let featuresNum = json["features"].count
                     var polylinePath = GMSMutablePath()
-                    for featureID in Range(0..<featuresNum) {
+                    for featureID in 0..<featuresNum {
                         let polylineCount = json["features"][featureID]["geometry"]["coordinates"].count
-                        for polylineNum in Range(0..<polylineCount) {
+                        for polylineNum in 0..<polylineCount {
                             let count = json["features"][featureID]["geometry"]["coordinates"][polylineNum].count
-                            for coordinateNum in Range(0..<count) {
+                            for coordinateNum in 0..<count {
                                 let point = json["features"][featureID]["geometry"]["coordinates"][polylineNum][coordinateNum]
-                                polylinePath.addCoordinate(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
+                                polylinePath.add(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
                             }
                             
                             let polyline = ExtendedPolyline(path: polylinePath)
                             polyline.title = json["features"][featureID]["id"].stringValue
                             for property in json["features"][featureID]["properties"] {
-                                polyline.properties.updateValue(String(property.1), forKey: property.0)
+                                polyline.properties.updateValue(String(describing: property.1), forKey: property.0)
                             }
-                            polyline.properties.removeValueForKey("bbox")
+                            polyline.properties.removeValue(forKey: "bbox")
                             polyline.key = json["features"][featureID]["properties"][self.titleProperty].stringValue
                             polyline.value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
                             
                             polyline.strokeWidth = 2.0
                             let strokeColor = ColorSet.colorDictionary[self.palette]
-                            polyline.strokeColor = strokeColor!.colorWithAlphaComponent(0.7)
+                            polyline.strokeColor = strokeColor!.withAlphaComponent(0.7)
                             polyline.geodesic = true
-                            polyline.tappable = true
+                            polyline.isTappable = true
                             polyline.map = self.mapView
                             polylinePath = GMSMutablePath()
-                            self.textView.editable = false
+                            self.textView.isEditable = false
                             self.textView.text = polyline.getProperties()
                         }
                     }
@@ -325,40 +332,40 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
                 case "MultiPolygon":
                     var polygonPath = GMSMutablePath()
                     let count = json["features"][0]["geometry"]["coordinates"][0][0].count
-                    for i in Range(0..<count) {
+                    for i in 0..<count {
                         let point = json["features"][0]["geometry"]["coordinates"][0][0][i]
-                        polygonPath.addCoordinate(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
+                        polygonPath.add(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
                     }
                     
                     let polygon = ExtendedPolygon(path: polygonPath)
                     polygon.title = json["features"][0]["id"].stringValue
                     for property in json["features"][0]["properties"] {
-                        polygon.properties.updateValue(String(property.1), forKey: property.0)
+                        polygon.properties.updateValue(String(describing: property.1), forKey: property.0)
                     }
                     
                     
-                    polygon.properties.removeValueForKey("bbox")
+                    polygon.properties.removeValue(forKey: "bbox")
                     polygon.key = json["features"][0]["properties"][self.titleProperty].stringValue
                     polygon.value = json["features"][0]["properties"][self.classifierProperty].doubleValue
-                    polygon.strokeColor = UIColor.blackColor()
+                    polygon.strokeColor = UIColor.black
                     polygon.strokeWidth = 1
-                    polygon.tappable = true
+                    polygon.isTappable = true
                     
                     switch self.palette {
                     case "Red":
-                        polygon.fillColor = ColorSet.colorDictionary["Red"]!.colorWithAlphaComponent(self.alpha)
+                        polygon.fillColor = ColorSet.colorDictionary["Red"]!.withAlphaComponent(self.alpha)
                     case "Orange":
-                        polygon.fillColor = ColorSet.colorDictionary["Orange"]!.colorWithAlphaComponent(self.alpha)
+                        polygon.fillColor = ColorSet.colorDictionary["Orange"]!.withAlphaComponent(self.alpha)
                     case "Green":
-                        polygon.fillColor = ColorSet.colorDictionary["Green"]!.colorWithAlphaComponent(self.alpha)
+                        polygon.fillColor = ColorSet.colorDictionary["Green"]!.withAlphaComponent(self.alpha)
                     case "Blue":
-                        polygon.fillColor = ColorSet.colorDictionary["Blue"]!.colorWithAlphaComponent(self.alpha)
+                        polygon.fillColor = ColorSet.colorDictionary["Blue"]!.withAlphaComponent(self.alpha)
                     case "Purple":
-                        polygon.fillColor = ColorSet.colorDictionary["Purple"]!.colorWithAlphaComponent(self.alpha)
+                        polygon.fillColor = ColorSet.colorDictionary["Purple"]!.withAlphaComponent(self.alpha)
                     case "Gray":
-                        polygon.fillColor = ColorSet.colorDictionary["Gray"]!.colorWithAlphaComponent(self.alpha)
+                        polygon.fillColor = ColorSet.colorDictionary["Gray"]!.withAlphaComponent(self.alpha)
                     default:
-                        polygon.fillColor = ColorSet.theme["AURIN-Ming"]?.colorWithAlphaComponent(self.alpha)
+                        polygon.fillColor = ColorSet.theme["AURIN-Ming"]?.withAlphaComponent(self.alpha)
                     }
                     
                     polygon.map = self.mapView
@@ -374,17 +381,17 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
                     
                     
                     
-                    let camera = GMSCameraPosition.cameraWithLatitude(centerLatitude, longitude: centerLongitude, zoom: zoomLevel)
-                    self.mapView.animateToCameraPosition(camera)
+                    let camera = GMSCameraPosition.camera(withLatitude: centerLatitude, longitude: centerLongitude, zoom: zoomLevel)
+                    self.mapView.animate(to: camera)
                     
                     
                     polygonPath = GMSMutablePath()
                     
-                    self.textView.editable = false
+                    self.textView.isEditable = false
                     self.textView.text = polygon.getProperties()
                     self.textView.textColor = ColorSet.theme["AURIN-Ming"]
                     self.textView.font = UIFont(name: "Menlo", size: 10)
-                    self.textView.textAlignment = .Center
+                    self.textView.textAlignment = .center
                     
                     
                 // ====================================================================================

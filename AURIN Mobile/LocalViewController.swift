@@ -31,7 +31,7 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
         // Set the self sizing table cell. The default cell height is 72.0 point.
         tableView.estimatedRowHeight = 72.0
         tableView.rowHeight = UITableViewAutomaticDimension
-        // Get Data from GeoServer through WFS.
+        // Get Data from openapi through WFS.
         self.getDatasets()
         // Add search bar to the view.
         searchController.searchResultsUpdater = self

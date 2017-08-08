@@ -152,7 +152,7 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
                 let xml = SWXMLHash.parse(response.data!)
                 // Dealing each feature, and put them into a list.
                 let featureTypeList = xml["wfs:WFS_Capabilities"]["FeatureTypeList"]["FeatureType"]
-                for featureType in featureTypeList {
+                for featureType in featureTypeList.all {
                     // Create a dataset, read data from XML
                     let dataset = Dataset()
                     dataset.name = (featureType["Name"].element?.text)!
@@ -161,13 +161,13 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
                     dataset.keywords = featureType["ows:Keywords"]["ows:Keyword"].all.map {
                         keyword in (keyword.element?.text)!
                     }
-                    for bbox in featureType["ows:WGS84BoundingBox"] {
+                    for bbox in featureType["ows:WGS84BoundingBox"].all {
                         let lowerCorner = (bbox["ows:LowerCorner"].element?.text)!
-                        let lowerLON = Double(lowerCorner.componentsSeparatedByString(" ")[0])!
-                        let lowerLAT = Double(lowerCorner.componentsSeparatedByString(" ")[1])!
+                        let lowerLON = Double(lowerCorner.components(separatedBy: " ")[0])!
+                        let lowerLAT = Double(lowerCorner.components(separatedBy: " ")[1])!
                         let upperCorner = (bbox["ows:UpperCorner"].element?.text)!
-                        let upperLON = Double(upperCorner.componentsSeparatedByString(" ")[0])!
-                        let upperLAT = Double(upperCorner.componentsSeparatedByString(" ")[1])!
+                        let upperLON = Double(upperCorner.components(separatedBy: " ")[0])!
+                        let upperLAT = Double(upperCorner.components(separatedBy: " ")[1])!
                         dataset.bbox = BBOX(lowerLON: lowerLON, lowerLAT: lowerLAT, upperLON: upperLON, upperLAT: upperLAT)
                         // Calculating the center's coordinate of bounding box.
                         let centerLON = round((lowerLON + upperLON) / 2 * 1000000) / 1000000
@@ -176,8 +176,8 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
                         let zoom = Float(round((log2(210 / abs(upperLON - lowerLON)) + 1) * 100) / 100)
                         dataset.zoom = zoom
                     }
-                    dataset.organisation = dataset.name.componentsSeparatedByString(":")[0]
-                    dataset.website = (featureType.element?.attributes["xmlns:\(dataset.organisation)"])!
+                    dataset.organisation = dataset.name.components(separatedBy: ":")[0]
+                    dataset.website = (featureType.element?.attribute(by: "xmlns:\(dataset.organisation)")?.text)!
                     
                     // Add dataset object to list
                     if DataSet.invalidData[dataset.title] != nil {

@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		01E8C5183A970D32D89E9B07 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D354DC590FBA86BF29049A1F /* Pods.framework */; };
 		11800D251F30BA300046F5D6 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB6B70F1CD62510007E044C /* FilterViewController.swift */; };
+		11800D621F3845920046F5D6 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11800D611F3845920046F5D6 /* SwiftyJSON.framework */; };
 		11FB20861F2EE88500AAD489 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11FB20831F2EE84300AAD489 /* Charts.framework */; };
 		11FB20871F2EE88500AAD489 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 11FB20831F2EE84300AAD489 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BC2B361F1CC0C606002DF1F6 /* MapSettingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2B361E1CC0C606002DF1F6 /* MapSettingTableViewController.swift */; };
@@ -75,6 +75,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		11800D611F3845920046F5D6 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../Library/Developer/Xcode/DerivedData/AURIN_Mobile-aveymqehifmgsthepoknilwqbjuc/Build/Products/Debug-iphonesimulator/SwiftyJSON/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		11FB207D1F2EE84200AAD489 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = "../Intern/Charts-master/Charts.xcodeproj"; sourceTree = "<group>"; };
 		4FEAC482FD2D7A1DEDC5ECEC /* Pods_AURIN_Mobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AURIN_Mobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C6D22DE04824B586C2ECD4E /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -105,7 +106,6 @@
 		BCEB76941CC5E243000B99B2 /* WalkthroughPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkthroughPageViewController.swift; sourceTree = "<group>"; };
 		BCEB76971CC5FDFB000B99B2 /* WalkthroughAnimationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkthroughAnimationViewController.swift; sourceTree = "<group>"; };
 		C26F7695EDEB4E63E40D699D /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		D354DC590FBA86BF29049A1F /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD689112050DB3B75F58E077 /* Pods-AURIN Mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AURIN Mobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AURIN Mobile/Pods-AURIN Mobile.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -114,8 +114,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11800D621F3845920046F5D6 /* SwiftyJSON.framework in Frameworks */,
 				11FB20861F2EE88500AAD489 /* Charts.framework in Frameworks */,
-				01E8C5183A970D32D89E9B07 /* Pods.framework in Frameworks */,
 				C98325000EEC11D82B5E3598 /* Pods_AURIN_Mobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -135,7 +135,7 @@
 		779F9733B0246D289D51E41F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D354DC590FBA86BF29049A1F /* Pods.framework */,
+				11800D611F3845920046F5D6 /* SwiftyJSON.framework */,
 				4FEAC482FD2D7A1DEDC5ECEC /* Pods_AURIN_Mobile.framework */,
 			);
 			name = Frameworks;
