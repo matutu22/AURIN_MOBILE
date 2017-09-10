@@ -74,9 +74,9 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         barChartView.delegate = self
         barChartView.noDataText  = "No available data."
         
-//        progressHUD = MBProgressHUD.showAdded(to: self.barChartView, animated: true)
-//        progressHUD.mode = MBProgressHUDMode.indeterminate
-//        progressHUD.label.text = "Loading..."
+        progressHUD = MBProgressHUD.showAdded(to: self.barChartView, animated: true)
+        progressHUD.mode = MBProgressHUDMode.indeterminate
+        progressHUD.label.text = "Loading..."
         
         self.mapView.mapType = .normal;
         self.mapView.settings.tiltGestures = false
