@@ -103,9 +103,17 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
         cell.datasetTitle.text = data.title
         cell.datasetOrg.text = data.organisation
         cell.datasetKeyword.text = "Keywords: " + data.keywords
-        cell.datasetImage.image = UIImage(named: data.organisation)
+        let image = UIImage(named: data.organisation)
+        cell.datasetImage.image = image
+        cell.datasetImage.layer.cornerRadius = cell.datasetImage.frame.size.width/2
+        cell.datasetImage.clipsToBounds = true
+        cell.datasetImage.layer.masksToBounds = true
+        cell.datasetImage.layer.borderWidth = 0.5
+        cell.datasetImage.layer.borderColor = UIColor.lightGray.cgColor
+        
         return cell
     }
+    
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if searchController.isActive {

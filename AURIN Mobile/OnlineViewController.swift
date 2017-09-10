@@ -70,9 +70,7 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to reload datasets")
         refreshControl.addTarget(self, action: #selector(OnlineViewController.refreshDataset), for: UIControlEvents.valueChanged)
         self.refreshControl = refreshControl
-        
-        
-        
+
     } // viewDidLoad ends.
     
     // Refetch datasets from GeoServer.
@@ -107,7 +105,7 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
         
     }
 
-    // This fucntion fetch dataset catalog from AURIN API: GeoServer
+    // This fucntion fetch dataset catalog from AURIN API: OpenApi
     fileprivate func getSavedDatasets() {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "LocalDataset")
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
@@ -140,27 +138,30 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     }
     
     
-    // This function will get datasets content fron GeoServer, and generating a list of 'Dataset' type.
+    // This function will get datasets content fron Openapi, and generating a list of 'Dataset' type.
     fileprivate func getDatasets() {
         
         // Query the dataset list from GeoServer, using 'GetCapabilities' service.
-        Alamofire.request("https://geoserver.aurin.org.au/wfs?service=WFS&version=1.1.0&request=GetCapabilities")
+        Alamofire.request("http://openapi.aurin.org.au/wfs?service=WFS&version=1.1.0&request=GetCapabilities")
             .authenticate(user: "student", password: "dj78dfGF")
             .response {  response in
-                
                 // It is the XML file that returnd by GeoServer.
                 let xml = SWXMLHash.parse(response.data!)
                 // Dealing each feature, and put them into a list.
                 let featureTypeList = xml["wfs:WFS_Capabilities"]["FeatureTypeList"]["FeatureType"]
                 for featureType in featureTypeList.all {
+                    
                     // Create a dataset, read data from XML
                     let dataset = Dataset()
                     dataset.name = (featureType["Name"].element?.text)!
-                    dataset.title = (featureType["Title"].element?.text)!
-                    dataset.abstract = (featureType["Abstract"].element?.text)!
+                    let title = (featureType["Title"].element?.text)!
+                    dataset.title = title.components(separatedBy: "Data provider: ")[0]
+                    dataset.abstract = (featureType["Abstract"].element?.text)!.components(separatedBy: "Temporal extent start: ")[0]
                     dataset.keywords = featureType["ows:Keywords"]["ows:Keyword"].all.map {
                         keyword in (keyword.element?.text)!
                     }
+                    
+                    //Retrieve Geo Data
                     for bbox in featureType["ows:WGS84BoundingBox"].all {
                         let lowerCorner = (bbox["ows:LowerCorner"].element?.text)!
                         let lowerLON = Double(lowerCorner.components(separatedBy: " ")[0])!
@@ -176,9 +177,16 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
                         let zoom = Float(round((log2(210 / abs(upperLON - lowerLON)) + 1) * 100) / 100)
                         dataset.zoom = zoom
                     }
-                    dataset.organisation = dataset.name.components(separatedBy: ":")[0]
-                    dataset.website = (featureType.element?.attribute(by: "xmlns:\(dataset.organisation)")?.text)!
+                    dataset.organisation = title.components(separatedBy: "Data provider: ")[1]
                     
+                    //Find Dataset website in the abstract
+                    if let start = dataset.abstract.range(of: "a href='"),
+                        let end = dataset.abstract.range(of: "' target=", range: start.upperBound..<dataset.abstract.endIndex){
+                        dataset.website = dataset.abstract[start.upperBound..<end.lowerBound]
+                    }else{
+                        dataset.website = "http://aurin.org.au"
+                    }
+                                        
                     // Add dataset object to list
                     if DataSet.invalidData[dataset.title] != nil {
                         // Do nothing
@@ -230,7 +238,15 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
         cell.datasetTitle.text = data.title
         cell.datasetOrg.text = data.organisation
         cell.datasetKeyword.text = "Keywords: " + data.showKeyword()
-        cell.datasetImage.image = UIImage(named: data.organisation)
+        let image = UIImage(named: data.organisation)
+
+        cell.datasetImage.image = image
+        cell.datasetImage.layer.cornerRadius = cell.datasetImage.frame.size.width/2
+        cell.datasetImage.clipsToBounds = true
+        cell.datasetImage.layer.masksToBounds = true
+        cell.datasetImage.layer.borderWidth = 0.5
+        cell.datasetImage.layer.borderColor = UIColor.lightGray.cgColor
+
         return cell
     }
     
@@ -382,12 +398,18 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     // Go back to dataset list from geographical filter.
     @IBAction func close(_ segue:UIStoryboardSegue) {
         if let filterViewController = segue.source as? FilterViewController {
-            let bbox = filterViewController.filertBBOX
+            let bbox = filterViewController.filterBBOX
             datasets = datasets.filter{$0.bbox.isIntersect(bbox)}
             tableView.reloadData()
             DataSet.filterBBOX = bbox
             
         }
+    }
+    
+    // Reset Geo Filter
+     @IBAction func reset(_ segue:UIStoryboardSegue) {
+        datasets = alldatasets
+        tableView.reloadData()
     }
     
 }

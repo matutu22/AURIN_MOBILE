@@ -20,7 +20,7 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
     // Receive data from former view.
     var propertyList = [String: String]()
     var dataset:Dataset!
-    var geom_name = "the_geom"
+    var geom_name = "ogr_geometry"
     
     
     // Passing data to next view.
@@ -72,7 +72,6 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
     
     
     
-    
     @IBOutlet var areaTitle: UILabel!
     @IBOutlet var areaLabel: UILabel!
     @IBOutlet var areaPicker: UIPickerView!
@@ -98,10 +97,7 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
     @IBOutlet var opacitySlider: UISlider!
     
     
-    
-    
-    
-    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()

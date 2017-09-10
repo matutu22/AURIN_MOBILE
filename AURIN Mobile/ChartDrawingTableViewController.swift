@@ -17,7 +17,7 @@ import Charts
 import Alamofire
 import GoogleMaps
 import SwiftyJSON
-
+import MBProgressHUD
 
 class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate, GMSMapViewDelegate {
 
@@ -30,10 +30,11 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
     var palette: String = "Default"
     //var colorClass: Int = 6
     var opacity: Float = 0.7
-    var geom_name = "the_geom"
+    var geom_name = "ogr_geometry"
 
     var alpha: CGFloat = 0.7
-    
+    var progressHUD : MBProgressHUD = MBProgressHUD()
+
     // Hidden Cell Flag.
     var mapViewHidden = true
     var detailViewHidden = true
@@ -53,7 +54,17 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "\(dataset.title)"
+        let label = UILabel(frame: CGRect(x:0, y:0, width:400, height:50))
+        label.numberOfLines = 2
+        label.font = UIFont.boldSystemFont(ofSize: 16.0)
+        label.textAlignment = .center
+        label.textColor = UIColor.white
+        label.text = "\(dataset.title)"
+        label.font = UIFont(name: "Avenir-Light", size: 16.0)
+        label.adjustsFontSizeToFitWidth = true
+        
+        self.navigationItem.titleView = label
+
         
         alpha = CGFloat(opacity)
         
@@ -61,6 +72,11 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         valueLabel.text = classifierProperty
         
         barChartView.delegate = self
+        barChartView.noDataText  = "No available data."
+        
+//        progressHUD = MBProgressHUD.showAdded(to: self.barChartView, animated: true)
+//        progressHUD.mode = MBProgressHUDMode.indeterminate
+//        progressHUD.label.text = "Loading..."
         
         self.mapView.mapType = .normal;
         self.mapView.settings.tiltGestures = false
@@ -78,8 +94,9 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         mapView.camera = camera
         // self.mapView.animate()
         
+        
         // Generate the query which only request for key & value properties.
-        let queryURL = "https://openapi.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&MaxFeatures=1000&outputFormat=json&CQL_FILTER=BBOX(\(geom_name),\(chooseBBOX.lowerLAT),\(chooseBBOX.lowerLON),\(chooseBBOX.upperLAT),\(chooseBBOX.upperLON))&PropertyName=\(titleProperty),\(classifierProperty)"
+        let queryURL = "http://openapi.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&MaxFeatures=1000&outputFormat=json&CQL_FILTER=BBOX(\(geom_name),\(chooseBBOX.lowerLAT),\(chooseBBOX.lowerLON),\(chooseBBOX.upperLAT),\(chooseBBOX.upperLON))&PropertyName=\(titleProperty),\(classifierProperty)"
         
         DispatchQueue.global(qos: .default).async(execute: {
             Alamofire.request(queryURL).response { response in
@@ -90,7 +107,6 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
                     alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alertMessage, animated: true, completion: nil)
                 }
-                
                 
                 // ====================================================================================
                 let featuresNum = json["features"].count
@@ -103,6 +119,14 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
                 }
                 
                 self.setChart(self.xAxis, values: self.yAxis)
+                
+                self.progressHUD.hide(animated: true)
+                let doneProgress = MBProgressHUD.showAdded(to: self.barChartView, animated: true)
+                doneProgress.mode = MBProgressHUDMode.customView
+                doneProgress.customView = UIImageView.init(image: #imageLiteral(resourceName: "Checkmark"))
+                doneProgress.label.text = "Done"
+                doneProgress.isSquare = true
+                doneProgress.hide(animated: true, afterDelay: 2)
             }
         })
         
@@ -237,13 +261,12 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         
         //chartDataSet.colors = ColorSet.BlueSet
         
-        barChartView.noDataText = "Loading data, please wait..."
+        barChartView.noDataText  = "No available data."
         //barChartView.nodatatextdescrip = "The Internet is busy now"
         
         barChartView.chartDescription?.text = ""
         //barChartView.drawGridBackgroundEnabled = true
 
-        
         barChartView.xAxis.labelPosition = .bottom
         barChartView.backgroundColor = UIColor.white
         barChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
@@ -265,7 +288,7 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
     
     
     
-    func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, dataSetIndex: Int, highlight: Highlight) {
+    func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
         mapView.clear()
         keyLabel.text = "\(xAxis[Int(entry.x)])"
         valueLabel.text = "\(entry.y)"
@@ -274,7 +297,7 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         if !mapViewHidden || !detailViewHidden {
             // The URL request shoud not include 'space', so change it to '%20'.
             let newName = xAxis[Int(entry.x)].replacingOccurrences(of: " ", with: "%20")
-            let nameSearchURL = "https://openapi.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&outputFormat=json&CQL_FILTER=(\(titleProperty)='\(newName)')"
+            let nameSearchURL = "http://openapi.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&outputFormat=json&CQL_FILTER=(\(titleProperty)='\(newName)')"
             print(nameSearchURL)
             
             Alamofire.request(nameSearchURL).response { response in

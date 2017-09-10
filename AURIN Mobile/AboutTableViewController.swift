@@ -11,7 +11,7 @@ import UIKit
 
 class AboutTableViewController: UITableViewController {
 
-    var sectionTitles = ["Supervisors & Author", "Follow us", "More about AURIN"]
+    var sectionTitles = [ "About", "Support", "Follow us", "More about AURIN"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,16 +29,18 @@ class AboutTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 3
+        return 4
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         if section == 0 {
+            return 2
+        } else if section == 1{
+            return 2
+        } else if section == 2{
             return 3
-        } else if section == 1 {
-            return 3
-        } else {
+        } else{
             return 2
         }
     }
@@ -54,20 +56,31 @@ class AboutTableViewController: UITableViewController {
         switch indexPath.section {
         case 0:
             switch indexPath.row {
-            case 2:
-                cell.aboutImageView.image = UIImage(named: "about-hayden")
-                cell.aboutTextLabel.text = "Haidong Wang"
             case 0:
-                cell.aboutImageView.image = UIImage(named: "about-richard")
-                cell.aboutTextLabel.text = "Prof. Richard Sinnott"
+                cell.aboutImageView.image = UIImage(named: "about_terms")
+                cell.aboutTextLabel.text = "Terms"
             case 1:
-                cell.aboutImageView.image = UIImage(named: "about-luca")
-                cell.aboutTextLabel.text = "Mr. Luca Morandini"
+                cell.aboutImageView.image = UIImage(named: "about_copyright")
+                cell.aboutTextLabel.text = "Copyright"
+
             default:
                 break
             }
-            //cell.aboutTextLabel.text = sectionContent[indexPath.section][indexPath.row]
         case 1:
+            switch indexPath.row {
+            case 0:
+                cell.aboutImageView.image = UIImage(named: "about_help")
+                cell.aboutTextLabel.text = "Help & Tutorials"
+            case 1:
+                cell.aboutImageView.image = UIImage(named: "about_report")
+                cell.aboutTextLabel.text = "Report an issue"
+                
+            default:
+                break
+            }
+            
+            //cell.aboutTextLabel.text = sectionContent[indexPath.section][indexPath.row]
+        case 2:
             switch indexPath.row {
             case 0:
                 cell.aboutImageView.image = UIImage(named: "social-twitter")
@@ -81,7 +94,7 @@ class AboutTableViewController: UITableViewController {
             default:
                 break
             }
-        case 2:
+        case 3:
             switch indexPath.row {
             case 0:
                 cell.aboutImageView.image = UIImage(named: "about_intro")
@@ -89,7 +102,7 @@ class AboutTableViewController: UITableViewController {
                 
             case 1:
                 cell.aboutImageView.image = UIImage(named: "about-website")
-                cell.aboutTextLabel.textColor = UIColor(red: 65.0/255.0, green: 151.0/255.0, blue: 235.0/255.0, alpha: 1.0)
+                //cell.aboutTextLabel.textColor = UIColor(red: 65.0/255.0, green: 151.0/255.0, blue: 235.0/255.0, alpha: 1.0)
                 cell.aboutTextLabel.text = "Visit Official Website"
             default:
                 break
@@ -107,8 +120,26 @@ class AboutTableViewController: UITableViewController {
         switch indexPath.section {
         // Leave us feedback section
         case 0:
-            break
+            if indexPath.row == 0 {
+                if let url = URL(string: "https://aurin.org.au/compliance/aurin-terms-of-use") {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                }
+            } else {
+                if let url = URL(string: "https://aurin.org.au/compliance/copyright-and-attribution") {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                }
+            }
         case 1:
+            if indexPath.row == 0 {
+                if let url = URL(string: "https://docs.aurin.org.au/") {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                }
+            } else {
+                if let url = URL(string: "https://docs.aurin.org.au/aurin-online-bug-report") {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                }
+            }
+        case 2:
             if indexPath.row == 0 {
                 if let url = URL(string: "https://twitter.com/aurin_org_au") {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -122,7 +153,7 @@ class AboutTableViewController: UITableViewController {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
             }
-        case 2:
+        case 3:
             if indexPath.row == 0 {
                 if let pageViewController = storyboard?.instantiateViewController(withIdentifier: "WalkthroughController") as? WalkthroughPageViewController {
                     present(pageViewController, animated: true, completion: nil)

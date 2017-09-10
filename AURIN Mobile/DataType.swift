@@ -3,7 +3,8 @@
 //  AURIN Mobile
 //
 //  Created by Hayden on 16/4/9.
-//  Copyright © 2016 University of Melbourne. All rights reserved.
+//  Updated by Chenhan on Aug 2017
+//  Copyright © 2017 University of Melbourne. All rights reserved.
 //
 
 /********************************************************************************************
@@ -171,7 +172,7 @@ class LocalDataset:NSManagedObject {
 
 
 // Extend the Marker type in Google Maps SDK
-class ExtendedMarker: GMSMarker {
+class ExtendedMarker: GMSMarker, GMUClusterItem {
     var key: String = ""
     var value: Double = 0.0
     var properties = [String:String]()

@@ -24,7 +24,8 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
     
     var propertyList = [String: String]()
     var dataset:Dataset!
-    var geom_name = "the_geom"
+    var geom_name = "ogr_geometry"
+    var chooseBBOX = BBOX(lowerLON: 144.88, lowerLAT: -37.84, upperLON: 145.05, upperLAT: -37.76)
     
     var bounding = GMSPolygon()
     
@@ -32,7 +33,8 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        getDatasetProperties()
+        print(dataset.name)
+        self.getDatasetProperties()
         
         // Add a google map to the view
         self.mapView.isMyLocationEnabled = true;
@@ -54,7 +56,11 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         let centerLON = dataset.center.longitude
         let zoomLevel = dataset.zoom
         
+        print("Dataset detail view:", lowerLAT, lowerLON, upperLAT, upperLON)
+        self.chooseBBOX = BBOX(lowerLON: lowerLON, lowerLAT: lowerLAT, upperLON: upperLON, upperLAT: upperLAT)
+        
         let camera = GMSCameraPosition.camera(withLatitude: centerLAT, longitude: centerLON, zoom: zoomLevel)
+        print("Camera is ", camera)
         self.mapView.animate(to: camera)
         
         // Draw bounding box on map
@@ -63,6 +69,7 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         rect.add(CLLocationCoordinate2D(latitude: upperLAT, longitude: lowerLON))
         rect.add(CLLocationCoordinate2D(latitude: upperLAT, longitude: upperLON))
         rect.add(CLLocationCoordinate2D(latitude: lowerLAT, longitude: upperLON))
+        print("Rect is ",  rect)
         
         bounding = GMSPolygon(path: rect)
         bounding.strokeColor = UIColor.black
@@ -85,10 +92,17 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     // Get the detail information of selected dataset from AURIN serer.
-    fileprivate func getDatasetProperties() {
-        Alamofire.request("https://openapi.aurin.org.au/wfs?request=DescribeFeatureType&service=WFS&version=1.1.0&TypeName=\(dataset.name)")
+    func getDatasetProperties() {
+        NSLog("Send Request")
+        //var gmlset = Set<String>()
+        //var nameset = Set<String>()
+        
+        Alamofire.request("http://openapi.aurin.org.au/wfs?request=DescribeFeatureType&service=WFS&version=1.1.0&typeName=\(dataset.name)")
+            .authenticate(user: "student", password: "dj78dfGF")
             .response { response in
-                //print(data) // if you want to check XML data in debug window.
+                print("---------------")
+                print(response.data!)
+                //print(response.data!) // if you want to check XML data in debug window.
                 let xml = SWXMLHash.parse(response.data!)
                 for property in xml["xsd:schema"]["xsd:complexType"]["xsd:complexContent"]["xsd:extension"]["xsd:sequence"]["xsd:element"].all {
                     let propertyName = (property.element?.attribute(by: "name")?.text)!
@@ -96,6 +110,8 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
                     propertyType = propertyType.components(separatedBy: ":")[1]
                     //print("\(propertyName): \(propertyType)")
                     self.propertyList.updateValue(propertyType, forKey: propertyName)
+                    //gmlset.insert(propertyType)
+                
                 }
                 self.tableView.reloadData()
             }
@@ -126,10 +142,11 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
             cell.fieldImage.image = UIImage(named: "icon_type")
             
             // "wkb_geometry"
-            for geom_title in ["the_geom", "geom", "wkb_geometry"] {
+            for geom_title in ["the_geom", "geom", "wkb_geometry", "ogr_geometry"] {
                 if propertyList[geom_title] != nil {
                     cell.valueLabel.text = propertyList[geom_title]
                     self.geom_name = geom_title
+                    break
                 }
             }
             
@@ -204,6 +221,7 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
             destinationController.dataset = dataset
             destinationController.propertyList = propertyList
             destinationController.geom_name = geom_name
+            destinationController.chooseBBOX = chooseBBOX
             // destinationController.hidesBottomBarWhenPushed = true
         }
         
@@ -212,6 +230,8 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
             destinationController.dataset = dataset
             destinationController.propertyList = propertyList
             destinationController.geom_name = geom_name
+            destinationController.chooseBBOX = chooseBBOX
+
         }
     }
 

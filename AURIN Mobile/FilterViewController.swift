@@ -19,8 +19,18 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
 
     @IBOutlet var areaPicker: UIPickerView!
     @IBOutlet var areaMap: GMSMapView!
+    @IBOutlet weak var resetFilter: UIButton!
+    @IBOutlet weak var applyFilter: UIButton!
     
-    var filertBBOX = BBOX(lowerLON: 116.16, lowerLAT: -44.23, upperLON: 157.11, upperLAT: -7.19)
+    @IBAction func applyFilter(_ sender: AnyObject){
+        performSegue(withIdentifier: "applyFilter", sender: self)
+    }
+    
+    @IBAction func resetFilter(_ sender: AnyObject){
+        performSegue(withIdentifier: "resetFilter", sender: self)
+    }
+    
+    var filterBBOX = BBOX(lowerLON: 116.16, lowerLAT: -44.23, upperLON: 157.11, upperLAT: -7.19)
     
     // Picker Options
     let states = ["Capital Territory", "New South Wales", "Northern Territory", "Queensland", "South Australia", "Tasmania", "Victoria", "Western Australia"]
@@ -111,49 +121,49 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
             switch states[row] {
             case "Capital Territory":
                 suburbs = act
-                filertBBOX = bboxSet.BBoxes["ACT-All"]!
+                filterBBOX = bboxSet.BBoxes["ACT-All"]!
                 pickerView.reloadAllComponents()
             case "New South Wales":
                 suburbs = nsw
-                filertBBOX = bboxSet.BBoxes["NSW-All"]!
+                filterBBOX = bboxSet.BBoxes["NSW-All"]!
                 pickerView.reloadAllComponents()
             case "Northern Territory":
                 suburbs = nt
-                filertBBOX = bboxSet.BBoxes["NT-All"]!
+                filterBBOX = bboxSet.BBoxes["NT-All"]!
                 pickerView.reloadAllComponents()
             case "Queensland":
                 suburbs = qld
-                filertBBOX = bboxSet.BBoxes["QLD-All"]!
+                filterBBOX = bboxSet.BBoxes["QLD-All"]!
                 pickerView.reloadAllComponents()
             case "South Australia":
                 suburbs = sa
-                filertBBOX = bboxSet.BBoxes["SA-All"]!
+                filterBBOX = bboxSet.BBoxes["SA-All"]!
                 pickerView.reloadAllComponents()
             case "Tasmania":
                 suburbs = tas
-                filertBBOX = bboxSet.BBoxes["TAS-All"]!
+                filterBBOX = bboxSet.BBoxes["TAS-All"]!
                 pickerView.reloadAllComponents()
             case "Victoria":
                 suburbs = vic
-                filertBBOX = bboxSet.BBoxes["VIC-All"]!
+                filterBBOX = bboxSet.BBoxes["VIC-All"]!
                 pickerView.reloadAllComponents()
             case "Western Australia":
                 suburbs = wa
-                filertBBOX = bboxSet.BBoxes["WA-All"]!
+                filterBBOX = bboxSet.BBoxes["WA-All"]!
                 pickerView.reloadAllComponents()
             default:
                 break
             }
         } else {
-            filertBBOX = bboxSet.BBoxes[suburbs[row]]!
+            filterBBOX = bboxSet.BBoxes[suburbs[row]]!
         }
         
         // draw bounding box on the map
         let rect = GMSMutablePath()
-        rect.add(CLLocationCoordinate2D(latitude: filertBBOX.lowerLAT, longitude: filertBBOX.lowerLON))
-        rect.add(CLLocationCoordinate2D(latitude: filertBBOX.upperLAT, longitude: filertBBOX.lowerLON))
-        rect.add(CLLocationCoordinate2D(latitude: filertBBOX.upperLAT, longitude: filertBBOX.upperLON))
-        rect.add(CLLocationCoordinate2D(latitude: filertBBOX.lowerLAT, longitude: filertBBOX.upperLON))
+        rect.add(CLLocationCoordinate2D(latitude: filterBBOX.lowerLAT, longitude: filterBBOX.lowerLON))
+        rect.add(CLLocationCoordinate2D(latitude: filterBBOX.upperLAT, longitude: filterBBOX.lowerLON))
+        rect.add(CLLocationCoordinate2D(latitude: filterBBOX.upperLAT, longitude: filterBBOX.upperLON))
+        rect.add(CLLocationCoordinate2D(latitude: filterBBOX.lowerLAT, longitude: filterBBOX.upperLON))
         
         areaMap.clear()
         let bounding = GMSPolygon(path: rect)
@@ -164,9 +174,9 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
         
         bounding.map = areaMap
         
-        let zoomLevel = Float(round((log2(210 / abs(filertBBOX.upperLON - filertBBOX.lowerLON)) + 1) * 100) / 100) - 1.5
-        let centerLatitude = (filertBBOX.lowerLAT + filertBBOX.upperLAT) / 2
-        let centerLongitude = (filertBBOX.lowerLON + filertBBOX.upperLON) / 2
+        let zoomLevel = Float(round((log2(210 / abs(filterBBOX.upperLON - filterBBOX.lowerLON)) + 1) * 100) / 100) - 1.5
+        let centerLatitude = (filterBBOX.lowerLAT + filterBBOX.upperLAT) / 2
+        let centerLongitude = (filterBBOX.lowerLON + filterBBOX.upperLON) / 2
         
         
         
@@ -243,7 +253,7 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
             let neLongitude = max(lowerLongitude, upperLongitude)
 
             
-            self.filertBBOX = BBOX(lowerLON: swLongitude, lowerLAT: swLatitude, upperLON: neLongitude, upperLAT: neLatitude)
+            self.filterBBOX = BBOX(lowerLON: swLongitude, lowerLAT: swLatitude, upperLON: neLongitude, upperLAT: neLatitude)
             
         }
         

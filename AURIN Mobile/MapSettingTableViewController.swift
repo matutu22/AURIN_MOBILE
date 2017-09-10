@@ -21,7 +21,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
     // Receive data from former view.
     var propertyList = [String: String]()
     var dataset:Dataset!
-    var geom_name = "the_geom"
+    var geom_name = "ogr_geometry"
 
     
     // Passing data to next view.
@@ -108,6 +108,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
     @IBOutlet var opacityLabel: UILabel!
     @IBOutlet var opacitySlider: UISlider!
     
+    /*
     
     @IBOutlet var simplifierSwitch: UISwitch!
     @IBOutlet var simplifierServer: UITextField!
@@ -116,6 +117,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
     var simLevel: Float = 0.1
     var useSimplifier = false
     var serverAddress = "localhost:3000"
+    
     
     @IBAction func simplifierOnOff(_ sender: UISwitch) {
         if sender.isOn {
@@ -141,10 +143,13 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
         let textField = sender as! UITextField
         serverAddress = textField.text!
     }
+    */
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //print("MapsettingTable View controller", geom_name)
+
         navigationItem.title = "Map Setting"
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
@@ -295,11 +300,12 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
             return 0
         } else if opacitySliderHidden && indexPath.section == 2 && indexPath.row == 5 {
             return 0
-        } else if !useSimplifier && indexPath.section == 3 && indexPath.row == 1 {
+        } /*else if !useSimplifier && indexPath.section == 3 && indexPath.row == 1 {
             return 0
         } else if !useSimplifier && indexPath.section == 3 && indexPath.row == 2 {
             return 0
         }
+             */
         
         else {
             return super.tableView(tableView, heightForRowAt: indexPath)
@@ -686,9 +692,9 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
             destinationController.geom_name = geom_name
             
             
-            destinationController.simLevel = simLevel
+            /* destinationController.simLevel = simLevel
             destinationController.serverAddress = serverAddress
-            destinationController.useSimplifier = useSimplifier
+            destinationController.useSimplifier = useSimplifier    */
             // 在下页隐藏Tab Bar
             // destinationController.hidesBottomBarWhenPushed = true
         }

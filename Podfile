@@ -9,4 +9,5 @@ target 'AURIN Mobile' do
   pod 'Alamofire', '~> 4.4'
   pod 'SWXMLHash', '~> 4.0.0'
   pod 'GoogleMaps'
+  pod 'MBProgressHUD', '~> 1.0.0'
 end
