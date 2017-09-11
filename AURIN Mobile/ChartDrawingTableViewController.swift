@@ -27,7 +27,7 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
     var chooseBBOX = BBOX(lowerLON: 144.88, lowerLAT: -37.84, upperLON: 145.05, upperLAT: -37.76)
     var titleProperty: String = ""
     var classifierProperty: String = ""
-    var palette: String = "Default"
+    var palette: String = "Red"
     //var colorClass: Int = 6
     var opacity: Float = 0.7
     var geom_name = "ogr_geometry"
@@ -292,6 +292,7 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         mapView.clear()
         keyLabel.text = "\(xAxis[Int(entry.x)])"
         valueLabel.text = "\(entry.y)"
+        NSLog("Chart Selected ")
         
         
         if !mapViewHidden || !detailViewHidden {
@@ -303,129 +304,150 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
             Alamofire.request(nameSearchURL).response { response in
                 let json = try! JSON(data: response.data!)
                 let shapeType = json["features"][0]["geometry"]["type"]
+                print(shapeType)
+                
                 switch shapeType {
-                // ====================================================================================
                 case "Point":
-                    let latitude = json["features"][0]["geometry"]["coordinates"][1].doubleValue
-                    let longitude = json["features"][0]["geometry"]["coordinates"][0].doubleValue
-                    let marker = ExtendedMarker(position: CLLocationCoordinate2DMake(latitude, longitude))
-                    marker.title = json["features"][0]["id"].stringValue
-                    for property in json["features"][0]["properties"] {
-                        marker.properties.updateValue(String(describing: property.1), forKey: property.0)
-                    }
-                    marker.properties.removeValue(forKey: "bbox")
-                    
-                    self.textView.isEditable = false
-                    self.textView.text = marker.getProperties()
-                    marker.map = self.mapView
-                // ====================================================================================
+                    self.pointDataSet(json)
                 case "MultiLineString":
-                    let featuresNum = json["features"].count
-                    var polylinePath = GMSMutablePath()
-                    for featureID in 0..<featuresNum {
-                        let polylineCount = json["features"][featureID]["geometry"]["coordinates"].count
-                        for polylineNum in 0..<polylineCount {
-                            let count = json["features"][featureID]["geometry"]["coordinates"][polylineNum].count
-                            for coordinateNum in 0..<count {
-                                let point = json["features"][featureID]["geometry"]["coordinates"][polylineNum][coordinateNum]
-                                polylinePath.add(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
-                            }
-                            
-                            let polyline = ExtendedPolyline(path: polylinePath)
-                            polyline.title = json["features"][featureID]["id"].stringValue
-                            for property in json["features"][featureID]["properties"] {
-                                polyline.properties.updateValue(String(describing: property.1), forKey: property.0)
-                            }
-                            polyline.properties.removeValue(forKey: "bbox")
-                            polyline.key = json["features"][featureID]["properties"][self.titleProperty].stringValue
-                            polyline.value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
-                            
-                            polyline.strokeWidth = 2.0
-                            let strokeColor = ColorSet.colorDictionary[self.palette]
-                            polyline.strokeColor = strokeColor!.withAlphaComponent(0.7)
-                            polyline.geodesic = true
-                            polyline.isTappable = true
-                            polyline.map = self.mapView
-                            polylinePath = GMSMutablePath()
-                            self.textView.isEditable = false
-                            self.textView.text = polyline.getProperties()
-                        }
-                    }
-                // ====================================================================================
-                case "MultiPolygon":
-                    var polygonPath = GMSMutablePath()
-                    let count = json["features"][0]["geometry"]["coordinates"][0][0].count
-                    for i in 0..<count {
-                        let point = json["features"][0]["geometry"]["coordinates"][0][0][i]
-                        polygonPath.add(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
-                    }
-                    
-                    let polygon = ExtendedPolygon(path: polygonPath)
-                    polygon.title = json["features"][0]["id"].stringValue
-                    for property in json["features"][0]["properties"] {
-                        polygon.properties.updateValue(String(describing: property.1), forKey: property.0)
-                    }
-                    
-                    
-                    polygon.properties.removeValue(forKey: "bbox")
-                    polygon.key = json["features"][0]["properties"][self.titleProperty].stringValue
-                    polygon.value = json["features"][0]["properties"][self.classifierProperty].doubleValue
-                    polygon.strokeColor = UIColor.black
-                    polygon.strokeWidth = 1
-                    polygon.isTappable = true
-                    
-                    switch self.palette {
-                    case "Red":
-                        polygon.fillColor = ColorSet.colorDictionary["Red"]!.withAlphaComponent(self.alpha)
-                    case "Orange":
-                        polygon.fillColor = ColorSet.colorDictionary["Orange"]!.withAlphaComponent(self.alpha)
-                    case "Green":
-                        polygon.fillColor = ColorSet.colorDictionary["Green"]!.withAlphaComponent(self.alpha)
-                    case "Blue":
-                        polygon.fillColor = ColorSet.colorDictionary["Blue"]!.withAlphaComponent(self.alpha)
-                    case "Purple":
-                        polygon.fillColor = ColorSet.colorDictionary["Purple"]!.withAlphaComponent(self.alpha)
-                    case "Gray":
-                        polygon.fillColor = ColorSet.colorDictionary["Gray"]!.withAlphaComponent(self.alpha)
-                    default:
-                        polygon.fillColor = ColorSet.theme["AURIN-Ming"]?.withAlphaComponent(self.alpha)
-                    }
-                    
-                    polygon.map = self.mapView
-                    
-                    let lowerLat = json["features"][0]["properties"]["bbox"][1].doubleValue
-                    let lowerLon = json["features"][0]["properties"]["bbox"][0].doubleValue
-                    let upperLat = json["features"][0]["properties"]["bbox"][3].doubleValue
-                    let upperLon = json["features"][0]["properties"]["bbox"][2].doubleValue
-                    
-                    let zoomLevel = Float(round((log2(210 / abs(upperLon - lowerLon)) + 1) * 100) / 100) - 1.5
-                    let centerLatitude = (lowerLat + upperLat) / 2
-                    let centerLongitude = (lowerLon + upperLon) / 2
-                    
-                    
-                    
-                    let camera = GMSCameraPosition.camera(withLatitude: centerLatitude, longitude: centerLongitude, zoom: zoomLevel)
-                    self.mapView.animate(to: camera)
-                    
-                    
-                    polygonPath = GMSMutablePath()
-                    
-                    self.textView.isEditable = false
-                    self.textView.text = polygon.getProperties()
-                    self.textView.textColor = ColorSet.theme["AURIN-Ming"]
-                    self.textView.font = UIFont(name: "Menlo", size: 10)
-                    self.textView.textAlignment = .center
-                    
-                    
-                // ====================================================================================
+                    self.multiStringDataSet(json)
+                case "MultiPolygon", "Polygon":
+                    self.multipolygonDataSet(json)
                 default:
                     break
+                
                 } // Switch ends.
                 
             } // Alamofire request ends.
-            
+            return
         } // Hidden Flag checking ends.
         
     } // FUNCTION: chartValueSelected ends.
 
+    
+    func pointDataSet(_ json : JSON){
+        let latitude = json["features"][0]["geometry"]["coordinates"][1].doubleValue
+        let longitude = json["features"][0]["geometry"]["coordinates"][0].doubleValue
+        let marker = ExtendedMarker(position: CLLocationCoordinate2DMake(latitude, longitude))
+        marker.title = json["features"][0]["id"].stringValue
+        for property in json["features"][0]["properties"] {
+            marker.properties.updateValue(String(describing: property.1), forKey: property.0)
+        }
+        marker.properties.removeValue(forKey: "bbox")
+        
+        self.textView.isEditable = false
+        self.textView.text = marker.getProperties()
+        marker.map = self.mapView
+    }
+    
+    func multiStringDataSet(_ json :JSON)
+    {
+        let featuresNum = json["features"].count
+        var polylinePath = GMSMutablePath()
+        for featureID in 0..<featuresNum
+        {
+            let polylineCount = json["features"][featureID]["geometry"]["coordinates"][0].count
+            for polylineNum in 0..<polylineCount
+            {
+                //let count = json["features"][featureID]["geometry"]["coordinates"][polylineNum].count
+                //for coordinateNum in 0..<count {
+                    let point = json["features"][featureID]["geometry"]["coordinates"][0][polylineNum]
+                    polylinePath.add(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
+            }//}
+                let polyline = ExtendedPolyline(path: polylinePath)
+                polyline.title = json["features"][featureID]["id"].stringValue
+                for property in json["features"][featureID]["properties"] {
+                    polyline.properties.updateValue(String(describing: property.1), forKey: property.0)
+                }
+                polyline.properties.removeValue(forKey: "bbox")
+                polyline.key = json["features"][featureID]["properties"][self.titleProperty].stringValue
+                polyline.value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
+                polyline.strokeWidth = 2.0
+                let strokeColor = ColorSet.colorDictionary[self.palette]
+                polyline.strokeColor = strokeColor!.withAlphaComponent(0.7)
+                polyline.geodesic = true
+                polyline.isTappable = true
+                polyline.map = self.mapView
+                polylinePath = GMSMutablePath()
+                self.textView.isEditable = false
+                self.textView.text = polyline.getProperties()
+            
+        }
+    }
+    
+    
+    func multipolygonDataSet(_ json : JSON){
+        var polygonPath = GMSMutablePath()
+        var polygonCoordinatesList = [JSON]()
+        if (json["features"][0]["geometry"]["type"]) == "MultiPolygon" {
+             polygonCoordinatesList = json["features"][0]["geometry"]["coordinates"][0][0].arrayValue
+        }else{
+             polygonCoordinatesList = json["features"][0]["geometry"]["coordinates"][0].arrayValue
+        }
+        print(polygonCoordinatesList)
+        let count = polygonCoordinatesList.count
+        for i in 0..<count {
+            print(i)
+            let point = polygonCoordinatesList[i]
+            polygonPath.add(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
+        }
+        
+        let polygon = ExtendedPolygon(path: polygonPath)
+        polygon.title = json["features"][0]["id"].stringValue
+        for property in json["features"][0]["properties"] {
+            polygon.properties.updateValue(String(describing: property.1), forKey: property.0)
+        }
+        print(polygon)
+        
+        polygon.properties.removeValue(forKey: "bbox")
+        polygon.key = json["features"][0]["properties"][self.titleProperty].stringValue
+        polygon.value = json["features"][0]["properties"][self.classifierProperty].doubleValue
+        polygon.strokeColor = UIColor.black
+        polygon.strokeWidth = 1
+        polygon.isTappable = true
+        
+        switch self.palette {
+        case "Red":
+            polygon.fillColor = ColorSet.colorDictionary["Red"]!.withAlphaComponent(self.alpha)
+        case "Orange":
+            polygon.fillColor = ColorSet.colorDictionary["Orange"]!.withAlphaComponent(self.alpha)
+        case "Green":
+            polygon.fillColor = ColorSet.colorDictionary["Green"]!.withAlphaComponent(self.alpha)
+        case "Blue":
+            polygon.fillColor = ColorSet.colorDictionary["Blue"]!.withAlphaComponent(self.alpha)
+        case "Purple":
+            polygon.fillColor = ColorSet.colorDictionary["Purple"]!.withAlphaComponent(self.alpha)
+        case "Gray":
+            polygon.fillColor = ColorSet.colorDictionary["Gray"]!.withAlphaComponent(self.alpha)
+        default:
+            polygon.fillColor = ColorSet.theme["AURIN-Ming"]?.withAlphaComponent(self.alpha)
+        }
+        
+        polygon.map = self.mapView
+        
+        let lowerLat = json["features"][0]["properties"]["bbox"][1].doubleValue
+        let lowerLon = json["features"][0]["properties"]["bbox"][0].doubleValue
+        let upperLat = json["features"][0]["properties"]["bbox"][3].doubleValue
+        let upperLon = json["features"][0]["properties"]["bbox"][2].doubleValue
+        
+        let zoomLevel = Float(round((log2(210 / abs(upperLon - lowerLon)) + 1) * 100) / 100) - 1.5
+        let centerLatitude = (lowerLat + upperLat) / 2
+        let centerLongitude = (lowerLon + upperLon) / 2
+        
+        
+        
+        let camera = GMSCameraPosition.camera(withLatitude: centerLatitude, longitude: centerLongitude, zoom: zoomLevel)
+        self.mapView.animate(to: camera)
+        
+        
+        polygonPath = GMSMutablePath()
+        print(polygonPath)
+        
+        self.textView.isEditable = false
+        self.textView.text = polygon.getProperties()
+        self.textView.textColor = ColorSet.theme["AURIN-Ming"]
+        self.textView.font = UIFont(name: "Menlo", size: 10)
+        self.textView.textAlignment = .center
+        
+    }
 }

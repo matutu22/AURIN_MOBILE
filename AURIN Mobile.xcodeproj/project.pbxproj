@@ -193,6 +193,16 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		11A019891F6618EE00881E11 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BC7176911CBA069300623916 /* DatasetDetailTableViewCell.swift */,
+				BCAE3DE31CB902DB0019B4C9 /* DatasetTableViewCell.swift */,
+				BC7176A11CBA7B2E00623916 /* AboutTableViewCell.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		11F9CA811F4A93B3002C59AC /* Google-Maps-iOS-Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -284,6 +294,7 @@
 		BCB680201CB8F969006EFACD /* AURIN Mobile */ = {
 			isa = PBXGroup;
 			children = (
+				11A019891F6618EE00881E11 /* Views */,
 				11A019831F64337300881E11 /* Models */,
 				11A019811F64133C00881E11 /* Supporting Files */,
 				11A0197D1F5FD59400881E11 /* Libraries */,
@@ -291,15 +302,12 @@
 				BCB680231CB8F969006EFACD /* OnlineViewController.swift */,
 				BC918E811CC2737400942BAA /* LocalViewController.swift */,
 				BCB6B70F1CD62510007E044C /* FilterViewController.swift */,
-				BCAE3DE31CB902DB0019B4C9 /* DatasetTableViewCell.swift */,
 				BC7176891CB9E73900623916 /* DatasetDetailViewController.swift */,
-				BC7176911CBA069300623916 /* DatasetDetailTableViewCell.swift */,
 				BC2B361E1CC0C606002DF1F6 /* MapSettingTableViewController.swift */,
 				BC2B362B1CC1242B002DF1F6 /* MapDrawingViewController.swift */,
 				BC358E5E1CC333C90070F1D1 /* ChartSettingTableViewController.swift */,
 				BC358E791CC3514B0070F1D1 /* ChartDrawingTableViewController.swift */,
 				BC7176971CBA65CE00623916 /* AboutTableViewController.swift */,
-				BC7176A11CBA7B2E00623916 /* AboutTableViewCell.swift */,
 				BC71769F1CBA69D400623916 /* WebViewController.swift */,
 				BCEB76941CC5E243000B99B2 /* WalkthroughPageViewController.swift */,
 				BCEB768F1CC5E0EA000B99B2 /* WalkthroughContentViewController.swift */,

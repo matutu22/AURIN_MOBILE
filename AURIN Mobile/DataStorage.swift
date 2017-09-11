@@ -3,6 +3,7 @@
 //  AURIN Mobile
 //
 //  Created by Hayden on 16/4/15.
+//  Updated by Chenhan on Aug 2017
 //  Copyright © 2016 University of Melbourne. All rights reserved.
 //
 
@@ -29,7 +30,8 @@ class ColorSet {
         "Green":  UIColor(red:038/255, green:166/255, blue:091/255, alpha:1.0),
         "Blue":   UIColor(red:065/255, green:131/255, blue:215/255, alpha:1.0),
         "Purple": UIColor(red:142/255, green:068/255, blue:173/255, alpha:1.0),
-        "Gray":   UIColor(red:000/255, green:000/255, blue:000/255, alpha:1.0)]
+        "Gray":   UIColor(red:000/255, green:000/255, blue:000/255, alpha:1.0),
+        "AURIN-Ming": UIColor(red: 28.0/255.0, green: 79.0/255.0, blue: 107.0/255.0, alpha: 1.0)]
     
     
     

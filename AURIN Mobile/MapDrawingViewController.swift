@@ -112,9 +112,6 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
 
                 let json = try! JSON(data: response.data!)
                 
-                    
-
-                
                 //If no data returned, alert
                 if json["features"].count == 0 {
                     let alertMessage = UIAlertController(title: "No Data", message: "There is no data in the selected area, please try to choose another area.", preferredStyle: .alert)
@@ -140,7 +137,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
                 default: break
                 }
                 
-
+                // Progress Bar Setting
                 self.progressHUD.hide(animated: true)
                 let doneProgress = MBProgressHUD.showAdded(to: self.mapView, animated: true)
                 doneProgress.mode = MBProgressHUDMode.customView
@@ -221,6 +218,13 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
     fileprivate func polygonDataSet(_ json: JSON){
         self.shapeType = "Polygon"
         let featuresNum = json["features"].count
+        print(featuresNum)
+        
+        if featuresNum > 100 {
+            self.areaTooLargeAlert()
+            return
+        }
+        
         var polygonPath = GMSMutablePath()
         var polygons = [ExtendedPolygon]()
         var maxValue = 0.0
@@ -230,8 +234,11 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         for featureID in 0..<featuresNum {
             let Key = json["features"][featureID]["properties"][self.titleProperty].stringValue
             let Value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
+            print(featureID)
+
             
-            let polygonCoordinatesList = json["features"][featureID]["geometry"]["coordinates"][0][0]
+            let polygonCoordinatesList = json["features"][featureID]["geometry"]["coordinates"][0]
+
             let coordinatecount = polygonCoordinatesList.count
             
             for coordianteNum in 0..<coordinatecount {
@@ -274,16 +281,22 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
     fileprivate func multiPolygonDataSet(_ json: JSON){
         self.shapeType = "Polygon"
         let featuresNum = json["features"].count
+        print(featuresNum)
         var polygonPath = GMSMutablePath()
         var polygons = [ExtendedPolygon]()
         var maxValue = 0.0
         var minValue = 9999999.0
         var step = 0.0
         
+        if featuresNum > 100 {
+            self.areaTooLargeAlert()
+            return
+        }
+        
         for featureID in 0..<featuresNum {
             let Key = json["features"][featureID]["properties"][self.titleProperty].stringValue
             let Value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
-            
+            print(featureID)
 
             let polygonCoordinatesList = json["features"][featureID]["geometry"]["coordinates"][0][0]
             let coordinatecount = polygonCoordinatesList.count
@@ -368,7 +381,11 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         //SVProgressHUD.dismiss()
     }
     
-    
+    func areaTooLargeAlert(){
+        let alertMessage = UIAlertController(title: "Area too large", message: "The area you choose has too much data, please choose a smaller area.", preferredStyle: .alert)
+        alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alertMessage, animated: true, completion: nil)
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -388,6 +405,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         if (marker.userData as? GMUCluster) != nil{
             NSLog("Tapped on a cluster")
         }else{
+            NSLog("Tapped on Marker")
             let extendedMarker = marker.userData as! ExtendedMarker
             let alertMessage = UIAlertController(title: extendedMarker.key, message: "\(classifierProperty): \(extendedMarker.value)", preferredStyle: .alert)
             let detailActionHandler = { (action:UIAlertAction!) -> Void in
@@ -419,6 +437,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
     func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
         switch shapeType {
         case "Polygon":
+            NSLog("Tapped on polygon")
             let extendedPolygon = overlay as! ExtendedPolygon
             let alertMessage = UIAlertController(title: extendedPolygon.key, message: "\(classifierProperty): \(extendedPolygon.value)", preferredStyle: .alert)
             
