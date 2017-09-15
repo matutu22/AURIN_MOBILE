@@ -27,7 +27,7 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
     var chooseBBOX = BBOX(lowerLON: 144.88, lowerLAT: -37.84, upperLON: 145.05, upperLAT: -37.76)
     var titleProperty: String = ""
     var classifierProperty: String = ""
-    var palette: String = "Red"
+    var palette: String = "AURIN-Ming"
     //var colorClass: Int = 6
     var opacity: Float = 0.7
     var geom_name = "ogr_geometry"

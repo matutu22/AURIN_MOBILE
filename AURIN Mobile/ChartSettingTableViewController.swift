@@ -27,7 +27,7 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
     var chooseBBOX = BBOX(lowerLON: 144.88, lowerLAT: -37.84, upperLON: 145.05, upperLAT: -37.76)
     var titleProperty: String = ""
     var classifierProperty: String = ""
-    var palette: String = "Red"
+    var palette: String = "Default"
     var opacity: Float = 0.7
     
     
@@ -437,7 +437,7 @@ class ChartSettingTableViewController: UITableViewController, UIPickerViewDataSo
             paletteLabel.text = "Gray"
             palette = "Gray"
         default:
-            palette = "Red"
+            palette = "AURIN-Ming"
             break
         }
     }

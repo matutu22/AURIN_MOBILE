@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1116F5C31F6B71A800F6F324 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1116F5C01F6B719D00F6F324 /* Charts.framework */; };
+		1116F5C41F6B71A800F6F324 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1116F5C01F6B719D00F6F324 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		113229701F6B6A3B00CF0E82 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1132296D1F6B6A3B00CF0E82 /* Alamofire.framework */; };
 		11800D251F30BA300046F5D6 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB6B70F1CD62510007E044C /* FilterViewController.swift */; };
 		11800D621F3845920046F5D6 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11800D611F3845920046F5D6 /* SwiftyJSON.framework */; };
 		11F9CA8B1F4A93F6002C59AC /* GMUGridBasedClusterAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F9CA841F4A93F6002C59AC /* GMUGridBasedClusterAlgorithm.m */; };
@@ -19,8 +22,6 @@
 		11F9CAA21F4A9407002C59AC /* GMUDefaultClusterRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F9CA9F1F4A9407002C59AC /* GMUDefaultClusterRenderer.m */; };
 		11F9CAAA1F4A940D002C59AC /* GQTPointQuadTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F9CAA61F4A940D002C59AC /* GQTPointQuadTree.m */; };
 		11F9CAAB1F4A940D002C59AC /* GQTPointQuadTreeChild.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F9CAA81F4A940D002C59AC /* GQTPointQuadTreeChild.m */; };
-		11FB20861F2EE88500AAD489 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11FB20831F2EE84300AAD489 /* Charts.framework */; };
-		11FB20871F2EE88500AAD489 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 11FB20831F2EE84300AAD489 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6680C26179BA4EDCB0D59A46 /* Pods_AURIN_Mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE596D39B084A7AAD8DB5778 /* Pods_AURIN_Mobile.framework */; };
 		BC2B361F1CC0C606002DF1F6 /* MapSettingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2B361E1CC0C606002DF1F6 /* MapSettingTableViewController.swift */; };
 		BC2B36211CC0D5E8002DF1F6 /* DataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2B36201CC0D5E8002DF1F6 /* DataStorage.swift */; };
@@ -47,23 +48,23 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		11FB20821F2EE84300AAD489 /* PBXContainerItemProxy */ = {
+		1116F5BF1F6B719D00F6F324 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 11FB207D1F2EE84200AAD489 /* Charts.xcodeproj */;
+			containerPortal = 1116F5BA1F6B719D00F6F324 /* Charts.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 06165F241D8110E600722320;
 			remoteInfo = Charts;
 		};
-		11FB20841F2EE84300AAD489 /* PBXContainerItemProxy */ = {
+		1116F5C11F6B719D00F6F324 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 11FB207D1F2EE84200AAD489 /* Charts.xcodeproj */;
+			containerPortal = 1116F5BA1F6B719D00F6F324 /* Charts.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 06165F2E1D8110E600722320;
 			remoteInfo = ChartsTests;
 		};
-		11FB20881F2EE88500AAD489 /* PBXContainerItemProxy */ = {
+		1116F5C51F6B71A800F6F324 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 11FB207D1F2EE84200AAD489 /* Charts.xcodeproj */;
+			containerPortal = 1116F5BA1F6B719D00F6F324 /* Charts.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 06165F231D8110E600722320;
 			remoteInfo = Charts;
@@ -77,7 +78,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				11FB20871F2EE88500AAD489 /* Charts.framework in Embed Frameworks */,
+				1116F5C41F6B71A800F6F324 /* Charts.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -85,6 +86,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1116F5BA1F6B719D00F6F324 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = "Charts-master/Charts.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		1132296D1F6B6A3B00CF0E82 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "../../Library/Developer/Xcode/DerivedData/AURIN_Mobile-aveymqehifmgsthepoknilwqbjuc/Build/Products/Debug-iphoneos/Alamofire/Alamofire.framework"; sourceTree = "<group>"; };
+		1132296E1F6B6A3B00CF0E82 /* MBProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MBProgressHUD.framework; path = "../../Library/Developer/Xcode/DerivedData/AURIN_Mobile-aveymqehifmgsthepoknilwqbjuc/Build/Products/Debug-iphoneos/MBProgressHUD/MBProgressHUD.framework"; sourceTree = "<group>"; };
+		1132296F1F6B6A3B00CF0E82 /* SWXMLHash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SWXMLHash.framework; path = "../../Library/Developer/Xcode/DerivedData/AURIN_Mobile-aveymqehifmgsthepoknilwqbjuc/Build/Products/Debug-iphoneos/SWXMLHash/SWXMLHash.framework"; sourceTree = "<group>"; };
 		11800D611F3845920046F5D6 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../Library/Developer/Xcode/DerivedData/AURIN_Mobile-aveymqehifmgsthepoknilwqbjuc/Build/Products/Debug-iphonesimulator/SwiftyJSON/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		11F9CA781F4A842D002C59AC /* AURIN Mobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AURIN Mobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		11F9CA821F4A93F6002C59AC /* GMUClusterAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GMUClusterAlgorithm.h; path = Clustering/Algo/GMUClusterAlgorithm.h; sourceTree = "<group>"; };
@@ -119,7 +124,6 @@
 		11F9CAA71F4A940D002C59AC /* GQTPointQuadTreeChild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GQTPointQuadTreeChild.h; path = QuadTree/GQTPointQuadTreeChild.h; sourceTree = "<group>"; };
 		11F9CAA81F4A940D002C59AC /* GQTPointQuadTreeChild.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GQTPointQuadTreeChild.m; path = QuadTree/GQTPointQuadTreeChild.m; sourceTree = "<group>"; };
 		11F9CAA91F4A940D002C59AC /* GQTPointQuadTreeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GQTPointQuadTreeItem.h; path = QuadTree/GQTPointQuadTreeItem.h; sourceTree = "<group>"; };
-		11FB207D1F2EE84200AAD489 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = "../Intern/Charts-master/Charts.xcodeproj"; sourceTree = "<group>"; };
 		7C6D22DE04824B586C2ECD4E /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		98036E5135EAF90673E09B79 /* Pods-AURIN Mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AURIN Mobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-AURIN Mobile/Pods-AURIN Mobile.release.xcconfig"; sourceTree = "<group>"; };
 		AE596D39B084A7AAD8DB5778 /* Pods_AURIN_Mobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AURIN_Mobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,8 +161,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				113229701F6B6A3B00CF0E82 /* Alamofire.framework in Frameworks */,
+				1116F5C31F6B71A800F6F324 /* Charts.framework in Frameworks */,
 				11800D621F3845920046F5D6 /* SwiftyJSON.framework in Frameworks */,
-				11FB20861F2EE88500AAD489 /* Charts.framework in Frameworks */,
 				6680C26179BA4EDCB0D59A46 /* Pods_AURIN_Mobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -166,6 +171,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1116F5BB1F6B719D00F6F324 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1116F5C01F6B719D00F6F324 /* Charts.framework */,
+				1116F5C21F6B719D00F6F324 /* ChartsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		11A0197D1F5FD59400881E11 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -243,18 +257,12 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		11FB207E1F2EE84200AAD489 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				11FB20831F2EE84300AAD489 /* Charts.framework */,
-				11FB20851F2EE84300AAD489 /* ChartsTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		779F9733B0246D289D51E41F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1132296D1F6B6A3B00CF0E82 /* Alamofire.framework */,
+				1132296E1F6B6A3B00CF0E82 /* MBProgressHUD.framework */,
+				1132296F1F6B6A3B00CF0E82 /* SWXMLHash.framework */,
 				11800D611F3845920046F5D6 /* SwiftyJSON.framework */,
 				AE596D39B084A7AAD8DB5778 /* Pods_AURIN_Mobile.framework */,
 			);
@@ -275,7 +283,6 @@
 		BCB680151CB8F969006EFACD = {
 			isa = PBXGroup;
 			children = (
-				11FB207D1F2EE84200AAD489 /* Charts.xcodeproj */,
 				BCB680201CB8F969006EFACD /* AURIN Mobile */,
 				BCB6801F1CB8F969006EFACD /* Products */,
 				BA541F8E5FE62524E4CFB0D4 /* Pods */,
@@ -294,6 +301,7 @@
 		BCB680201CB8F969006EFACD /* AURIN Mobile */ = {
 			isa = PBXGroup;
 			children = (
+				1116F5BA1F6B719D00F6F324 /* Charts.xcodeproj */,
 				11A019891F6618EE00881E11 /* Views */,
 				11A019831F64337300881E11 /* Models */,
 				11A019811F64133C00881E11 /* Supporting Files */,
@@ -337,7 +345,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				11FB20891F2EE88500AAD489 /* PBXTargetDependency */,
+				1116F5C61F6B71A800F6F324 /* PBXTargetDependency */,
 			);
 			name = "AURIN Mobile";
 			productName = "AURIN Mobile";
@@ -385,8 +393,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 11FB207E1F2EE84200AAD489 /* Products */;
-					ProjectRef = 11FB207D1F2EE84200AAD489 /* Charts.xcodeproj */;
+					ProductGroup = 1116F5BB1F6B719D00F6F324 /* Products */;
+					ProjectRef = 1116F5BA1F6B719D00F6F324 /* Charts.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -397,18 +405,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		11FB20831F2EE84300AAD489 /* Charts.framework */ = {
+		1116F5C01F6B719D00F6F324 /* Charts.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Charts.framework;
-			remoteRef = 11FB20821F2EE84300AAD489 /* PBXContainerItemProxy */;
+			remoteRef = 1116F5BF1F6B719D00F6F324 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		11FB20851F2EE84300AAD489 /* ChartsTests.xctest */ = {
+		1116F5C21F6B719D00F6F324 /* ChartsTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = ChartsTests.xctest;
-			remoteRef = 11FB20841F2EE84300AAD489 /* PBXContainerItemProxy */;
+			remoteRef = 1116F5C11F6B719D00F6F324 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -515,10 +523,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		11FB20891F2EE88500AAD489 /* PBXTargetDependency */ = {
+		1116F5C61F6B71A800F6F324 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Charts;
-			targetProxy = 11FB20881F2EE88500AAD489 /* PBXContainerItemProxy */;
+			targetProxy = 1116F5C51F6B71A800F6F324 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -557,6 +565,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -606,6 +615,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -635,9 +645,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = HB7G3G78MD;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "AURIN Mobile/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "au.edu.unimelb.AURIN-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "AURIN Mobile/AURIN Mobile-Bridging-Header.h";
@@ -653,9 +665,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = HB7G3G78MD;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "AURIN Mobile/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "au.edu.unimelb.AURIN-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "AURIN Mobile/AURIN Mobile-Bridging-Header.h";
