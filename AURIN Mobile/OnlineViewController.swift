@@ -158,6 +158,7 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
                     let title = (featureType["Title"].element?.text)!
                     dataset.title = title.components(separatedBy: "Data provider: ")[0]
                     dataset.abstract = (featureType["Abstract"].element?.text)!.components(separatedBy: "Temporal extent start: ")[0]
+                    
                     dataset.keywords = featureType["ows:Keywords"]["ows:Keyword"].all.map {
                         keyword in (keyword.element?.text)!
                     }

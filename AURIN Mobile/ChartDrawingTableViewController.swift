@@ -261,28 +261,26 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
             let polylineCount = json["features"][featureID]["geometry"]["coordinates"][0].count
             for polylineNum in 0..<polylineCount
             {
-                //let count = json["features"][featureID]["geometry"]["coordinates"][polylineNum].count
-                //for coordinateNum in 0..<count {
-                    let point = json["features"][featureID]["geometry"]["coordinates"][0][polylineNum]
-                    polylinePath.add(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
-            }//}
-                let polyline = ExtendedPolyline(path: polylinePath)
-                polyline.title = json["features"][featureID]["id"].stringValue
-                for property in json["features"][featureID]["properties"] {
-                    polyline.properties.updateValue(String(describing: property.1), forKey: property.0)
-                }
-                polyline.properties.removeValue(forKey: "bbox")
-                polyline.key = json["features"][featureID]["properties"][self.titleProperty].stringValue
-                polyline.value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
-                polyline.strokeWidth = 2.0
-                let strokeColor = ColorSet.colorDictionary[self.palette]
-                polyline.strokeColor = strokeColor!.withAlphaComponent(0.7)
-                polyline.geodesic = true
-                polyline.isTappable = true
-                polyline.map = self.mapView
-                polylinePath = GMSMutablePath()
-                self.textView.isEditable = false
-                self.textView.text = polyline.getProperties()
+                let point = json["features"][featureID]["geometry"]["coordinates"][0][polylineNum]
+                polylinePath.add(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
+            }
+            let polyline = ExtendedPolyline(path: polylinePath)
+            polyline.title = json["features"][featureID]["id"].stringValue
+            for property in json["features"][featureID]["properties"] {
+                polyline.properties.updateValue(String(describing: property.1), forKey: property.0)
+            }
+            polyline.properties.removeValue(forKey: "bbox")
+            polyline.key = json["features"][featureID]["properties"][self.titleProperty].stringValue
+            polyline.value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
+            polyline.strokeWidth = 2.0
+            let strokeColor = ColorSet.colorDictionary[self.palette]
+            polyline.strokeColor = strokeColor!.withAlphaComponent(0.7)
+            polyline.geodesic = true
+            polyline.isTappable = true
+            polyline.map = self.mapView
+            polylinePath = GMSMutablePath()
+            self.textView.isEditable = false
+            self.textView.text = polyline.getProperties()
             
         }
     }

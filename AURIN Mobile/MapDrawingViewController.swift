@@ -71,13 +71,6 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         let renderer = GMUDefaultClusterRenderer(mapView: mapView, clusterIconGenerator: iconGenerator)
         clusterManager = GMUClusterManager(map: mapView, algorithm: algorithm, renderer: renderer)
         
-        DispatchQueue.main.async {
-            
-        }
-        if Thread.isMainThread {
-            print("Main Thread")
-        }
-        
         queryURL = "http://openapi.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&MaxFeatures=1000&outputFormat=json&CQL_FILTER=BBOX(\(geom_name),\(chooseBBOX.lowerLAT),\(chooseBBOX.lowerLON),\(chooseBBOX.upperLAT),\(chooseBBOX.upperLON))"
         print(queryURL)
         
@@ -109,13 +102,9 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
     
     fileprivate func queryDataSet(_ queryURL : String) {
         DispatchQueue.global(qos: .userInitiated).async {
-            Alamofire.request(queryURL).responseJSON() { response in
-                switch response.result
-                {
-                case .success:
-                    NSLog("Connection success")
-                case .failure(let error):
-                    print(error)
+            Alamofire.request(queryURL).validate().responseJSON() { response in
+
+                guard response.result.isSuccess else{
                     let alertMessage = UIAlertController(title: "Oops!", message: "There is something wrong connecting with the server.", preferredStyle: .alert)
                     alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alertMessage, animated: true, completion: nil)
@@ -150,7 +139,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
                 default: break
                 }
                 
-                // Progress Bar Setting
+                // Process Bar Setting
                 self.progressHUD.hide(animated: true)
                 let doneProgress = MBProgressHUD.showAdded(to: self.mapView, animated: true)
                 doneProgress.mode = MBProgressHUDMode.customView
@@ -172,11 +161,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
             let longitude = json["features"][featureID]["geometry"]["coordinates"][0].doubleValue
             let marker = ExtendedMarker(position: CLLocationCoordinate2DMake(latitude, longitude))
             marker.title = json["features"][featureID]["id"].stringValue
-//            for property in json["features"][featureID]["properties"] {
-//                if property.0 != "bbox" {
-//                    marker.properties.updateValue(String(describing: property.1), forKey: property.0)
-//                }
-//            }
+
             marker.key = json["features"][featureID]["properties"][self.titleProperty].stringValue
             marker.value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
             
@@ -187,7 +172,6 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         }
         self.clusterManager.cluster()
         
-        // Register self to listen to both GMUClusterManagerDelegate and GMSMapViewDelegate events.
         self.clusterManager.setDelegate(self, mapDelegate: self)
     }
     
@@ -243,11 +227,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         var step = 0.0
         
         for featureID in 0..<featuresNum {
-            let Key = json["features"][featureID]["properties"][self.titleProperty].stringValue
-            let Value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
-
             let polygonCoordinatesList = json["features"][featureID]["geometry"]["coordinates"][0]
-
             let coordinatecount = polygonCoordinatesList.count
             
             for coordianteNum in 0..<coordinatecount {
@@ -258,14 +238,12 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
             let polygon = ExtendedPolygon(path: polygonPath)
             polygon.title = json["features"][featureID]["id"].stringValue
 
-            polygon.key = Key
-            polygon.value = Value
-            if polygon.value > maxValue {
-                maxValue = polygon.value
-            }
-            if polygon.value < minValue {
-                minValue = polygon.value
-            }
+            polygon.key = json["features"][featureID]["properties"][self.titleProperty].stringValue
+            polygon.value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
+            
+            if polygon.value > maxValue { maxValue = polygon.value }
+            if polygon.value < minValue { minValue = polygon.value }
+            
             polygon.strokeColor = UIColor.black
             polygon.strokeWidth = 1
             polygon.isTappable = true
@@ -287,7 +265,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         var polygonPath = GMSMutablePath()
         var polygons = [ExtendedPolygon]()
         var maxValue = 0.0
-        var minValue = 9999999.0
+        var minValue = Double.infinity
         var step = 0.0
         
         if featuresNum > 100 {
@@ -296,28 +274,24 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         }
         
         for featureID in 0..<featuresNum {
-            print(featureID)
-            let Key = json["features"][featureID]["properties"][self.titleProperty].stringValue
-            let Value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
 
             let polygonCoordinatesList = json["features"][featureID]["geometry"]["coordinates"][0][0]
             let coordinatecount = polygonCoordinatesList.count
             
             for coordianteNum in 0..<coordinatecount {
                 let polygonCoordinate = polygonCoordinatesList[coordianteNum]
-                polygonPath.add(CLLocationCoordinate2D(latitude: (polygonCoordinate[1].doubleValue),  longitude: (polygonCoordinate[0].doubleValue)))// traverse all coordinates in a polygon
+                polygonPath.add(CLLocationCoordinate2D(latitude: (polygonCoordinate[1].doubleValue),
+                                                       longitude: (polygonCoordinate[0].doubleValue)))
             } // traverse each polygon in a feature
             
-            
             let polygon = ExtendedPolygon(path: polygonPath)
-            polygon.key = Key
-            polygon.value = Value
-            if polygon.value > maxValue {
-                maxValue = polygon.value
-            }
-            if polygon.value < minValue {
-                minValue = polygon.value
-            }
+            
+            polygon.key = json["features"][featureID]["properties"][self.titleProperty].stringValue
+            polygon.value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
+            
+            if polygon.value > maxValue { maxValue = polygon.value }
+            if polygon.value < minValue { minValue = polygon.value }
+            
             polygon.title = json["features"][featureID]["id"].stringValue
             
             polygon.strokeColor = UIColor.black
@@ -325,7 +299,6 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
             polygon.isTappable = true
             polygons.append(polygon)
             
-            // Reset
             polygonPath = GMSMutablePath()
             
         } // traverse features
@@ -338,7 +311,6 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
     
     fileprivate func drawPolygons(_ polygons : [ExtendedPolygon], minValue : Double, step : Double){
         for polygon in polygons {
-            //let colorRank = Int((shape.value - self.minValue) / self.step)
             let rankIndex = abs (floor((polygon.value - minValue) / step))
             
             let transformedIndex = Int(round(Double(rankIndex) * 10.0 / Double(self.colorClass)))
@@ -402,7 +374,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
             let detailActionHandler = { (action:UIAlertAction!) -> Void in
                 let detailMessage = UIAlertController(title: extendedMarker.title, message: "Message", preferredStyle: .actionSheet)
                 detailMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                // Show alert
+
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = NSTextAlignment.center
                 let messageText = NSMutableAttributedString(

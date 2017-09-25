@@ -22,7 +22,7 @@ class WebViewController: UIViewController, WKUIDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "aurin.org.au"
+        navigationItem.title = "AURIN"
         // Do any additional setup after loading the view.
         if let url = URL(string: "http://aurin.org.au/") {
             let request = URLRequest(url: url)

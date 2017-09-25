@@ -13,6 +13,7 @@
 		11800D251F30BA300046F5D6 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB6B70F1CD62510007E044C /* FilterViewController.swift */; };
 		11800D621F3845920046F5D6 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11800D611F3845920046F5D6 /* SwiftyJSON.framework */; };
 		11A903201F74D5B200062AEF /* ErrorCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A9031F1F74D5B200062AEF /* ErrorCases.swift */; };
+		11A903241F78CD9900062AEF /* Reusefunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A903231F78CD9900062AEF /* Reusefunc.swift */; };
 		11F9CA8B1F4A93F6002C59AC /* GMUGridBasedClusterAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F9CA841F4A93F6002C59AC /* GMUGridBasedClusterAlgorithm.m */; };
 		11F9CA8C1F4A93F6002C59AC /* GMUNonHierarchicalDistanceBasedAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F9CA861F4A93F6002C59AC /* GMUNonHierarchicalDistanceBasedAlgorithm.m */; };
 		11F9CA8D1F4A93F6002C59AC /* GMUSimpleClusterAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F9CA881F4A93F6002C59AC /* GMUSimpleClusterAlgorithm.m */; };
@@ -93,6 +94,7 @@
 		1132296F1F6B6A3B00CF0E82 /* SWXMLHash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SWXMLHash.framework; path = "../../Library/Developer/Xcode/DerivedData/AURIN_Mobile-aveymqehifmgsthepoknilwqbjuc/Build/Products/Debug-iphoneos/SWXMLHash/SWXMLHash.framework"; sourceTree = "<group>"; };
 		11800D611F3845920046F5D6 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../Library/Developer/Xcode/DerivedData/AURIN_Mobile-aveymqehifmgsthepoknilwqbjuc/Build/Products/Debug-iphonesimulator/SwiftyJSON/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		11A9031F1F74D5B200062AEF /* ErrorCases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorCases.swift; sourceTree = "<group>"; };
+		11A903231F78CD9900062AEF /* Reusefunc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reusefunc.swift; sourceTree = "<group>"; };
 		11F9CA781F4A842D002C59AC /* AURIN Mobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AURIN Mobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		11F9CA821F4A93F6002C59AC /* GMUClusterAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GMUClusterAlgorithm.h; path = Clustering/Algo/GMUClusterAlgorithm.h; sourceTree = "<group>"; };
 		11F9CA831F4A93F6002C59AC /* GMUGridBasedClusterAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GMUGridBasedClusterAlgorithm.h; path = Clustering/Algo/GMUGridBasedClusterAlgorithm.h; sourceTree = "<group>"; };
@@ -220,6 +222,14 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
+		11A903221F78CD6400062AEF /* Reuse */ = {
+			isa = PBXGroup;
+			children = (
+				11A903231F78CD9900062AEF /* Reusefunc.swift */,
+			);
+			name = Reuse;
+			sourceTree = "<group>";
+		};
 		11F9CA811F4A93B3002C59AC /* Google-Maps-iOS-Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -309,6 +319,7 @@
 				11A019831F64337300881E11 /* Models */,
 				11A019811F64133C00881E11 /* Supporting Files */,
 				11A0197D1F5FD59400881E11 /* Libraries */,
+				11A903221F78CD6400062AEF /* Reuse */,
 				BCB680211CB8F969006EFACD /* AppDelegate.swift */,
 				BCB680231CB8F969006EFACD /* OnlineViewController.swift */,
 				BC918E811CC2737400942BAA /* LocalViewController.swift */,
@@ -516,6 +527,7 @@
 				BCB680221CB8F969006EFACD /* AppDelegate.swift in Sources */,
 				BC2B362C1CC1242B002DF1F6 /* MapDrawingViewController.swift in Sources */,
 				BCEB76901CC5E0EA000B99B2 /* WalkthroughContentViewController.swift in Sources */,
+				11A903241F78CD9900062AEF /* Reusefunc.swift in Sources */,
 				BC7176921CBA069300623916 /* DatasetDetailTableViewCell.swift in Sources */,
 				11F9CA981F4A93FE002C59AC /* GMUStaticCluster.m in Sources */,
 				11F9CA8E1F4A93F6002C59AC /* GMUWrappingDictionaryKey.m in Sources */,

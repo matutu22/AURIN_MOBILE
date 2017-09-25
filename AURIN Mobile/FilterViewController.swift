@@ -32,18 +32,6 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
     
     var filterBBOX = BBOX(lowerLON: 116.16, lowerLAT: -44.23, upperLON: 157.11, upperLAT: -7.19)
     
-    // Picker Options
-    let states = ["Capital Territory", "New South Wales", "Northern Territory", "Queensland", "South Australia", "Tasmania", "Victoria", "Western Australia"]
-    var suburbs = ["ACT-All", "Canberra"]
-    let vic = ["VIC-All", "Ballarat", "Bendigo", "Geelong", "Hume", "Latrobe - Gippsland", "Melbourne - Inner", "Melbourne - Inner East", "Melbourne - Inner South", "Melbourne - North East", "Melbourne - North West", "Melbourne - Outer East", "Melbourne - South East", "Melbourne - West", "Mornington Peninsula", "North West", "Shepparton", "Warrnambool and South West"]
-    let act = ["ACT-All", "Canberra"]
-    let nsw = ["NSW-All", "Capital Region", "Central Coast", "Central West", "Coffs Harbour", "Far West and Orana", "Hunter Valley exc Newcastle", "Illawarra", "Mid North Coast", "Murray", "Newcastle and Lake Macquarie", "New England and North West", "Riverina", "Southern Highlands and Shoalhaven", "Sydney - Baulkham Hills and Hawkesbury", "Sydney - Blacktown", "Sydney - City and Inner South", "Sydney - Eastern Suburbs", "Sydney - Inner South West", "Sydney - Inner West", "Sydney - Northern Beaches", "Sydney - North Sydney and Hornsby", "Sydney - Outer South West", "Sydney - Outer West and Blue Mountains", "Sydney - Parramatta", "Sydney - Ryde", "Sydney - South West", "Sydney - Sutherland"]
-    let nt = ["NT-All", "Darwin", "Northern Territory - Outback"]
-    let qld = ["QLD-All", "Brisbane - East", "Brisbane Inner City", "Brisbane - North", "Brisbane - South", "Brisbane - West", "Cairns", "Darling Downs - Maranoa", "Fitzroy", "Gold Coast", "Ipswich", "Logan - Beaudesert", "Mackay", "Moreton Bay - North", "Moreton Bay - South", "Queensland - Outback", "Sunshine Coast", "Toowoomba", "Townsville", "Wide Bay"]
-    let sa = ["SA-All", "Adelaide - Central and Hills", "Adelaide - North", "Adelaide - South", "Adelaide - West", "Barossa - Yorke - Mid North", "South Australia - Outback", "South Australia - South East"]
-    let tas = ["TAS-All", "Hobart", "Launceston and North East", "South East", "West and North West"]
-    let wa = ["WA-All", "Bunbury", "Mandurah", "Perth - Inner", "Perth - North East", "Perth - North West", "Perth - South East", "Perth - South West", "Western Australia - Outback", "Western Australia - Wheat Belt"]
-    
     // Used for MapView
     var tapCount = 0
     var lowerLatitude:Double = 0.0
@@ -59,8 +47,6 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         
         self.areaMap.isMyLocationEnabled = true;
         self.areaMap.mapType = .normal;
@@ -85,9 +71,9 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
 
         if component == 0 {
-            return states.count
+            return Region.states.count
         } else {
-            return suburbs.count
+            return Region.suburbs.count
         }
 
     }
@@ -97,8 +83,7 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
         if component == 0 {
             let pickerLabel = UILabel()
             pickerLabel.textColor = UIColor.black
-            pickerLabel.text = states[row]
-            // pickerLabel.font = UIFont(name: pickerLabel.font.fontName, size: 15)
+            pickerLabel.text = Region.states[row]
             pickerLabel.font = UIFont(name: "AvenirNextCondensed-Regular", size: 15) // In this use your custom font
             pickerLabel.textAlignment = NSTextAlignment.center
             return pickerLabel
@@ -106,8 +91,7 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
         } else {
             let pickerLabel = UILabel()
             pickerLabel.textColor = UIColor.black
-            pickerLabel.text = suburbs[row]
-            // pickerLabel.font = UIFont(name: pickerLabel.font.fontName, size: 15)
+            pickerLabel.text = Region.suburbs[row]
             pickerLabel.font = UIFont(name: "AvenirNextCondensed-Regular", size: 12) // In this use your custom font
             pickerLabel.textAlignment = NSTextAlignment.center
             return pickerLabel
@@ -118,44 +102,44 @@ class FilterViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
 
         if component == 0 {
-            switch states[row] {
+            switch Region.states[row] {
             case "Capital Territory":
-                suburbs = act
+                Region.suburbs = Region.act
                 filterBBOX = bboxSet.BBoxes["ACT-All"]!
                 pickerView.reloadAllComponents()
             case "New South Wales":
-                suburbs = nsw
+                Region.suburbs = Region.nsw
                 filterBBOX = bboxSet.BBoxes["NSW-All"]!
                 pickerView.reloadAllComponents()
             case "Northern Territory":
-                suburbs = nt
+                Region.suburbs = Region.nt
                 filterBBOX = bboxSet.BBoxes["NT-All"]!
                 pickerView.reloadAllComponents()
             case "Queensland":
-                suburbs = qld
+                Region.suburbs = Region.qld
                 filterBBOX = bboxSet.BBoxes["QLD-All"]!
                 pickerView.reloadAllComponents()
             case "South Australia":
-                suburbs = sa
+                Region.suburbs = Region.sa
                 filterBBOX = bboxSet.BBoxes["SA-All"]!
                 pickerView.reloadAllComponents()
             case "Tasmania":
-                suburbs = tas
+                Region.suburbs = Region.tas
                 filterBBOX = bboxSet.BBoxes["TAS-All"]!
                 pickerView.reloadAllComponents()
             case "Victoria":
-                suburbs = vic
+                Region.suburbs = Region.vic
                 filterBBOX = bboxSet.BBoxes["VIC-All"]!
                 pickerView.reloadAllComponents()
             case "Western Australia":
-                suburbs = wa
+                Region.suburbs = Region.wa
                 filterBBOX = bboxSet.BBoxes["WA-All"]!
                 pickerView.reloadAllComponents()
             default:
                 break
             }
         } else {
-            filterBBOX = bboxSet.BBoxes[suburbs[row]]!
+            filterBBOX = bboxSet.BBoxes[Region.suburbs[row]]!
         }
         
         // draw bounding box on the map
