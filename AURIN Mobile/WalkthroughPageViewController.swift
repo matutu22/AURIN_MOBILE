@@ -28,7 +28,11 @@ class WalkthroughPageViewController: UIPageViewController, UIPageViewControllerD
         
     }
     
-    
+    override func viewDidDisappear(_ animated: Bool) {
+        let defaluts = UserDefaults.standard
+        let status = defaluts.bool(forKey: "ClosedWalkthrough")
+        defaluts.set(!status, forKey: "ClosedWalkthrough")
+    }
     
 
     

@@ -112,9 +112,10 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
         fetchRequest.sortDescriptors = [sortDescriptor]
         if let managedObjectContext = (UIApplication.shared.delegate as?
             AppDelegate)?.managedObjectContext {
-            fetchResultController = NSFetchedResultsController(fetchRequest:
-                fetchRequest, managedObjectContext: managedObjectContext, sectionNameKeyPath:
-                nil, cacheName: nil)
+            fetchResultController = NSFetchedResultsController(
+                fetchRequest:fetchRequest,
+                managedObjectContext: managedObjectContext,
+                sectionNameKeyPath: nil, cacheName: nil)
             fetchResultController.delegate = self
             do {
                 try fetchResultController.performFetch()

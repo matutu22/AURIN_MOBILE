@@ -33,6 +33,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
     var opacity: Float = 0.7
     var geom_name = "ogr_geometry"
     var queryURL : String = ""
+    var suburbQuery : String = ""
 
     var progressHUD : MBProgressHUD = MBProgressHUD()
     
@@ -109,7 +110,19 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
     fileprivate func queryDataSet(_ queryURL : String) {
         DispatchQueue.global(qos: .userInitiated).async {
             Alamofire.request(queryURL).responseJSON() { response in
-
+                switch response.result
+                {
+                case .success:
+                    NSLog("Connection success")
+                case .failure(let error):
+                    print(error)
+                    let alertMessage = UIAlertController(title: "Oops!", message: "There is something wrong connecting with the server.", preferredStyle: .alert)
+                    alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alertMessage, animated: true, completion: nil)
+                    self.progressHUD.hide(animated: true)
+                    return
+                }
+                
                 let json = try! JSON(data: response.data!)
                 
                 //If no data returned, alert
@@ -159,20 +172,18 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
             let longitude = json["features"][featureID]["geometry"]["coordinates"][0].doubleValue
             let marker = ExtendedMarker(position: CLLocationCoordinate2DMake(latitude, longitude))
             marker.title = json["features"][featureID]["id"].stringValue
-            for property in json["features"][featureID]["properties"] {
-                if property.0 != "bbox" {
-                    marker.properties.updateValue(String(describing: property.1), forKey: property.0)
-                }
-            }
+//            for property in json["features"][featureID]["properties"] {
+//                if property.0 != "bbox" {
+//                    marker.properties.updateValue(String(describing: property.1), forKey: property.0)
+//                }
+//            }
             marker.key = json["features"][featureID]["properties"][self.titleProperty].stringValue
             marker.value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
-            
             
             let markerColor = ColorSet.colorDictionary[self.palette]
             marker.icon = GMSMarker.markerImage(with: markerColor?.withAlphaComponent(self.alpha))
             self.clusterManager.add(marker)
-            //marker.appearAnimation = kGMSMarkerAnimationPop
-            //marker.map = self.mapView
+
         }
         self.clusterManager.cluster()
         
@@ -234,9 +245,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         for featureID in 0..<featuresNum {
             let Key = json["features"][featureID]["properties"][self.titleProperty].stringValue
             let Value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
-            print(featureID)
 
-            
             let polygonCoordinatesList = json["features"][featureID]["geometry"]["coordinates"][0]
 
             let coordinatecount = polygonCoordinatesList.count
@@ -248,12 +257,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
             
             let polygon = ExtendedPolygon(path: polygonPath)
             polygon.title = json["features"][featureID]["id"].stringValue
-            for property in json["features"][featureID]["properties"] {
-                if property.0 != "bbox"{
-                    polygon.properties.updateValue(String(describing: property.1), forKey: property.0)
-                }
-            }
-            // polygon.properties.removeValue(forKey: "bbox")
+
             polygon.key = Key
             polygon.value = Value
             if polygon.value > maxValue {
@@ -273,7 +277,6 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         minValue *= 0.99
         step = (maxValue - minValue) / Double(self.colorClass)
 
-        print("step", step)
         drawPolygons(polygons, minValue: minValue, step: step)
 
     }
@@ -281,7 +284,6 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
     fileprivate func multiPolygonDataSet(_ json: JSON){
         self.shapeType = "Polygon"
         let featuresNum = json["features"].count
-        print(featuresNum)
         var polygonPath = GMSMutablePath()
         var polygons = [ExtendedPolygon]()
         var maxValue = 0.0
@@ -294,13 +296,12 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         }
         
         for featureID in 0..<featuresNum {
+            print(featureID)
             let Key = json["features"][featureID]["properties"][self.titleProperty].stringValue
             let Value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
-            print(featureID)
 
             let polygonCoordinatesList = json["features"][featureID]["geometry"]["coordinates"][0][0]
             let coordinatecount = polygonCoordinatesList.count
-            print("ploygonCount", coordinatecount)
             
             for coordianteNum in 0..<coordinatecount {
                 let polygonCoordinate = polygonCoordinatesList[coordianteNum]
@@ -319,29 +320,19 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
             }
             polygon.title = json["features"][featureID]["id"].stringValue
             
-            for property in json["features"][featureID]["properties"] {
-                if property.0 != "bbox"{
-                    polygon.properties.updateValue(String(describing: property.1), forKey: property.0)
-                }
-            }
-            //polygon.properties.removeValue(forKey: "bbox")
-            
             polygon.strokeColor = UIColor.black
             polygon.strokeWidth = 1
             polygon.isTappable = true
             polygons.append(polygon)
-            print("polygon", polygon)
             
             // Reset
             polygonPath = GMSMutablePath()
-
             
         } // traverse features
         maxValue *= 1.01
         minValue *= 0.99
         step = (maxValue - minValue) / Double(self.colorClass)
         
-        print("step", step)
         drawPolygons(polygons, minValue: minValue, step: step)
     }
     
@@ -349,10 +340,8 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         for polygon in polygons {
             //let colorRank = Int((shape.value - self.minValue) / self.step)
             let rankIndex = abs (floor((polygon.value - minValue) / step))
-            print("Value: ", polygon.value)
             
             let transformedIndex = Int(round(Double(rankIndex) * 10.0 / Double(self.colorClass)))
-            print("transformedindex", transformedIndex)
             
             switch self.palette {
             case "Red":
@@ -374,23 +363,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        if let barFont1 = UIFont(name: "Avenir-Light", size: 24.0) {
-            self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white, NSFontAttributeName:barFont1]
-        }
-        //SVProgressHUD.dismiss()
-    }
-    
-    func areaTooLargeAlert(){
-        let alertMessage = UIAlertController(title: "Area too large", message: "The area you choose has too much data, please choose a smaller area.", preferredStyle: .alert)
-        alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        self.present(alertMessage, animated: true, completion: nil)
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+
     
     func clusterManager(_ clusterManager: GMUClusterManager, didTap cluster: GMUCluster) -> Bool {
         let newCamera = GMSCameraPosition.camera(withTarget: cluster.position,
@@ -408,6 +381,24 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
             NSLog("Tapped on Marker")
             let extendedMarker = marker.userData as! ExtendedMarker
             let alertMessage = UIAlertController(title: extendedMarker.key, message: "\(classifierProperty): \(extendedMarker.value)", preferredStyle: .alert)
+            
+            if extendedMarker.key == ""{
+                self.titleNullAlert()
+                return true
+            }
+            let newName = extendedMarker.key.replacingOccurrences(of: " ", with: "%20")
+            self.suburbQuery = "http://openapi.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(self.dataset.name)&outputFormat=json&CQL_FILTER=(\(self.titleProperty)='\(newName)')"
+            
+            Alamofire.request(self.suburbQuery).response { response in
+                let json = try! JSON(data: response.data!)
+                for property in json["features"][0]["properties"] {
+                    print(property)
+                    if property.0 != "bbox"{
+                        extendedMarker.properties.updateValue(String(describing: property.1), forKey: property.0)
+                    }
+                }
+            }
+            
             let detailActionHandler = { (action:UIAlertAction!) -> Void in
                 let detailMessage = UIAlertController(title: extendedMarker.title, message: "Message", preferredStyle: .actionSheet)
                 detailMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -441,7 +432,24 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
             let extendedPolygon = overlay as! ExtendedPolygon
             let alertMessage = UIAlertController(title: extendedPolygon.key, message: "\(classifierProperty): \(extendedPolygon.value)", preferredStyle: .alert)
             
+            if extendedPolygon.key == ""{
+                self.titleNullAlert()
+                return
+            }
+            let newName = extendedPolygon.key.replacingOccurrences(of: " ", with: "%20")
+            self.suburbQuery = "http://openapi.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(self.dataset.name)&outputFormat=json&CQL_FILTER=(\(self.titleProperty)='\(newName)')"
+            
+            Alamofire.request(self.suburbQuery).response { response in
+                let json = try! JSON(data: response.data!)
+                for property in json["features"][0]["properties"] {
+                    print(property)
+                    if property.0 != "bbox"{
+                        extendedPolygon.properties.updateValue(String(describing: property.1), forKey: property.0)
+                    }
+                }
+            }
             let detailActionHandler = { (action:UIAlertAction!) -> Void in
+                print("Detailactionhandler")
                 let detailMessage = UIAlertController(title: extendedPolygon.title, message: "Message", preferredStyle: .actionSheet)
                 detailMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 let paragraphStyle = NSMutableParagraphStyle()
@@ -456,6 +464,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
                 detailMessage.setValue(messageText, forKey: "attributedMessage")
                 self.present(detailMessage, animated: true, completion: nil)
             }
+            
             alertMessage.addAction(UIAlertAction(title: "MORE", style: .default, handler: detailActionHandler))
             alertMessage.addAction(UIAlertAction(title: "CLOSE", style: .destructive, handler: nil))
             self.present(alertMessage, animated: true, completion: nil)
@@ -490,7 +499,28 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         
     }
 
-
+    override func viewWillDisappear(_ animated: Bool) {
+        if let barFont1 = UIFont(name: "Avenir-Light", size: 24.0) {
+            self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white, NSFontAttributeName:barFont1]
+        }
+    }
+    
+    func areaTooLargeAlert(){
+        let alertMessage = UIAlertController(title: "Area too large", message: "The area you choose has too much data, please choose a smaller area.", preferredStyle: .alert)
+        alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alertMessage, animated: true, completion: nil)
+    }
+    
+    func titleNullAlert(){
+        let alertMessage = UIAlertController(title: "No data of current title", message: "There is no data under chosen title attribute, please go back select another title.", preferredStyle: .alert)
+        alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alertMessage, animated: true, completion: nil)
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
     
     /*
     // MARK: - Navigation

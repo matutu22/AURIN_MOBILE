@@ -97,7 +97,6 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         
         // Generate the query which only request for key & value properties.
         let queryURL = "http://openapi.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&MaxFeatures=1000&outputFormat=json&CQL_FILTER=BBOX(\(geom_name),\(chooseBBOX.lowerLAT),\(chooseBBOX.lowerLON),\(chooseBBOX.upperLAT),\(chooseBBOX.upperLON))&PropertyName=\(titleProperty),\(classifierProperty)"
-        
         DispatchQueue.global(qos: .default).async(execute: {
             Alamofire.request(queryURL).response { response in
                 let json = try! JSON(data: response.data!)
@@ -108,7 +107,6 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
                     self.present(alertMessage, animated: true, completion: nil)
                 }
                 
-                // ====================================================================================
                 let featuresNum = json["features"].count
                 for featureID in 0..<featuresNum {
                     let key = json["features"][featureID]["properties"][self.titleProperty].stringValue
@@ -130,96 +128,6 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
             }
         })
         
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    // MARK: - Table view data source
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: false)
-    }
-    
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        if !mapViewHidden && detailViewHidden && indexPath.section == 0 {
-            // Map opend，Text closed.
-            switch indexPath.row {
-            case 0: // Bar Chart.
-                return 275
-            case 2: // Text Field.
-                return 0
-            case 3: // Map View.
-                return 200
-            default: // Cell Label.
-                return super.tableView(tableView, heightForRowAt: indexPath)
-            }
-        } else if mapViewHidden && !detailViewHidden && indexPath.section == 0 {
-            // Map closed，Text opend.
-            switch indexPath.row {
-            case 0: // Bar Chart.
-                return 355
-            case 2: // Text Field.
-                return 120
-            case 3: // Map View.
-                return 0
-            default: // Cell Label.
-                return super.tableView(tableView, heightForRowAt: indexPath)
-            }
-        } else if mapViewHidden && detailViewHidden && indexPath.section == 0 {
-            // Map closed，Text closed
-            switch indexPath.row {
-            case 0: // Bar Chart.
-                return 350
-            case 2: // Text Field.
-                return 0
-            case 3: // Map View.
-                return 0
-            default: // Cell Label.
-                return super.tableView(tableView, heightForRowAt: indexPath)
-            }
-        } else if !mapViewHidden && !detailViewHidden && indexPath.section == 0 {
-            // Map opend，Text opend.
-            switch indexPath.row {
-            case 0: // Bar Chart.
-                return 255
-            case 2: // Text Field.
-                return 70
-            case 3: // Map View.
-                return 150
-            default: // Cell Label.
-                return super.tableView(tableView, heightForRowAt: indexPath)
-            }
-            
-        } else {
-            // Other cells in section 0 and 1.
-            return super.tableView(tableView, heightForRowAt: indexPath)
-        }
-
-    }
-    
-    @IBAction func mapSwitch(_ sender: UISwitch) {
-        if sender.isOn {
-            mapViewHidden = false
-            tableView.reloadData()
-        } else {
-            mapViewHidden = true
-            tableView.reloadData()
-        }
-    }
-    
-    @IBAction func detailSwitch(_ sender: UISwitch) {
-        if sender.isOn {
-            detailViewHidden = false
-            tableView.reloadData()
-        } else {
-            detailViewHidden = true
-            tableView.reloadData()
-        }
     }
 
 
@@ -292,14 +200,18 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         mapView.clear()
         keyLabel.text = "\(xAxis[Int(entry.x)])"
         valueLabel.text = "\(entry.y)"
-        NSLog("Chart Selected ")
+        if keyLabel.text == "" {
+            let alertMessage = UIAlertController(title: "No Data", message: "There is no data for selected title, please go back to select another title as X-axis!", preferredStyle: .alert)
+            alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alertMessage, animated: true, completion: nil)
+            return
+        }
         
         
         if !mapViewHidden || !detailViewHidden {
             // The URL request shoud not include 'space', so change it to '%20'.
             let newName = xAxis[Int(entry.x)].replacingOccurrences(of: " ", with: "%20")
             let nameSearchURL = "http://openapi.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&outputFormat=json&CQL_FILTER=(\(titleProperty)='\(newName)')"
-            print(nameSearchURL)
             
             Alamofire.request(nameSearchURL).response { response in
                 let json = try! JSON(data: response.data!)
@@ -387,7 +299,6 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         print(polygonCoordinatesList)
         let count = polygonCoordinatesList.count
         for i in 0..<count {
-            print(i)
             let point = polygonCoordinatesList[i]
             polygonPath.add(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
         }
@@ -449,5 +360,98 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         self.textView.font = UIFont(name: "Menlo", size: 10)
         self.textView.textAlignment = .center
         
+    }
+    
+    
+    
+    // MARK: - Table view data source
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        if !mapViewHidden && detailViewHidden && indexPath.section == 0 {
+            // Map opend，Text closed.
+            switch indexPath.row {
+            case 0: // Bar Chart.
+                return 275
+            case 2: // Text Field.
+                return 0
+            case 3: // Map View.
+                return 200
+            default: // Cell Label.
+                return super.tableView(tableView, heightForRowAt: indexPath)
+            }
+        } else if mapViewHidden && !detailViewHidden && indexPath.section == 0 {
+            // Map closed，Text opend.
+            switch indexPath.row {
+            case 0: // Bar Chart.
+                return 355
+            case 2: // Text Field.
+                return 120
+            case 3: // Map View.
+                return 0
+            default: // Cell Label.
+                return super.tableView(tableView, heightForRowAt: indexPath)
+            }
+        } else if mapViewHidden && detailViewHidden && indexPath.section == 0 {
+            // Map closed，Text closed
+            switch indexPath.row {
+            case 0: // Bar Chart.
+                return 350
+            case 2: // Text Field.
+                return 0
+            case 3: // Map View.
+                return 0
+            default: // Cell Label.
+                return super.tableView(tableView, heightForRowAt: indexPath)
+            }
+        } else if !mapViewHidden && !detailViewHidden && indexPath.section == 0 {
+            // Map opend，Text opend.
+            switch indexPath.row {
+            case 0: // Bar Chart.
+                return 255
+            case 2: // Text Field.
+                return 70
+            case 3: // Map View.
+                return 150
+            default: // Cell Label.
+                return super.tableView(tableView, heightForRowAt: indexPath)
+            }
+            
+        } else {
+            // Other cells in section 0 and 1.
+            return super.tableView(tableView, heightForRowAt: indexPath)
+        }
+        
+    }
+    
+    @IBAction func mapSwitch(_ sender: UISwitch) {
+        if sender.isOn {
+            mapViewHidden = false
+            tableView.reloadData()
+        } else {
+            mapViewHidden = true
+            tableView.reloadData()
+        }
+    }
+    
+    @IBAction func detailSwitch(_ sender: UISwitch) {
+        if sender.isOn {
+            detailViewHidden = false
+            tableView.reloadData()
+        } else {
+            detailViewHidden = true
+            tableView.reloadData()
+        }
+    }
+    
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
 }

@@ -12,6 +12,7 @@
 		113229701F6B6A3B00CF0E82 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1132296D1F6B6A3B00CF0E82 /* Alamofire.framework */; };
 		11800D251F30BA300046F5D6 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB6B70F1CD62510007E044C /* FilterViewController.swift */; };
 		11800D621F3845920046F5D6 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11800D611F3845920046F5D6 /* SwiftyJSON.framework */; };
+		11A903201F74D5B200062AEF /* ErrorCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A9031F1F74D5B200062AEF /* ErrorCases.swift */; };
 		11F9CA8B1F4A93F6002C59AC /* GMUGridBasedClusterAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F9CA841F4A93F6002C59AC /* GMUGridBasedClusterAlgorithm.m */; };
 		11F9CA8C1F4A93F6002C59AC /* GMUNonHierarchicalDistanceBasedAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F9CA861F4A93F6002C59AC /* GMUNonHierarchicalDistanceBasedAlgorithm.m */; };
 		11F9CA8D1F4A93F6002C59AC /* GMUSimpleClusterAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F9CA881F4A93F6002C59AC /* GMUSimpleClusterAlgorithm.m */; };
@@ -91,6 +92,7 @@
 		1132296E1F6B6A3B00CF0E82 /* MBProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MBProgressHUD.framework; path = "../../Library/Developer/Xcode/DerivedData/AURIN_Mobile-aveymqehifmgsthepoknilwqbjuc/Build/Products/Debug-iphoneos/MBProgressHUD/MBProgressHUD.framework"; sourceTree = "<group>"; };
 		1132296F1F6B6A3B00CF0E82 /* SWXMLHash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SWXMLHash.framework; path = "../../Library/Developer/Xcode/DerivedData/AURIN_Mobile-aveymqehifmgsthepoknilwqbjuc/Build/Products/Debug-iphoneos/SWXMLHash/SWXMLHash.framework"; sourceTree = "<group>"; };
 		11800D611F3845920046F5D6 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../Library/Developer/Xcode/DerivedData/AURIN_Mobile-aveymqehifmgsthepoknilwqbjuc/Build/Products/Debug-iphonesimulator/SwiftyJSON/SwiftyJSON.framework"; sourceTree = "<group>"; };
+		11A9031F1F74D5B200062AEF /* ErrorCases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorCases.swift; sourceTree = "<group>"; };
 		11F9CA781F4A842D002C59AC /* AURIN Mobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AURIN Mobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		11F9CA821F4A93F6002C59AC /* GMUClusterAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GMUClusterAlgorithm.h; path = Clustering/Algo/GMUClusterAlgorithm.h; sourceTree = "<group>"; };
 		11F9CA831F4A93F6002C59AC /* GMUGridBasedClusterAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GMUGridBasedClusterAlgorithm.h; path = Clustering/Algo/GMUGridBasedClusterAlgorithm.h; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 			children = (
 				BCB6806A1CB8FC20006EFACD /* DataType.swift */,
 				BC2B36201CC0D5E8002DF1F6 /* DataStorage.swift */,
+				11A9031F1F74D5B200062AEF /* ErrorCases.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -488,6 +491,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BCB680241CB8F969006EFACD /* OnlineViewController.swift in Sources */,
+				11A903201F74D5B200062AEF /* ErrorCases.swift in Sources */,
 				BC7176A21CBA7B2E00623916 /* AboutTableViewCell.swift in Sources */,
 				11F9CAAA1F4A940D002C59AC /* GQTPointQuadTree.m in Sources */,
 				BCEB76981CC5FDFB000B99B2 /* WalkthroughAnimationViewController.swift in Sources */,
