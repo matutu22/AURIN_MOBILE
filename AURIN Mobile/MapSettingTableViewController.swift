@@ -423,8 +423,6 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
                 bboxLabel.text = chooseBBOX.printBBOX()
             }
             
-            
-            // 在地图上画出Bounding Box
             let rect = GMSMutablePath()
             rect.add(CLLocationCoordinate2D(latitude: chooseBBOX.lowerLAT, longitude: chooseBBOX.lowerLON))
             rect.add(CLLocationCoordinate2D(latitude: chooseBBOX.upperLAT, longitude: chooseBBOX.lowerLON))

@@ -44,11 +44,8 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
     @IBOutlet var backButton: UIButton!
     @IBOutlet var mapView: GMSMapView!
 
-    // Mark: ViewwillAppear
-
     // Mark: viewdidload
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -105,20 +102,16 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
             Alamofire.request(queryURL).validate().responseJSON() { response in
 
                 guard response.result.isSuccess else{
-                    let alertMessage = UIAlertController(title: "Oops!", message: "There is something wrong connecting with the server.", preferredStyle: .alert)
-                    alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alertMessage, animated: true, completion: nil)
+                    Reuse.shared.showAlert(view: self, title: "Oops!", message: "There is something wrong connecting with the server.")
                     self.progressHUD.hide(animated: true)
                     return
                 }
                 
                 let json = try! JSON(data: response.data!)
                 
-                //If no data returned, alert
                 if json["features"].count == 0 {
-                    let alertMessage = UIAlertController(title: "No Data", message: "There is no data in the selected area, please try to choose another area.", preferredStyle: .alert)
-                    alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alertMessage, animated: true, completion: nil)
+                    Reuse.shared.showAlert(view: self, title: "No data",
+                                           message: "There is no data in the selected area, please try to choose another area.")
                 }
                 
                 let shapeType = json["features"][0]["geometry"]["type"]
@@ -156,14 +149,15 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
     fileprivate func pointDataset(_ json : JSON) {
         let featuresNum = json["features"].count
         for featureID in 0..<featuresNum {
+            let thisPoint = json["features"][featureID]
             
-            let latitude = json["features"][featureID]["geometry"]["coordinates"][1].doubleValue
-            let longitude = json["features"][featureID]["geometry"]["coordinates"][0].doubleValue
+            let latitude = thisPoint["geometry"]["coordinates"][1].doubleValue
+            let longitude = thisPoint["geometry"]["coordinates"][0].doubleValue
             let marker = ExtendedMarker(position: CLLocationCoordinate2DMake(latitude, longitude))
-            marker.title = json["features"][featureID]["id"].stringValue
+            marker.title = thisPoint["id"].stringValue
 
-            marker.key = json["features"][featureID]["properties"][self.titleProperty].stringValue
-            marker.value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
+            marker.key = thisPoint["properties"][self.titleProperty].stringValue
+            marker.value = thisPoint["properties"][self.classifierProperty].doubleValue
             
             let markerColor = ColorSet.colorDictionary[self.palette]
             marker.icon = GMSMarker.markerImage(with: markerColor?.withAlphaComponent(self.alpha))
@@ -181,22 +175,24 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         var polylinePath = GMSMutablePath()
         
         for featureID in 0..<featuresNum {
-            let polylineCount = json["features"][featureID]["geometry"]["coordinates"].count
+            let thisPolyline = json["features"][featureID]
+            let polylineCount = thisPolyline["geometry"]["coordinates"].count
+
             for polylineNum in 0..<polylineCount {
-                let count = json["features"][featureID]["geometry"]["coordinates"][polylineNum].count
+                let count = thisPolyline["geometry"]["coordinates"][polylineNum].count
                 for coordinateNum in 0..<count {
-                    let point = json["features"][featureID]["geometry"]["coordinates"][polylineNum][coordinateNum]
+                    let point = thisPolyline["geometry"]["coordinates"][polylineNum][coordinateNum]
                     polylinePath.add(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
                 }
                 
                 let polyline = ExtendedPolyline(path: polylinePath)
-                polyline.title = json["features"][featureID]["id"].stringValue
-                for property in json["features"][featureID]["properties"] {
+                polyline.title = thisPolyline["id"].stringValue
+                for property in thisPolyline["properties"] {
                     polyline.properties.updateValue(String(describing: property.1), forKey: property.0)
                 }
                 polyline.properties.removeValue(forKey: "bbox")
-                polyline.key = json["features"][featureID]["properties"][self.titleProperty].stringValue
-                polyline.value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
+                polyline.key = thisPolyline["properties"][self.titleProperty].stringValue
+                polyline.value = thisPolyline["properties"][self.classifierProperty].doubleValue
                 
                 polyline.strokeWidth = 2.0
                 let strokeColor = ColorSet.colorDictionary[self.palette]
@@ -274,8 +270,8 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         }
         
         for featureID in 0..<featuresNum {
-
-            let polygonCoordinatesList = json["features"][featureID]["geometry"]["coordinates"][0][0]
+            let thisPloygon = json["features"][featureID]
+            let polygonCoordinatesList = thisPloygon["geometry"]["coordinates"][0][0]
             let coordinatecount = polygonCoordinatesList.count
             
             for coordianteNum in 0..<coordinatecount {
@@ -286,13 +282,13 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
             
             let polygon = ExtendedPolygon(path: polygonPath)
             
-            polygon.key = json["features"][featureID]["properties"][self.titleProperty].stringValue
-            polygon.value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
+            polygon.key = thisPloygon["properties"][self.titleProperty].stringValue
+            polygon.value = thisPloygon["properties"][self.classifierProperty].doubleValue
             
             if polygon.value > maxValue { maxValue = polygon.value }
             if polygon.value < minValue { minValue = polygon.value }
             
-            polygon.title = json["features"][featureID]["id"].stringValue
+            polygon.title = thisPloygon["id"].stringValue
             
             polygon.strokeColor = UIColor.black
             polygon.strokeWidth = 1
@@ -364,7 +360,6 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
             Alamofire.request(self.suburbQuery).response { response in
                 let json = try! JSON(data: response.data!)
                 for property in json["features"][0]["properties"] {
-                    print(property)
                     if property.0 != "bbox"{
                         extendedMarker.properties.updateValue(String(describing: property.1), forKey: property.0)
                     }
@@ -414,7 +409,6 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
             Alamofire.request(self.suburbQuery).response { response in
                 let json = try! JSON(data: response.data!)
                 for property in json["features"][0]["properties"] {
-                    print(property)
                     if property.0 != "bbox"{
                         extendedPolygon.properties.updateValue(String(describing: property.1), forKey: property.0)
                     }
@@ -473,20 +467,19 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
 
     override func viewWillDisappear(_ animated: Bool) {
         if let barFont1 = UIFont(name: "Avenir-Light", size: 24.0) {
-            self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white, NSFontAttributeName:barFont1]
+            self.navigationController?.navigationBar.titleTextAttributes =
+                [NSForegroundColorAttributeName:UIColor.white, NSFontAttributeName:barFont1]
         }
     }
     
     func areaTooLargeAlert(){
-        let alertMessage = UIAlertController(title: "Area too large", message: "The area you choose has too much data, please choose a smaller area.", preferredStyle: .alert)
-        alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        self.present(alertMessage, animated: true, completion: nil)
+        Reuse.shared.showAlert(view: self, title: "Area too large",
+                               message: "The area you choose has too much data, please choose a smaller area.")
     }
     
     func titleNullAlert(){
-        let alertMessage = UIAlertController(title: "No data of current title", message: "There is no data under chosen title attribute, please go back select another title.", preferredStyle: .alert)
-        alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        self.present(alertMessage, animated: true, completion: nil)
+        Reuse.shared.showAlert(view: self, title: "No data of current title",
+                               message: "There is no data under chosen title attribute, please go back select another title.")
     }
     
     override func didReceiveMemoryWarning() {

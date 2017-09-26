@@ -60,7 +60,6 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         self.chooseBBOX = BBOX(lowerLON: lowerLON, lowerLAT: lowerLAT, upperLON: upperLON, upperLAT: upperLAT)
         
         let camera = GMSCameraPosition.camera(withLatitude: centerLAT, longitude: centerLON, zoom: zoomLevel)
-        print("Camera is ", camera)
         self.mapView.animate(to: camera)
         
         // Draw bounding box on map
@@ -69,7 +68,6 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         rect.add(CLLocationCoordinate2D(latitude: upperLAT, longitude: lowerLON))
         rect.add(CLLocationCoordinate2D(latitude: upperLAT, longitude: upperLON))
         rect.add(CLLocationCoordinate2D(latitude: lowerLAT, longitude: upperLON))
-        print("Rect is ",  rect)
         
         bounding = GMSPolygon(path: rect)
         bounding.strokeColor = UIColor.black
@@ -93,15 +91,11 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
     
     // Get the detail information of selected dataset from AURIN serer.
     func getDatasetProperties() {
-        NSLog("Send Request")
-        //var gmlset = Set<String>()
-        //var nameset = Set<String>()
         
         Alamofire.request("http://openapi.aurin.org.au/wfs?request=DescribeFeatureType&service=WFS&version=1.1.0&typeName=\(dataset.name)")
             .authenticate(user: "student", password: "dj78dfGF")
             .response { response in
                 print("---------------")
-                print(response.data!)
                 //print(response.data!) // if you want to check XML data in debug window.
                 let xml = SWXMLHash.parse(response.data!)
                 for property in xml["xsd:schema"]["xsd:complexType"]["xsd:complexContent"]["xsd:extension"]["xsd:sequence"]["xsd:element"].all {

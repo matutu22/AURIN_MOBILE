@@ -102,9 +102,8 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
                 let json = try! JSON(data: response.data!)
                 
                 if json["features"].count == 0 {
-                    let alertMessage = UIAlertController(title: "No Data", message: "There is no data in the selected area, please try to choose another area.", preferredStyle: .alert)
-                    alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alertMessage, animated: true, completion: nil)
+                    Reuse.shared.showAlert(view: self, title: "No data",
+                                           message: "There is no data in the selected area, please try to choose another area.")
                 }
                 
                 let featuresNum = json["features"].count
@@ -201,9 +200,8 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         keyLabel.text = "\(xAxis[Int(entry.x)])"
         valueLabel.text = "\(entry.y)"
         if keyLabel.text == "" {
-            let alertMessage = UIAlertController(title: "No Data", message: "There is no data for selected title, please go back to select another title as X-axis!", preferredStyle: .alert)
-            alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            self.present(alertMessage, animated: true, completion: nil)
+            Reuse.shared.showAlert(view: self, title: "No data",
+                                   message: "There is no data for selected title, please go back to select another title as X-axis!")
             return
         }
         
@@ -289,10 +287,11 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
     func multipolygonDataSet(_ json : JSON){
         var polygonPath = GMSMutablePath()
         var polygonCoordinatesList = [JSON]()
-        if (json["features"][0]["geometry"]["type"]) == "MultiPolygon" {
-             polygonCoordinatesList = json["features"][0]["geometry"]["coordinates"][0][0].arrayValue
+        let thisPolygon = json["features"][0]
+        if (thisPolygon["geometry"]["type"]) == "MultiPolygon" {
+             polygonCoordinatesList = thisPolygon["geometry"]["coordinates"][0][0].arrayValue
         }else{
-             polygonCoordinatesList = json["features"][0]["geometry"]["coordinates"][0].arrayValue
+             polygonCoordinatesList = thisPolygon["geometry"]["coordinates"][0].arrayValue
         }
         print(polygonCoordinatesList)
         let count = polygonCoordinatesList.count
@@ -302,15 +301,15 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         }
         
         let polygon = ExtendedPolygon(path: polygonPath)
-        polygon.title = json["features"][0]["id"].stringValue
-        for property in json["features"][0]["properties"] {
+        polygon.title = thisPolygon["id"].stringValue
+        for property in thisPolygon["properties"] {
             polygon.properties.updateValue(String(describing: property.1), forKey: property.0)
         }
         print(polygon)
         
         polygon.properties.removeValue(forKey: "bbox")
-        polygon.key = json["features"][0]["properties"][self.titleProperty].stringValue
-        polygon.value = json["features"][0]["properties"][self.classifierProperty].doubleValue
+        polygon.key = thisPolygon["properties"][self.titleProperty].stringValue
+        polygon.value = thisPolygon["properties"][self.classifierProperty].doubleValue
         polygon.strokeColor = UIColor.black
         polygon.strokeWidth = 1
         polygon.isTappable = true
@@ -334,10 +333,10 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         
         polygon.map = self.mapView
         
-        let lowerLat = json["features"][0]["properties"]["bbox"][1].doubleValue
-        let lowerLon = json["features"][0]["properties"]["bbox"][0].doubleValue
-        let upperLat = json["features"][0]["properties"]["bbox"][3].doubleValue
-        let upperLon = json["features"][0]["properties"]["bbox"][2].doubleValue
+        let lowerLat = thisPolygon["properties"]["bbox"][1].doubleValue
+        let lowerLon = thisPolygon["properties"]["bbox"][0].doubleValue
+        let upperLat = thisPolygon["properties"]["bbox"][3].doubleValue
+        let upperLon = thisPolygon["properties"]["bbox"][2].doubleValue
         
         let zoomLevel = Float(round((log2(210 / abs(upperLon - lowerLon)) + 1) * 100) / 100) - 1.5
         let centerLatitude = (lowerLat + upperLat) / 2
@@ -350,7 +349,6 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         
         
         polygonPath = GMSMutablePath()
-        print(polygonPath)
         
         self.textView.isEditable = false
         self.textView.text = polygon.getProperties()
