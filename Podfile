@@ -1,5 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '9.0'
+platform :ios, ’10.3’
 use_frameworks!
 
 
@@ -10,4 +10,5 @@ target 'AURIN Mobile' do
   pod 'SWXMLHash', '~> 4.0.0'
   pod 'GoogleMaps'
   pod 'MBProgressHUD', '~> 1.0.0'
+  pod 'DZNEmptyDataSet', '~> 1.8'
 end

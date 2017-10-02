@@ -129,7 +129,9 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
                     self.polygonDataSet(json)
                 case "MultiPolygon":
                     self.multiPolygonDataSet(json)
-                default: break
+                default:
+                    Reuse.shared.showAlert(view: self, title: "Error", message: "Something wrong")
+                    break
                 }
                 
                 // Process Bar Setting
@@ -179,9 +181,11 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
             let polylineCount = thisPolyline["geometry"]["coordinates"].count
 
             for polylineNum in 0..<polylineCount {
-                let count = thisPolyline["geometry"]["coordinates"][polylineNum].count
+                let coordinates = thisPolyline["geometry"]["coordinates"][polylineNum]
+
+                let count = coordinates.count
                 for coordinateNum in 0..<count {
-                    let point = thisPolyline["geometry"]["coordinates"][polylineNum][coordinateNum]
+                    let point = coordinates[coordinateNum]
                     polylinePath.add(CLLocationCoordinate2D(latitude: (point[1].double!),  longitude: (point[0].double!)))
                 }
                 
@@ -209,7 +213,6 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
     fileprivate func polygonDataSet(_ json: JSON){
         self.shapeType = "Polygon"
         let featuresNum = json["features"].count
-        print(featuresNum)
         
         if featuresNum > 100 {
             self.areaTooLargeAlert()

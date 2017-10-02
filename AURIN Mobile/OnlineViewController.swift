@@ -18,7 +18,7 @@ import Alamofire
 import SWXMLHash
 import CoreData
 
-class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetchedResultsControllerDelegate, UIPopoverPresentationControllerDelegate {
+class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetchedResultsControllerDelegate, UIPopoverPresentationControllerDelegate,DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     /*********************************** VARIABLES *********************************************/
 
@@ -49,6 +49,9 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
         // Set the self sizing table cell. The default cell height is 72.0 point.
         tableView.estimatedRowHeight = 72.0
         tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.emptyDataSetSource = self
+        tableView.emptyDataSetDelegate = self
+        tableView.tableFooterView = UIView()
         
         // Get Data from GeoServer through WFS.
         self.getDatasets()
@@ -99,7 +102,6 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
             if let pageViewController = storyboard?.instantiateViewController(withIdentifier: "WalkthroughController") as? WalkthroughPageViewController {
                 present(pageViewController, animated: true, completion: nil)
             }
-            // Set the display flag to false.
             displayWalkthrough = false
         }
         
@@ -204,6 +206,21 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     
     
     // MARK: - DataSource
+    
+    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+        let str = "No data"
+        let attributes = [NSFontAttributeName: UIFont.boldSystemFont(ofSize: CGFloat(18.0)), NSForegroundColorAttributeName: UIColor.darkGray]
+        return NSAttributedString(string: str, attributes: attributes)
+    }
+    
+    func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+        let text = "Try refresh the table"
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.lineBreakMode = .byWordWrapping
+        paragraph.alignment = .center
+        let attributes = [NSFontAttributeName: UIFont.systemFont(ofSize: CGFloat(14.0)), NSForegroundColorAttributeName: UIColor.lightGray, NSParagraphStyleAttributeName: paragraph]
+        return NSAttributedString(string: text, attributes: attributes)
+    }
     
     // FUNCTION: Number of rows in table section.
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

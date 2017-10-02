@@ -12,6 +12,7 @@
 		113229701F6B6A3B00CF0E82 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1132296D1F6B6A3B00CF0E82 /* Alamofire.framework */; };
 		11800D251F30BA300046F5D6 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB6B70F1CD62510007E044C /* FilterViewController.swift */; };
 		11800D621F3845920046F5D6 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11800D611F3845920046F5D6 /* SwiftyJSON.framework */; };
+		119E50461F81E780005FA051 /* UIScrollView+EmptyDataSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 119E50451F81E780005FA051 /* UIScrollView+EmptyDataSet.m */; };
 		11A903201F74D5B200062AEF /* ErrorCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A9031F1F74D5B200062AEF /* ErrorCases.swift */; };
 		11A903241F78CD9900062AEF /* Reusefunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A903231F78CD9900062AEF /* Reusefunc.swift */; };
 		11F9CA8B1F4A93F6002C59AC /* GMUGridBasedClusterAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F9CA841F4A93F6002C59AC /* GMUGridBasedClusterAlgorithm.m */; };
@@ -93,6 +94,8 @@
 		1132296E1F6B6A3B00CF0E82 /* MBProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MBProgressHUD.framework; path = "../../Library/Developer/Xcode/DerivedData/AURIN_Mobile-aveymqehifmgsthepoknilwqbjuc/Build/Products/Debug-iphoneos/MBProgressHUD/MBProgressHUD.framework"; sourceTree = "<group>"; };
 		1132296F1F6B6A3B00CF0E82 /* SWXMLHash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SWXMLHash.framework; path = "../../Library/Developer/Xcode/DerivedData/AURIN_Mobile-aveymqehifmgsthepoknilwqbjuc/Build/Products/Debug-iphoneos/SWXMLHash/SWXMLHash.framework"; sourceTree = "<group>"; };
 		11800D611F3845920046F5D6 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../Library/Developer/Xcode/DerivedData/AURIN_Mobile-aveymqehifmgsthepoknilwqbjuc/Build/Products/Debug-iphonesimulator/SwiftyJSON/SwiftyJSON.framework"; sourceTree = "<group>"; };
+		119E50441F81E780005FA051 /* UIScrollView+EmptyDataSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+EmptyDataSet.h"; sourceTree = "<group>"; };
+		119E50451F81E780005FA051 /* UIScrollView+EmptyDataSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+EmptyDataSet.m"; sourceTree = "<group>"; };
 		11A9031F1F74D5B200062AEF /* ErrorCases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorCases.swift; sourceTree = "<group>"; };
 		11A903231F78CD9900062AEF /* Reusefunc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reusefunc.swift; sourceTree = "<group>"; };
 		11F9CA781F4A842D002C59AC /* AURIN Mobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AURIN Mobile-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -187,6 +190,8 @@
 		11A0197D1F5FD59400881E11 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				119E50441F81E780005FA051 /* UIScrollView+EmptyDataSet.h */,
+				119E50451F81E780005FA051 /* UIScrollView+EmptyDataSet.m */,
 				11F9CA811F4A93B3002C59AC /* Google-Maps-iOS-Utils */,
 			);
 			name = Libraries;
@@ -523,6 +528,7 @@
 				BC71768A1CB9E73900623916 /* DatasetDetailViewController.swift in Sources */,
 				11F9CAA21F4A9407002C59AC /* GMUDefaultClusterRenderer.m in Sources */,
 				11F9CAA11F4A9407002C59AC /* GMUDefaultClusterIconGenerator.m in Sources */,
+				119E50461F81E780005FA051 /* UIScrollView+EmptyDataSet.m in Sources */,
 				11800D251F30BA300046F5D6 /* FilterViewController.swift in Sources */,
 				BCB680221CB8F969006EFACD /* AppDelegate.swift in Sources */,
 				BC2B362C1CC1242B002DF1F6 /* MapDrawingViewController.swift in Sources */,
