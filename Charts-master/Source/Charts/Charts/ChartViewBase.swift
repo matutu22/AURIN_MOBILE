@@ -367,8 +367,8 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
                 text: noDataText,
                 point: CGPoint(x: frame.width / 2.0, y: frame.height / 2.0),
                 attributes:
-                [NSFontAttributeName: noDataFont,
-                 NSForegroundColorAttributeName: noDataTextColor],
+                [NSAttributedStringKey.font.rawValue: noDataFont,
+                 NSAttributedStringKey.foregroundColor.rawValue: noDataTextColor],
                 constrainedToSize: self.bounds.size,
                 anchor: CGPoint(x: 0.5, y: 0.5),
                 angleRadians: 0.0)
@@ -407,8 +407,8 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
         
         var attrs = [String : AnyObject]()
         
-        attrs[NSFontAttributeName] = description.font
-        attrs[NSForegroundColorAttributeName] = description.textColor
+        attrs[NSAttributedStringKey.font] = description.font
+        attrs[NSAttributedStringKey.foregroundColor] = description.textColor
 
         ChartUtils.drawText(
             context: context,

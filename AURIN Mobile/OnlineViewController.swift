@@ -46,7 +46,6 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set the self sizing table cell. The default cell height is 72.0 point.
         tableView.estimatedRowHeight = 72.0
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.emptyDataSetSource = self
@@ -77,7 +76,8 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     } // viewDidLoad ends.
     
     // Refetch datasets from GeoServer.
-    func refreshDataset() {
+    @objc func refreshDataset() {
+        self.getDatasets()
         datasets = alldatasets
         sleep(1)
         tableView.reloadData()
@@ -186,7 +186,7 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
                     //Find Dataset website in the abstract
                     if let start = dataset.abstract.range(of: "a href='"),
                         let end = dataset.abstract.range(of: "' target=", range: start.upperBound..<dataset.abstract.endIndex){
-                        dataset.website = dataset.abstract[start.upperBound..<end.lowerBound]
+                        dataset.website = String(dataset.abstract[start.upperBound..<end.lowerBound])
                     }else{
                         dataset.website = "http://aurin.org.au"
                     }
@@ -209,7 +209,7 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     
     func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
         let str = "No data"
-        let attributes = [NSFontAttributeName: UIFont.boldSystemFont(ofSize: CGFloat(18.0)), NSForegroundColorAttributeName: UIColor.darkGray]
+        let attributes = [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: CGFloat(18.0)), NSAttributedStringKey.foregroundColor: UIColor.darkGray]
         return NSAttributedString(string: str, attributes: attributes)
     }
     
@@ -218,10 +218,16 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineBreakMode = .byWordWrapping
         paragraph.alignment = .center
-        let attributes = [NSFontAttributeName: UIFont.systemFont(ofSize: CGFloat(14.0)), NSForegroundColorAttributeName: UIColor.lightGray, NSParagraphStyleAttributeName: paragraph]
+        let attributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: CGFloat(14.0)),
+                          NSAttributedStringKey.foregroundColor: UIColor.lightGray] //NSAttributedStringKey.paragraphStyleNSAttributedStringKey.paragraphStyle: paragraph]
         return NSAttributedString(string: text, attributes: attributes)
     }
     
+    func emptyDataSetShouldAllowScroll(_ scrollView: UIScrollView!) -> Bool{
+        return true
+    }
+
+
     // FUNCTION: Number of rows in table section.
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchController.isActive && searchController.searchBar.text != "" {

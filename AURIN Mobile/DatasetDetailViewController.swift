@@ -56,7 +56,6 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         let centerLON = dataset.center.longitude
         let zoomLevel = dataset.zoom
         
-        print("Dataset detail view:", lowerLAT, lowerLON, upperLAT, upperLON)
         self.chooseBBOX = BBOX(lowerLON: lowerLON, lowerLAT: lowerLAT, upperLON: upperLON, upperLAT: upperLAT)
         
         let camera = GMSCameraPosition.camera(withLatitude: centerLAT, longitude: centerLON, zoom: zoomLevel)
@@ -77,7 +76,6 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
     
         
         // Table's appearance
-        //tableView.backgroundColor = UIColor(red: 240.0/255.0, green: 240.0/255.0, blue: 240.0/255.0, alpha: 0.2)
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         tableView.separatorColor = UIColor(red: 240.0/255.0, green: 240.0/255.0, blue: 240.0/255.0, alpha: 0.8)
         tableView.estimatedRowHeight = 36.0
@@ -95,7 +93,7 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         Alamofire.request("http://openapi.aurin.org.au/wfs?request=DescribeFeatureType&service=WFS&version=1.1.0&typeName=\(dataset.name)")
             .authenticate(user: "student", password: "dj78dfGF")
             .response { response in
-                print("---------------")
+
                 //print(response.data!) // if you want to check XML data in debug window.
                 let xml = SWXMLHash.parse(response.data!)
                 for property in xml["xsd:schema"]["xsd:complexType"]["xsd:complexContent"]["xsd:extension"]["xsd:sequence"]["xsd:element"].all {

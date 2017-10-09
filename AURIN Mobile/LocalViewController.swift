@@ -16,7 +16,7 @@
 import UIKit
 import CoreData
 
-class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetchedResultsControllerDelegate {
+class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetchedResultsControllerDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     
     var localDatasets:[LocalDataset] = []
@@ -28,21 +28,23 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Set the self sizing table cell. The default cell height is 72.0 point.
         tableView.estimatedRowHeight = 72.0
         tableView.rowHeight = UITableViewAutomaticDimension
-        // Get Data from openapi through WFS.
         self.getDatasets()
-        // Add search bar to the view.
+        
+        tableView.emptyDataSetSource = self
+        tableView.emptyDataSetDelegate = self
+        tableView.tableFooterView = UIView()
+        
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
         searchController.searchBar.scopeButtonTitles = ["All", "Title", "Org", "Keyword"]
         searchController.searchBar.delegate = self
-        // Set the text of 'back' button in next view.
+
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        // Do any additional setup after loading the view.
+
         tableView.tableFooterView = UIView(frame: CGRect.zero)
 
     }
@@ -77,7 +79,29 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
     
     
     // MARK: - DataSource
+    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+        let str = "No saved dataset"
+        let attributes = [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: CGFloat(18.0)), NSAttributedStringKey.foregroundColor: UIColor.darkGray]
+        return NSAttributedString(string: str, attributes: attributes)
+    }
     
+    func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+        let text = "Save your favourite dataset in Discover page"
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.lineBreakMode = .byWordWrapping
+        paragraph.alignment = .center
+        let attributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: CGFloat(14.0)), NSAttributedStringKey.foregroundColor: UIColor.lightGray, NSAttributedStringKey.paragraphStyle: paragraph]
+        return NSAttributedString(string: text, attributes: attributes)
+    }
+    func  EmptyDataSetShouldAllowTouch (forEmptyDataSet scrollView: UIScrollView!) -> Bool{
+        return true
+    }
+    
+    func emptyDataSet(_ scrollView: UIScrollView!, didTap view: UIView!) {
+        print("Tapped on")
+        sleep(1)
+        tableView.reloadData()
+    }
     // FUNCTION: Number of rows in table section.
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchController.isActive && searchController.searchBar.text != "" {

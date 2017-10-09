@@ -21,6 +21,7 @@ import MBProgressHUD
 
 class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUClusterManagerDelegate {
     
+
     private var clusterManager: GMUClusterManager!
 
     // Receive Data from Map Setting View
@@ -50,6 +51,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         super.viewDidLoad()
 
         // Set the title of navigation bar
+        NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: .UIApplicationWillResignActive, object: nil)
 
         let label = UILabel(frame: CGRect(x:0, y:0, width:400, height:50))
         label.numberOfLines = 2
@@ -95,7 +97,9 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         self.queryDataSet(queryURL)
         
     } // View Did Load
-    
+    @objc func willResignActive(_ notification: Notification) {
+        NSLog("Observered background")
+    }
     
     fileprivate func queryDataSet(_ queryURL : String) {
         DispatchQueue.global(qos: .userInitiated).async {
@@ -147,9 +151,14 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         }
 
     }
+
     
     fileprivate func pointDataset(_ json : JSON) {
         let featuresNum = json["features"].count
+        let iconImage = UIImage(named: "markericon")!.withRenderingMode(.alwaysTemplate)
+        let markerView = UIImageView(image: iconImage)
+        markerView.tintColor = ColorSet.colorDictionary[self.palette]
+        
         for featureID in 0..<featuresNum {
             let thisPoint = json["features"][featureID]
             
@@ -160,9 +169,9 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
 
             marker.key = thisPoint["properties"][self.titleProperty].stringValue
             marker.value = thisPoint["properties"][self.classifierProperty].doubleValue
+            marker.iconView = markerView
+
             
-            let markerColor = ColorSet.colorDictionary[self.palette]
-            marker.icon = GMSMarker.markerImage(with: markerColor?.withAlphaComponent(self.alpha))
             self.clusterManager.add(marker)
 
         }
@@ -378,9 +387,9 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
                 let messageText = NSMutableAttributedString(
                     string: (extendedMarker.getProperties()),
                     attributes: [
-                        NSParagraphStyleAttributeName: paragraphStyle,
-                        NSFontAttributeName: UIFont(name: "Menlo-Regular",size: 11.0)!,
-                        NSForegroundColorAttributeName : UIColor.darkGray
+                        NSAttributedStringKey.paragraphStyle: paragraphStyle,
+                        NSAttributedStringKey.font: UIFont(name: "Menlo-Regular",size: 11.0)!,
+                        NSAttributedStringKey.foregroundColor : UIColor.darkGray
                     ])
                 detailMessage.setValue(messageText, forKey: "attributedMessage")
                 self.present(detailMessage, animated: true, completion: nil)
@@ -426,9 +435,9 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
                 let messageText = NSMutableAttributedString(
                     string: extendedPolygon.getProperties(),
                     attributes: [
-                        NSParagraphStyleAttributeName: paragraphStyle,
-                        NSFontAttributeName: UIFont(name: "Menlo-Regular",size: 11.0)!,
-                        NSForegroundColorAttributeName : UIColor.darkGray
+                        NSAttributedStringKey.paragraphStyle: paragraphStyle,
+                        NSAttributedStringKey.font: UIFont(name: "Menlo-Regular",size: 11.0)!,
+                        NSAttributedStringKey.foregroundColor : UIColor.darkGray
                     ])
                 detailMessage.setValue(messageText, forKey: "attributedMessage")
                 self.present(detailMessage, animated: true, completion: nil)
@@ -450,9 +459,9 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
                 let messageText = NSMutableAttributedString(
                     string: extendedPolyline.getProperties(),
                     attributes: [
-                        NSParagraphStyleAttributeName: paragraphStyle,
-                        NSFontAttributeName: UIFont(name: "Menlo-Regular",size: 11.0)!,
-                        NSForegroundColorAttributeName : UIColor.darkGray
+                        NSAttributedStringKey.paragraphStyle: paragraphStyle,
+                        NSAttributedStringKey.font: UIFont(name: "Menlo-Regular",size: 11.0)!,
+                        NSAttributedStringKey.foregroundColor : UIColor.darkGray
                     ])
                 detailMessage.setValue(messageText, forKey: "attributedMessage")
                 self.present(detailMessage, animated: true, completion: nil)
@@ -471,7 +480,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
     override func viewWillDisappear(_ animated: Bool) {
         if let barFont1 = UIFont(name: "Avenir-Light", size: 24.0) {
             self.navigationController?.navigationBar.titleTextAttributes =
-                [NSForegroundColorAttributeName:UIColor.white, NSFontAttributeName:barFont1]
+                [NSAttributedStringKey.foregroundColor:UIColor.white, NSAttributedStringKey.font:barFont1]
         }
     }
     

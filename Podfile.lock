@@ -1,6 +1,5 @@
 PODS:
   - Alamofire (4.5.0)
-  - DZNEmptyDataSet (1.8.1)
   - GoogleMaps (2.3.1):
     - GoogleMaps/Maps (= 2.3.1)
   - GoogleMaps/Base (2.3.1)
@@ -11,8 +10,7 @@ PODS:
   - SWXMLHash (4.0.0)
 
 DEPENDENCIES:
-  - Alamofire (~> 4.4)
-  - DZNEmptyDataSet (~> 1.8)
+  - Alamofire (~> 4.5)
   - GoogleMaps
   - MBProgressHUD (~> 1.0.0)
   - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`)
@@ -29,12 +27,11 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
-  DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   GoogleMaps: c66a71058b9b1294bcdd5463a68e357fa50c079f
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   SwiftyJSON: 05cf0e98a950e2ba343735264f5a96b81e755d00
   SWXMLHash: 6bbc0bf72975a18ceda469fb7d6a886a26d81694
 
-PODFILE CHECKSUM: d721bdd6b1a96aee2c5c434eb1a96cd934ffb445
+PODFILE CHECKSUM: 20acebc9bdba4cded0372318e7f634011ec98f0a
 
 COCOAPODS: 1.2.1
