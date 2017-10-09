@@ -193,9 +193,9 @@
 			isa = PBXGroup;
 			children = (
 				112ECCDB1F8B1A4300D75900 /* Charts.xcodeproj */,
+				11F9CA811F4A93B3002C59AC /* Google-Maps-iOS-Utils */,
 				119E50441F81E780005FA051 /* UIScrollView+EmptyDataSet.h */,
 				119E50451F81E780005FA051 /* UIScrollView+EmptyDataSet.m */,
-				11F9CA811F4A93B3002C59AC /* Google-Maps-iOS-Utils */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";

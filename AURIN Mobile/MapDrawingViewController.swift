@@ -42,7 +42,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
     var alpha: CGFloat = 0.7
     var shapeType = "Overlay"
 
-    @IBOutlet var backButton: UIButton!
+//    @IBOutlet var backButton: UIButton!
     @IBOutlet var mapView: GMSMapView!
 
     // Mark: viewdidload
@@ -77,13 +77,13 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         let centerLatitude = (chooseBBOX.lowerLAT + chooseBBOX.upperLAT) / 2
         let centerLongitude = (chooseBBOX.lowerLON + chooseBBOX.upperLON) / 2
         
-        mapView.bringSubview(toFront: backButton)
+        //mapView.bringSubview(toFront: backButton)
         alpha = CGFloat(opacity)
         
         self.mapView.isMyLocationEnabled = true;
         self.mapView.mapType = .normal;
         self.mapView.settings.compassButton = true;
-        self.mapView.settings.myLocationButton = true;
+//        self.mapView.settings.myLocationButton = true;
         self.mapView.settings.tiltGestures = false
         self.mapView.settings.rotateGestures = false
         self.mapView.delegate = self;

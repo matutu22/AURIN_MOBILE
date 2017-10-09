@@ -223,10 +223,8 @@ class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetched
             } else {
                 return (titleMatchFlag || orgMatchFlag || keywordMatchFlag)
             }
-            
         })
-        
-        //tableView.reloadData()
+        tableView.reloadData()
     }
     
     

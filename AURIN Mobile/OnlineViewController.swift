@@ -2,7 +2,7 @@
 //  OnlineViewController.swift
 //  AURIN Mobile
 //
-//  Created by Hayden on 16/4/9.
+//  By Chenhan Ma
 //  Copyright © 2016 University of Melbourne. All rights reserved.
 //
 
@@ -18,9 +18,9 @@ import Alamofire
 import SWXMLHash
 import CoreData
 
-class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetchedResultsControllerDelegate, UIPopoverPresentationControllerDelegate,DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
-
-    /*********************************** VARIABLES *********************************************/
+class OnlineViewController: UITableViewController, UITextFieldDelegate,
+    NSFetchedResultsControllerDelegate, UIPopoverPresentationControllerDelegate,
+    DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     // 'datasets' list store the information of all datasets.
     var datasets = [Dataset]()
@@ -39,8 +39,6 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
     var localDatasets:[LocalDataset] = []
     var alldatasets = [Dataset]()
     
-    
-    /*********************************** FUNCTIONS *********************************************/
     
     // FUNCTION: invoke when the view first appears.
     override func viewDidLoad() {
@@ -219,7 +217,7 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
         paragraph.lineBreakMode = .byWordWrapping
         paragraph.alignment = .center
         let attributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: CGFloat(14.0)),
-                          NSAttributedStringKey.foregroundColor: UIColor.lightGray] //NSAttributedStringKey.paragraphStyleNSAttributedStringKey.paragraphStyle: paragraph]
+                          NSAttributedStringKey.foregroundColor: UIColor.lightGray, NSAttributedStringKey.paragraphStyle: paragraph]
         return NSAttributedString(string: text, attributes: attributes)
     }
     
@@ -373,7 +371,7 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate, NSFetche
             }
         })
         
-        //tableView.reloadData()
+        tableView.reloadData()
     }
     
     
