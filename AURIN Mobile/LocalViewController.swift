@@ -16,8 +16,13 @@
 import UIKit
 import CoreData
 
-class LocalViewController: UITableViewController, UITextFieldDelegate, NSFetchedResultsControllerDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
-
+class LocalViewController : UITableViewController, UITextFieldDelegate, NSFetchedResultsControllerDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
+//
+//    static func storyboardInstance() -> LocalViewController? {
+//        let storyboard =  UIStoryboard(name: "LocalViewController", bundle: nil)
+//        return storyboard.instantiateInitialViewController() as? LocalViewController
+//    }
+//    
     
     var localDatasets:[LocalDataset] = []
     // 'searchDatasets' list stores the information of datasets that match the query.

@@ -189,6 +189,34 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		118054591F8B66E80083A2E9 /* About Page */ = {
+			isa = PBXGroup;
+			children = (
+				BC71769F1CBA69D400623916 /* WebViewController.swift */,
+				BC7176971CBA65CE00623916 /* AboutTableViewController.swift */,
+			);
+			name = "About Page";
+			sourceTree = "<group>";
+		};
+		1180545A1F8B670B0083A2E9 /* WalkThrough */ = {
+			isa = PBXGroup;
+			children = (
+				BCEB76941CC5E243000B99B2 /* WalkthroughPageViewController.swift */,
+				BCEB768F1CC5E0EA000B99B2 /* WalkthroughContentViewController.swift */,
+				BCEB76971CC5FDFB000B99B2 /* WalkthroughAnimationViewController.swift */,
+			);
+			name = WalkThrough;
+			sourceTree = "<group>";
+		};
+		1180545B1F8B673B0083A2E9 /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				BCB6B70C1CD5E70B007E044C /* Main.storyboard */,
+				BCB6802A1CB8F969006EFACD /* LaunchScreen.storyboard */,
+			);
+			name = Storyboard;
+			sourceTree = "<group>";
+		};
 		11A0197D1F5FD59400881E11 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -323,12 +351,14 @@
 		BCB680201CB8F969006EFACD /* AURIN Mobile */ = {
 			isa = PBXGroup;
 			children = (
+				BCB680211CB8F969006EFACD /* AppDelegate.swift */,
+				1180545A1F8B670B0083A2E9 /* WalkThrough */,
+				118054591F8B66E80083A2E9 /* About Page */,
 				11A019891F6618EE00881E11 /* Views */,
 				11A019831F64337300881E11 /* Models */,
 				11A019811F64133C00881E11 /* Supporting Files */,
 				11A0197D1F5FD59400881E11 /* Libraries */,
 				11A903221F78CD6400062AEF /* Reuse */,
-				BCB680211CB8F969006EFACD /* AppDelegate.swift */,
 				BCB680231CB8F969006EFACD /* OnlineViewController.swift */,
 				BC918E811CC2737400942BAA /* LocalViewController.swift */,
 				BCB6B70F1CD62510007E044C /* FilterViewController.swift */,
@@ -337,14 +367,8 @@
 				BC2B362B1CC1242B002DF1F6 /* MapDrawingViewController.swift */,
 				BC358E5E1CC333C90070F1D1 /* ChartSettingTableViewController.swift */,
 				BC358E791CC3514B0070F1D1 /* ChartDrawingTableViewController.swift */,
-				BC7176971CBA65CE00623916 /* AboutTableViewController.swift */,
-				BC71769F1CBA69D400623916 /* WebViewController.swift */,
-				BCEB76941CC5E243000B99B2 /* WalkthroughPageViewController.swift */,
-				BCEB768F1CC5E0EA000B99B2 /* WalkthroughContentViewController.swift */,
-				BCEB76971CC5FDFB000B99B2 /* WalkthroughAnimationViewController.swift */,
 				BCB680281CB8F969006EFACD /* Assets.xcassets */,
-				BCB6B70C1CD5E70B007E044C /* Main.storyboard */,
-				BCB6802A1CB8F969006EFACD /* LaunchScreen.storyboard */,
+				1180545B1F8B673B0083A2E9 /* Storyboard */,
 			);
 			path = "AURIN Mobile";
 			sourceTree = "<group>";

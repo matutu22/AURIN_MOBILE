@@ -39,6 +39,20 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate,
     var localDatasets:[LocalDataset] = []
     var alldatasets = [Dataset]()
     
+    override func viewWillAppear(_ animated: Bool) {
+        // Add search bar to the view.
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        tableView.tableHeaderView = searchController.searchBar
+        searchController.searchBar.scopeButtonTitles = ["All", "Title", "Org", "Keyword"]
+        searchController.searchBar.delegate = self
+    }
+    
+    // Fix the bug of searchController not display normally
+    override func viewWillDisappear(_ animated: Bool) {
+        searchController.isActive = false
+    }
     
     // FUNCTION: invoke when the view first appears.
     override func viewDidLoad() {
@@ -53,14 +67,6 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate,
         // Get Data from GeoServer through WFS.
         self.getDatasets()
         getSavedDatasets()
-
-        // Add search bar to the view.
-        searchController.searchResultsUpdater = self
-        searchController.dimsBackgroundDuringPresentation = false
-        definesPresentationContext = true
-        tableView.tableHeaderView = searchController.searchBar
-        searchController.searchBar.scopeButtonTitles = ["All", "Title", "Org", "Keyword"]
-        searchController.searchBar.delegate = self
         
         // Set the text of 'back' button in next view.
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
@@ -188,7 +194,7 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate,
                     }else{
                         dataset.website = "http://aurin.org.au"
                     }
-                                        
+                    
                     // Add dataset object to list
                     if DataSet.invalidData[dataset.title] != nil {
                         // Do nothing
@@ -277,7 +283,8 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate,
         if searchController.isActive {
             return false
         } else {
-            return true }
+            return true
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -395,7 +402,6 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate,
                 let destinationController = segue.destination as! DatasetDetailViewController
                 destinationController.dataset = datasetToPass
                 // destinationController.hidesBottomBarWhenPushed = true
-                
             }
         }
         if segue.identifier == "showPopover" {
