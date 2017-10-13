@@ -44,10 +44,5 @@ class Reuse{
         
         return date!
     }
-//    
-//    func sortDescending(datasets : [DataSet], sortOption : String) -> [DataSet] {
-//        return datasets.sorted(by: {$0.date > $1.date})
-//    }
-//    
-//    func sortAc
+
 }

@@ -74,7 +74,6 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate,
         tableView.emptyDataSetSource = self
         tableView.emptyDataSetDelegate = self
         tableView.tableFooterView = UIView()
-        
         // Get Data from GeoServer through WFS.
         self.getDatasets()
         getSavedDatasets()
@@ -92,13 +91,14 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate,
     
     // Refetch datasets from GeoServer.
     @objc func refreshDataset() {
-        self.getDatasets()
+        print("Refresh")
         datasets = alldatasets
         sleep(1)
         tableView.reloadData()
         refreshControl?.endRefreshing()
     }
     
+
     
     // This function will display the walkthrough pages after the table view appears.
     override func viewDidAppear(_ animated: Bool) {
@@ -367,8 +367,8 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate,
                         let cell = tableView.cellForRow(at: indexPath)
                         cell?.accessoryType = .checkmark
                     }
-                    self.datasets.remove(at: indexPath.row)
-                    self.tableView.deleteRows(at: [indexPath], with: .fade)
+//                    self.datasets.remove(at: indexPath.row)
+//                    self.tableView.deleteRows(at: [indexPath], with: .fade)
                     
                 }
 
@@ -386,7 +386,7 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate,
     
     
     func filterContentForSearchText(_ searchText: String, scope: String = "All") {
-        searchDatasets = datasets.filter( { (dataset:Dataset) -> Bool in
+        searchDatasets = alldatasets.filter( { (dataset:Dataset) -> Bool in
             let titleMatch = dataset.title.range(of: searchText, options: NSString.CompareOptions.caseInsensitive)
             let orgMatch = dataset.organisation.range(of: searchText, options: NSString.CompareOptions.caseInsensitive)
             let keywordMatch = dataset.showKeyword().range(of: searchText, options: NSString.CompareOptions.caseInsensitive)
@@ -489,5 +489,10 @@ extension OnlineViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         filterContentForSearchText(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
     }
-}
 
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        datasets = searchDatasets
+        print("search button click")
+        searchController.isActive = false
+    }
+}
