@@ -37,4 +37,17 @@ class Reuse{
         view.present(alertController, animated: true, completion: nil)
     }
     
+    func dateConverter(dateString : String) -> Date{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let date = dateFormatter.date(from: dateString)
+        
+        return date!
+    }
+//    
+//    func sortDescending(datasets : [DataSet], sortOption : String) -> [DataSet] {
+//        return datasets.sorted(by: {$0.date > $1.date})
+//    }
+//    
+//    func sortAc
 }

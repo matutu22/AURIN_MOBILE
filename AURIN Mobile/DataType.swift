@@ -86,6 +86,7 @@ class Dataset {
     var zoom:Float = 0.00
     var center: (longitude: Double, latitude: Double)
     var isSaved = false
+    var date : Date
     
     init() {
         self.name = ""
@@ -97,6 +98,7 @@ class Dataset {
         self.bbox =  BBOX(lowerLON: 0.0, lowerLAT: 0.0, upperLON: 0.0, upperLAT: 0.0)
         self.zoom = 0.00
         self.center = (0.000000, 0.000000)
+        self.date = Reuse.shared.dateConverter(dateString: "2000-01-01")
     }
     
     func showKeyword() -> String {
@@ -130,9 +132,12 @@ class Dataset {
         localDataset.zoom = self.zoom
         localDataset.centerLON = self.center.longitude
         localDataset.centerLAT = self.center.latitude
+        localDataset.date = self.date
         
         return localDataset
     }
+    
+    
 }
 
 
@@ -151,7 +156,8 @@ class LocalDataset:NSManagedObject {
     @NSManaged var zoom: Float
     @NSManaged var centerLON: Double
     @NSManaged var centerLAT: Double
-
+    @NSManaged var date : Date
+    
     func toDataset() -> Dataset {
         let dataset = Dataset()
         
@@ -164,6 +170,7 @@ class LocalDataset:NSManagedObject {
         dataset.bbox = BBOX(lowerLON: self.lowerLON, lowerLAT: self.lowerLAT, upperLON: self.upperLON, upperLAT: self.upperLAT)
         dataset.zoom = self.zoom
         dataset.center = (longitude: self.centerLON, latitude: self.centerLAT)
+        dataset.date = self.date
         
         return dataset
     }

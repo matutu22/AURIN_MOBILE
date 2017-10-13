@@ -28,13 +28,12 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate,
     // 'searchDatasets' list stores the information of datasets that match the query.
     var searchDatasets = [Dataset]()
     
-    // Create a search controller.
     let searchController = UISearchController(searchResultsController: nil)
     
     // The flag for walkthrough page displaying.
     var displayWalkthrough = true
     
-    
+    var sortOption : String = "default"
     var fetchResultController:NSFetchedResultsController<NSFetchRequestResult>!
     var localDatasets:[LocalDataset] = []
     var alldatasets = [Dataset]()
@@ -47,7 +46,19 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate,
         tableView.tableHeaderView = searchController.searchBar
         searchController.searchBar.scopeButtonTitles = ["All", "Title", "Org", "Keyword"]
         searchController.searchBar.delegate = self
+        searchController.searchBar.showsBookmarkButton = true
+        searchController.searchBar.setImage(UIImage(named: "sort"), for: .bookmark, state: .normal)
+
     }
+    
+    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
+        if self.sortOption == "default"          { self.sortOption = "descending"}
+        else if self.sortOption == "descending"  { self.sortOption = "ascending" }
+        else if self.sortOption == "ascending"   { self.sortOption = "descending"}
+        tableView.reloadData()
+        print("Sort button pressed")
+    }
+    
     
     // Fix the bug of searchController not display normally
     override func viewWillDisappear(_ animated: Bool) {
@@ -163,7 +174,8 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate,
                     dataset.name = (featureType["Name"].element?.text)!
                     let title = (featureType["Title"].element?.text)!
                     dataset.title = title.components(separatedBy: "Data provider: ")[0]
-                    dataset.abstract = (featureType["Abstract"].element?.text)!.components(separatedBy: "Temporal extent start: ")[0]
+                    let rawAbstract = (featureType["Abstract"].element?.text)!
+                    dataset.abstract = rawAbstract.components(separatedBy: "Temporal extent start: ")[0]
                     
                     dataset.keywords = featureType["ows:Keywords"]["ows:Keyword"].all.map {
                         keyword in (keyword.element?.text)!
@@ -195,6 +207,12 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate,
                         dataset.website = "http://aurin.org.au"
                     }
                     
+                    // Find dataset creation date
+                    if let start = rawAbstract.range(of: "Temporal extent start: "),
+                        let end = rawAbstract.range(of: "T00:00:00 Temporal", range: start.upperBound..<rawAbstract.endIndex){
+                        dataset.date = Reuse.shared.dateConverter(dateString: String(rawAbstract[start.upperBound..<end.lowerBound]))
+                    }
+
                     // Add dataset object to list
                     if DataSet.invalidData[dataset.title] != nil {
                         // Do nothing
@@ -209,7 +227,7 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate,
     
     
     
-    // MARK: - DataSource
+    // MARK: - EmptyDataset
     
     func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
         let str = "No data"
@@ -255,7 +273,15 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate,
         if searchController.isActive && searchController.searchBar.text != "" {
             data = searchDatasets[indexPath.row]
         } else {
-            data = datasets[indexPath.row]
+            if self.sortOption == "descending" {
+                datasets = datasets.sorted( by: {$0.date > $1.date})
+                data = datasets[indexPath.row]
+            }else if self.sortOption == "ascending"{
+                datasets = datasets.sorted( by: {$0.date < $1.date})
+                data = datasets[indexPath.row]
+            }else{
+                data = datasets[indexPath.row]
+            }
         }
         
         if data.isSaved {
@@ -446,6 +472,11 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate,
 
 extension OnlineViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
+        if searchController.isActive {
+            searchController.searchBar.showsBookmarkButton = false
+        } else {
+            searchController.searchBar.showsBookmarkButton = true
+        }
         let searchBar = searchController.searchBar
         let scope = searchBar.scopeButtonTitles![searchBar.selectedScopeButtonIndex]
         filterContentForSearchText(searchController.searchBar.text!, scope: scope)
