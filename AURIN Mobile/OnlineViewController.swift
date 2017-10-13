@@ -230,13 +230,19 @@ class OnlineViewController: UITableViewController, UITextFieldDelegate,
     // MARK: - EmptyDataset
     
     func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-        let str = "No data"
+        var str = "No data"
+        if searchController.isActive && searchController.searchBar.text != ""{
+            str = "No result"
+        }
         let attributes = [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: CGFloat(18.0)), NSAttributedStringKey.foregroundColor: UIColor.darkGray]
         return NSAttributedString(string: str, attributes: attributes)
     }
     
     func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = "Try refresh the table"
+        var text = "Try refresh the table"
+        if searchController.isActive && searchController.searchBar.text != ""{
+            text = "No dataset matches your query, try another one."
+        }
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineBreakMode = .byWordWrapping
         paragraph.alignment = .center

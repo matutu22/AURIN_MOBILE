@@ -3,6 +3,7 @@
 //  AURIN Mobile
 //
 //  Created by Hayden on 16/4/17.
+//  Updated by Chenhan on Oct 17
 //  Copyright © 2016年 University of Melbourne. All rights reserved.
 //
 

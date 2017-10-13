@@ -2,7 +2,7 @@
 //  MapSettingTableViewController.swift
 //  AURIN Mobile
 //
-//  Created by Hayden on 16/4/15.
+//  Updated by Chenhan
 //  Copyright © 2016 University of Melbourne. All rights reserved.
 //
 

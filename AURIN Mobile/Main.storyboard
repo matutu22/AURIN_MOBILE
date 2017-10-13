@@ -1338,7 +1338,7 @@
             </objects>
             <point key="canvasLocation" x="-32" y="454"/>
         </scene>
-        <!--Favorities-->
+        <!--Favourities-->
         <scene sceneID="Cen-rh-CvZ">
             <objects>
                 <tableViewController id="Oz0-D2-TnP" customClass="LocalViewController" customModule="AURIN_Mobile" customModuleProvider="target" sceneMemberID="viewController">
@@ -1412,7 +1412,7 @@
                             <outlet property="delegate" destination="Oz0-D2-TnP" id="kab-XL-Vh4"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Favorities" id="KAo-od-V3C">
+                    <navigationItem key="navigationItem" title="Favourities" id="KAo-od-V3C">
                         <barButtonItem key="rightBarButtonItem" image="sort" id="SxQ-Wt-cL5">
                             <connections>
                                 <action selector="editing:" destination="Oz0-D2-TnP" id="LEj-yS-KYq"/>
@@ -1424,11 +1424,11 @@
             </objects>
             <point key="canvasLocation" x="1497" y="-354"/>
         </scene>
-        <!--Favorites-->
+        <!--Favourites-->
         <scene sceneID="3sL-GZ-U0T">
             <objects>
                 <navigationController id="jD0-Zc-Gmo" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Favorites" image="bar_favor" id="kTo-hA-kv2"/>
+                    <tabBarItem key="tabBarItem" title="Favourites" image="bar_favor" id="kTo-hA-kv2" userLabel="Favourites"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="FlB-Rl-igq">
                         <rect key="frame" x="0.0" y="20" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1746,6 +1746,6 @@
         <image name="sort" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="tQT-Ud-dfy"/>
+        <segue reference="GmD-0b-HqN"/>
     </inferredMetricsTieBreakers>
 </document>

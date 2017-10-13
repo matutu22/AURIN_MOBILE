@@ -83,15 +83,21 @@ class LocalViewController : UITableViewController, UITextFieldDelegate, NSFetche
     }
     
     
-    // MARK: - DataSource
+    // MARK: - Empty dataset
     func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-        let str = "No saved dataset"
+        var str = "No saved dataset"
+        if searchController.isActive && searchController.searchBar.text != ""{
+            str = "No result"
+        }
         let attributes = [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: CGFloat(18.0)), NSAttributedStringKey.foregroundColor: UIColor.darkGray]
         return NSAttributedString(string: str, attributes: attributes)
     }
     
     func description(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = "Save your favourite dataset in Discover page"
+        var text = "Save your favourite dataset in Discover page"
+        if searchController.isActive && searchController.searchBar.text != ""{
+            text = "No saved dataset matches your query, try again."
+        }
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineBreakMode = .byWordWrapping
         paragraph.alignment = .center
@@ -104,9 +110,9 @@ class LocalViewController : UITableViewController, UITextFieldDelegate, NSFetche
     
     func emptyDataSet(_ scrollView: UIScrollView!, didTap view: UIView!) {
         print("Tapped on")
-        sleep(1)
         tableView.reloadData()
     }
+    
     // FUNCTION: Number of rows in table section.
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchController.isActive && searchController.searchBar.text != "" {

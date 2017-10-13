@@ -3,6 +3,7 @@
 //  AURIN Mobile
 //
 //  Created by Hayden on 16/4/17.
+//  Updated by Chenhan on Oct 17
 //  Copyright © 2016年 University of Melbourne. All rights reserved.
 //
 
@@ -40,6 +41,7 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
     var detailViewHidden = true
 
     // Store the x-axis and y-axis data.
+    var keyValueDict = [String : Double]()
     var xAxis: [String] = []
     var yAxis: [Double] = []
     
@@ -110,9 +112,15 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
                 for featureID in 0..<featuresNum {
                     let key = json["features"][featureID]["properties"][self.titleProperty].stringValue
                     let value = json["features"][featureID]["properties"][self.classifierProperty].doubleValue
-                    self.xAxis.append(key)
-                    self.yAxis.append(value)
+                    self.keyValueDict[key] = value
                     self.tableView.reloadData()
+                }
+                
+                // Sort chart by Y value
+                let dict = self.keyValueDict.sorted{$0.value < $1.value}
+                for d in dict{
+                    self.xAxis.append(d.0)
+                    self.yAxis.append(d.1)
                 }
                 
                 self.setChart(self.xAxis, values: self.yAxis)
