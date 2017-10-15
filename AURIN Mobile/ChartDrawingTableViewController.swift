@@ -100,7 +100,13 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         // Generate the query which only request for key & value properties.
         let queryURL = "http://openapi.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&MaxFeatures=1000&outputFormat=json&CQL_FILTER=BBOX(\(geom_name),\(chooseBBOX.lowerLAT),\(chooseBBOX.lowerLON),\(chooseBBOX.upperLAT),\(chooseBBOX.upperLON))&PropertyName=\(titleProperty),\(classifierProperty)"
         DispatchQueue.global(qos: .default).async(execute: {
-            Alamofire.request(queryURL).response { response in
+            Alamofire.request(queryURL).validate().responseJSON() { response in
+                guard response.result.isSuccess else{
+                    Reuse.shared.showAlert(view: self, title: "Oops!", message: "There is something wrong connecting the server.")
+                    self.progressHUD.hide(animated: true)
+                    return
+                }
+                
                 let json = try! JSON(data: response.data!)
                 
                 if json["features"].count == 0 {
@@ -153,28 +159,21 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         
         switch self.palette {
         case "Red":
-            //chartDataSet.colors = ChartColorTemplates.liberty()
             chartDataSet.colors = ColorSet.barChartRed
         case "Orange":
-            //chartDataSet.colors = ChartColorTemplates.colorful()
             chartDataSet.colors = ColorSet.barChartOrange
         case "Green":
-            //chartDataSet.colors = ChartColorTemplates.joyful()
             chartDataSet.colors = ColorSet.barChartGreen
         case "Blue":
-            //chartDataSet.colors = ChartColorTemplates.material()
             chartDataSet.colors = ColorSet.barChartBlue
         case "Purple":
-            //chartDataSet.colors = ChartColorTemplates.pastel()
             chartDataSet.colors = ColorSet.barChartPurple
         case "Gray":
-            //chartDataSet.colors = ChartColorTemplates.vordiplom()
             chartDataSet.colors = ColorSet.barChartGray
         default:
             chartDataSet.colors = ChartColorTemplates.liberty()
         }
         
-        //chartDataSet.colors = ColorSet.BlueSet
         
         barChartView.noDataText  = "No available data."
         //barChartView.nodatatextdescrip = "The Internet is busy now"
@@ -220,6 +219,7 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
             let nameSearchURL = "http://openapi.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&outputFormat=json&CQL_FILTER=(\(titleProperty)='\(newName)')"
             
             Alamofire.request(nameSearchURL).response { response in
+                
                 let json = try! JSON(data: response.data!)
                 let shapeType = json["features"][0]["geometry"]["type"]
                 print(shapeType)
@@ -301,7 +301,6 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         }else{
              polygonCoordinatesList = thisPolygon["geometry"]["coordinates"][0].arrayValue
         }
-        print(polygonCoordinatesList)
         let count = polygonCoordinatesList.count
         for i in 0..<count {
             let point = polygonCoordinatesList[i]
@@ -313,7 +312,6 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         for property in thisPolygon["properties"] {
             polygon.properties.updateValue(String(describing: property.1), forKey: property.0)
         }
-        print(polygon)
         
         polygon.properties.removeValue(forKey: "bbox")
         polygon.key = thisPolygon["properties"][self.titleProperty].stringValue
@@ -349,8 +347,7 @@ class ChartDrawingTableViewController: UITableViewController, ChartViewDelegate,
         let zoomLevel = Float(round((log2(210 / abs(upperLon - lowerLon)) + 1) * 100) / 100) - 1.5
         let centerLatitude = (lowerLat + upperLat) / 2
         let centerLongitude = (lowerLon + upperLon) / 2
-        
-        
+
         
         let camera = GMSCameraPosition.camera(withLatitude: centerLatitude, longitude: centerLongitude, zoom: zoomLevel)
         self.mapView.animate(to: camera)

@@ -20,7 +20,7 @@ import SwiftyJSON
 //import SVProgressHUD
 import MBProgressHUD
 
-class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUClusterManagerDelegate {
+class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUClusterManagerDelegate, GMUClusterRendererDelegate {
     
 
     private var clusterManager: GMUClusterManager!
@@ -43,7 +43,6 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
     var alpha: CGFloat = 0.7
     var shapeType = "Overlay"
 
-//    @IBOutlet var backButton: UIButton!
     @IBOutlet var mapView: GMSMapView!
 
     // Mark: viewdidload
@@ -69,6 +68,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         let iconGenerator = GMUDefaultClusterIconGenerator()
         let algorithm = GMUNonHierarchicalDistanceBasedAlgorithm()
         let renderer = GMUDefaultClusterRenderer(mapView: mapView, clusterIconGenerator: iconGenerator)
+        renderer.delegate = self;
         clusterManager = GMUClusterManager(map: mapView, algorithm: algorithm, renderer: renderer)
         
         queryURL = "http://openapi.aurin.org.au/wfs?request=GetFeature&service=WFS&version=1.1.0&TypeName=\(dataset.name)&MaxFeatures=1000&outputFormat=json&CQL_FILTER=BBOX(\(geom_name),\(chooseBBOX.lowerLAT),\(chooseBBOX.lowerLON),\(chooseBBOX.upperLAT),\(chooseBBOX.upperLON))"
@@ -84,7 +84,6 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         self.mapView.isMyLocationEnabled = true;
         self.mapView.mapType = .normal;
         self.mapView.settings.compassButton = true;
-//        self.mapView.settings.myLocationButton = true;
         self.mapView.settings.tiltGestures = false
         self.mapView.settings.rotateGestures = false
         self.mapView.delegate = self;
@@ -98,6 +97,9 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         self.queryDataSet(queryURL)
         
     } // View Did Load
+    
+
+    
     @objc func willResignActive(_ notification: Notification) {
         NSLog("Observered background")
     }
@@ -107,7 +109,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
             Alamofire.request(queryURL).validate().responseJSON() { response in
 
                 guard response.result.isSuccess else{
-                    Reuse.shared.showAlert(view: self, title: "Oops!", message: "There is something wrong connecting with the server.")
+                    Reuse.shared.showAlert(view: self, title: "Oops!", message: "This dataset is currently unavailable")
                     self.progressHUD.hide(animated: true)
                     return
                 }
@@ -156,10 +158,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
     
     fileprivate func pointDataset(_ json : JSON) {
         let featuresNum = json["features"].count
-        let iconImage = UIImage(named: "markericon")!.withRenderingMode(.alwaysTemplate)
-        let markerView = UIImageView(image: iconImage)
-        markerView.tintColor = ColorSet.colorDictionary[self.palette]
-        
+
         for featureID in 0..<featuresNum {
             let thisPoint = json["features"][featureID]
             
@@ -170,7 +169,6 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
 
             marker.key = thisPoint["properties"][self.titleProperty].stringValue
             marker.value = thisPoint["properties"][self.classifierProperty].doubleValue
-            marker.iconView = markerView
 
             
             self.clusterManager.add(marker)
@@ -345,7 +343,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
     }
     
 
-    
+    // Mark: Tap event
     func clusterManager(_ clusterManager: GMUClusterManager, didTap cluster: GMUCluster) -> Bool {
         let newCamera = GMSCameraPosition.camera(withTarget: cluster.position,
                                                  zoom: mapView.camera.zoom + 1)
@@ -354,6 +352,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         return false
     }
     
+    // Tap on marker event
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
         
         if (marker.userData as? GMUCluster) != nil{
@@ -404,7 +403,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         return true
     }
     
-    
+    // Tap on polygon event
     func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
         switch shapeType {
         case "Polygon":
@@ -478,6 +477,16 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         
     }
 
+    // Custom marker in cluster
+    func renderer(_ renderer: GMUClusterRenderer, willRenderMarker marker: GMSMarker){
+        let iconImage = UIImage(named: "markericon")!.withRenderingMode(.alwaysTemplate)
+        let markerView = UIImageView(image: iconImage)
+        markerView.tintColor = ColorSet.colorDictionary[self.palette]
+        if marker.userData is ExtendedMarker{
+            marker.iconView = markerView
+        }
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         if let barFont1 = UIFont(name: "Avenir-Light", size: 24.0) {
             self.navigationController?.navigationBar.titleTextAttributes =
