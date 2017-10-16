@@ -415,10 +415,6 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
         
     }
     
-
-    
-    
-    
     /************************************* COLOR PALETTE ***********************************/
     
     @IBAction func paletteSelected(_ sender: UISegmentedControl) {
@@ -491,7 +487,7 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
             
             self.lowerLatitude = coordinate.latitude
             self.lowerLongitude = coordinate.longitude
-            // 覆盖掉之前的 marker1
+
             marker1 = GMSMarker(position: CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude))
             marker1.icon = markerIcon!
             marker1.appearAnimation = .pop
@@ -561,7 +557,6 @@ class MapSettingTableViewController: UITableViewController, UIPickerViewDataSour
                     self.bboxLabel.text = self.chooseBBOX.printBBOX()
                 }
                 
-                // 向Alert弹框里面增加一个选项
                 alertMessage.addAction(UIAlertAction(title: "IGNORE", style: .destructive, handler: ignoreHandler))
                 alertMessage.addAction(UIAlertAction(title: "RETRY", style: .default, handler: retryHandler))
 

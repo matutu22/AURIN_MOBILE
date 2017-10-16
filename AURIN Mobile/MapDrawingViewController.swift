@@ -169,8 +169,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
 
             marker.key = thisPoint["properties"][self.titleProperty].stringValue
             marker.value = thisPoint["properties"][self.classifierProperty].doubleValue
-
-            
+    
             self.clusterManager.add(marker)
 
         }
@@ -222,7 +221,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         self.shapeType = "Polygon"
         let featuresNum = json["features"].count
         
-        if featuresNum > 100 {
+        if featuresNum > 200 {
             self.areaTooLargeAlert()
             return
         }
@@ -275,7 +274,7 @@ class MapDrawingViewController: UIViewController, GMSMapViewDelegate, GMUCluster
         var minValue = Double.infinity
         var step = 0.0
         
-        if featuresNum > 100 {
+        if featuresNum > 200 {
             self.areaTooLargeAlert()
             return
         }

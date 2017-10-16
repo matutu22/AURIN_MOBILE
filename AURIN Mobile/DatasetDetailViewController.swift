@@ -34,7 +34,7 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        print(dataset.name)
+//        print(dataset.name)
         self.getDatasetProperties()
         
         // Add a google map to the view
@@ -102,9 +102,7 @@ class DatasetDetailViewController: UIViewController, UITableViewDataSource, UITa
                     var propertyType = (property.element?.attribute(by: "type")?.text)!
                     propertyType = propertyType.components(separatedBy: ":")[1]
                     //print("\(propertyName): \(propertyType)")
-                    self.propertyList.updateValue(propertyType, forKey: propertyName)
-                    //gmlset.insert(propertyType)
-                
+                    self.propertyList.updateValue(propertyType, forKey: propertyName)                
                 }
                 self.tableView.reloadData()
             }
